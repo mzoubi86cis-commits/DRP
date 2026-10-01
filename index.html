@@ -1,1131 +1,1683 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>اختبار الاستجابة للحوادث والتعافي من الكوارث</title>
-  
-  <!-- Fonts & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نظام الحضور والغياب - مدرسة الطرة الثانوية للبنين</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            maroon: {
-              DEFAULT: '#6B1D2F',
-              dark: '#3B0D18',
-              light: '#8C2339',
-              subtle: '#FAF0E6'
-            },
-            beige: {
-              DEFAULT: '#FAF6F0',
-              paper: '#F3EBE1',
-              card: '#FFFFFF',
-              dark: '#E2D7CC'
-            },
-            charcoal: {
-              DEFAULT: '#2C2220',
-              muted: '#635652',
-              light: '#4A3E3B'
-            },
-            gold: {
-              DEFAULT: '#B8860B',
-              light: '#8C6D46'
-            }
-          },
-          fontFamily: {
-            cairo: ['Cairo', 'sans-serif'],
-            tajawal: ['Tajawal', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
+:root {
+    --primary: #1e3c72;
+    --primary-light: #2a5298;
+    --green: #28a745;
+    --yellow: #ffc107;
+    --orange: #fd7e14;
+    --red: #dc3545;
+    --excused: #17a2b8;
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --border: #e0e4e8;
+    --text: #222;
+    --muted: #666;
+}
 
-  <style>
-    body {
-      font-family: 'Tajawal', 'Cairo', sans-serif;
-      background-color: #121212;
-      color: #2C2220;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    
-    .app-viewport {
-      max-width: 1100px;
-      margin: 0 auto;
-      width: 100%;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background-color: #FAF6F0;
-      box-shadow: 0 0 50px rgba(0,0,0,0.5);
-    }
+body {
+    font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+}
 
-    .option-card {
-      transition: all 0.2s ease-in-out;
-      border: 2px solid #EADFD4;
-    }
+.container { max-width: 1250px; margin: 0 auto; padding: 20px; }
 
-    .option-card:hover:not(.disabled) {
-      border-color: #8C2339;
-      background-color: #FFFDF9;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(107, 29, 47, 0.08);
-    }
+/* ===================== شاشة تسجيل الدخول ===================== */
+#loginScreen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+#loginScreen.hidden { display: none; }
 
-    .option-card.selected {
-      border-color: #6B1D2F;
-      background-color: #FAF0E6;
-    }
+.login-box {
+    background: white;
+    padding: 40px 35px;
+    border-radius: 16px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    text-align: center;
+    animation: slideUp 0.4s ease;
+}
+@keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
 
-    .q-grid-btn {
-      transition: all 0.2s ease;
-    }
+.login-box .logo { font-size: 4em; margin-bottom: 15px; display: block; }
+.login-box h1 { color: var(--primary); font-size: 1.5em; margin-bottom: 6px; }
+.login-box p.subtitle { color: var(--muted); font-size: 0.95em; margin-bottom: 25px; }
+.login-box label {
+    display: block;
+    text-align: right;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #444;
+    font-size: 0.95em;
+}
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e0e4e8;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1.1em;
+    text-align: center;
+    letter-spacing: 3px;
+    transition: border 0.2s;
+    direction: ltr;
+}
+.login-box input[type="password"]:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(42,82,152,0.15);
+}
+.login-box button {
+    width: 100%;
+    margin-top: 18px;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1.05em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+}
+.login-box button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(30,60,114,0.35);
+}
+.login-box button:active { transform: translateY(0); }
 
-    .q-grid-btn.answered {
-      background-color: #6B1D2F;
-      color: #FAF6F0;
-      border-color: #3B0D18;
-    }
+.login-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-size: 0.9em;
+    border-right: 4px solid var(--red);
+    display: none;
+}
+.login-error.show { display: block; animation: shake 0.3s; }
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
 
-    .q-grid-btn.current {
-      ring: 3px solid #B8860B;
-      transform: scale(1.08);
-    }
+.login-hint {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.85em;
+    color: var(--muted);
+}
 
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #F3EBE1;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #6B1D2F;
-      border-radius: 4px;
-    }
+/* ===================== الهيدر ===================== */
+header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    padding: 22px 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+header h1 { font-size: 1.7em; margin-bottom: 4px; }
+header p { opacity: 0.9; font-size: 0.95em; }
+nav { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
+nav button {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95em;
+    transition: all 0.2s;
+}
+nav button:hover { background: rgba(255,255,255,0.3); }
+nav button.active { background: white; color: var(--primary); font-weight: 700; }
 
-    @keyframes pulse-warning {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.8; transform: scale(1.03); }
-    }
-    .timer-warning {
-      animation: pulse-warning 1s infinite;
-      color: #B91C1C !important;
-      border-color: #EF4444 !important;
-    }
+.logout-btn { background: rgba(220,53,69,0.85) !important; margin-right: auto; }
+.logout-btn:hover { background: var(--red) !important; }
 
-    @media print {
-      body { background-color: white !important; }
-      .no-print { display: none !important; }
-      .app-viewport { box-shadow: none !important; max-width: 100% !important; }
+/* ===================== البطاقات ===================== */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+.card {
+    padding: 18px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+.card:hover { transform: translateY(-3px); }
+.card h3 { font-size: 1em; margin-bottom: 4px; }
+.card p { font-size: 0.82em; opacity: 0.95; }
+.card .num { display: block; font-size: 1.8em; font-weight: 700; margin-top: 6px; }
+.card.green { background: linear-gradient(135deg, #28a745, #1e7e34); }
+.card.yellow { background: linear-gradient(135deg, #ffc107, #d39e00); color: #333; }
+.card.orange { background: linear-gradient(135deg, #fd7e14, #dc6502); }
+.card.red { background: linear-gradient(135deg, #dc3545, #a71d2a); }
+.card.total { background: linear-gradient(135deg, #1e3c72, #2a5298); }
+.card.excused { background: linear-gradient(135deg, #17a2b8, #117a8b); }
+
+/* ===================== الأدوات ===================== */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.today-badge {
+    background: #e9ecef;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9em;
+}
+
+/* ===================== الأزرار ===================== */
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9em;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-primary { background: var(--primary-light); color: white; }
+.btn-primary:hover { background: var(--primary); }
+.btn-success { background: var(--green); color: white; }
+.btn-success:hover { background: #1e7e34; }
+.btn-secondary { background: #6c757d; color: white; }
+.btn-secondary:hover { background: #545b62; }
+.btn-danger { background: var(--red); color: white; }
+.btn-danger:hover { background: #a71d2a; }
+.btn-info { background: #17a2b8; color: white; }
+.btn-info:hover { background: #117a8b; }
+.btn-warning { background: var(--orange); color: white; }
+.btn-warning:hover { background: #dc6502; }
+.btn-small { padding: 5px 10px; font-size: 0.82em; }
+
+/* ===================== الجدول ===================== */
+.table-wrap {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+th {
+    background: var(--primary-light);
+    color: white;
+    padding: 12px;
+    text-align: right;
+    font-weight: 500;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+    font-size: 0.92em;
+}
+tbody tr:hover { background: #f8f9fa; }
+.student-link {
+    color: var(--primary-light);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+}
+.student-link:hover { text-decoration: underline; }
+.en-name { color: var(--muted); font-size: 0.85em; direction: ltr; text-align: left; }
+
+tr.row-green { border-right: 5px solid var(--green); }
+tr.row-yellow { border-right: 5px solid var(--yellow); background: #fff9e6; }
+tr.row-orange { border-right: 5px solid var(--orange); background: #fff3e6; }
+tr.row-red { border-right: 5px solid var(--red); background: #ffe6e6; }
+
+.badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    min-width: 40px;
+    text-align: center;
+    font-size: 0.9em;
+}
+.badge-green { background: #d4edda; color: #155724; }
+.badge-yellow { background: #fff3cd; color: #856404; }
+.badge-orange { background: #ffe5b4; color: #b35900; }
+.badge-red { background: #f8d7da; color: #721c24; }
+.badge-excused { background: #d1ecf1; color: #0c5460; }
+
+/* ===================== أزرار الحالة اليومية ===================== */
+.status-group {
+    display: inline-flex;
+    gap: 4px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #f8f9fa;
+}
+.status-btn {
+    padding: 6px 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.82em;
+    font-weight: 500;
+    transition: all 0.15s;
+    color: #555;
+    white-space: nowrap;
+}
+.status-btn:hover { background: #e9ecef; }
+.status-btn.active-present { background: var(--green); color: white; font-weight: 700; }
+.status-btn.active-absent { background: var(--red); color: white; font-weight: 700; }
+.status-btn.active-excused { background: var(--excused); color: white; font-weight: 700; }
+
+/* ===================== النوافذ المنبثقة ===================== */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 15px;
+}
+.modal.show { display: flex; }
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: pop 0.2s ease;
+}
+@keyframes pop {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.modal-content h3 { margin-bottom: 15px; color: var(--primary-light); }
+.modal-content label { display: block; margin: 12px 0; font-weight: 500; }
+.modal-content input, .modal-content select, .modal-content textarea {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-family: inherit;
+    margin-top: 5px;
+    font-size: 1em;
+}
+.modal-actions { display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; }
+
+/* ===================== لوحة التسجيل اليومي ===================== */
+.daily-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    border-right: 5px solid var(--primary-light);
+}
+.daily-controls {
+    display: flex;
+    gap: 15px;
+    align-items: end;
+    flex-wrap: wrap;
+    margin: 15px 0;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+}
+.daily-controls input {
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-family: inherit;
+}
+.daily-info {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    background: #f8f9fa;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+.daily-info span strong { color: var(--primary-light); }
+
+/* ===================== صفحة الطالب ===================== */
+.student-header {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+.student-header.row-green { border-right: 6px solid var(--green); }
+.student-header.row-yellow { border-right: 6px solid var(--yellow); }
+.student-header.row-orange { border-right: 6px solid var(--orange); }
+.student-header.row-red { border-right: 6px solid var(--red); }
+.student-header h2 { color: var(--primary-light); margin-bottom: 5px; }
+.student-stats { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
+.stat-box {
+    background: #f8f9fa;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 130px;
+}
+.stat-num { display: block; font-size: 2em; font-weight: 700; color: var(--primary-light); }
+.stat-lbl { font-size: 0.88em; color: var(--muted); }
+
+/* ===================== رسائل ===================== */
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+.alert-success { background: #d4edda; color: #155724; border-right: 4px solid var(--green); }
+.alert-error { background: #f8d7da; color: #721c24; border-right: 4px solid var(--red); }
+.alert-info { background: #d1ecf1; color: #0c5460; border-right: 4px solid #17a2b8; }
+.alert-warning { background: #fff3cd; color: #856404; border-right: 4px solid var(--yellow); }
+
+/* ===================== تبويبات الصفحات ===================== */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ===================== النماذج ===================== */
+.filter-form {
+    display: flex;
+    gap: 15px;
+    align-items: end;
+    flex-wrap: wrap;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.filter-form input, .filter-form select {
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-family: inherit;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: var(--muted);
+    margin-top: 40px;
+    font-size: 0.9em;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    background: white;
+    border-radius: 10px;
+    color: var(--muted);
+    font-size: 1.05em;
+}
+.empty-state .icon { font-size: 3em; display: block; margin-bottom: 10px; }
+
+/* ===================== نموذج الإنذار ===================== */
+.warning-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+    overflow-y: auto;
+}
+.warning-modal.show { display: flex; }
+
+.warning-paper {
+    background: white;
+    width: 100%;
+    max-width: 850px;
+    padding: 40px 50px;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    margin: 30px auto;
+    font-family: 'Tajawal', 'Traditional Arabic', serif;
+    line-height: 1.9;
+    color: #111;
+    animation: slideDown 0.3s ease;
+}
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.warning-paper .letterhead {
+    text-align: center;
+    padding-bottom: 15px;
+    border-bottom: 3px double #1e3c72;
+    margin-bottom: 25px;
+}
+.warning-paper .letterhead .school-name {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: #1e3c72;
+    margin-bottom: 5px;
+}
+.warning-paper .letterhead .school-info {
+    font-size: 0.92em;
+    color: #555;
+}
+.warning-paper .letterhead .ref {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.warning-title {
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 700;
+    padding: 12px;
+    margin: 20px 0;
+    border-radius: 6px;
+    letter-spacing: 1px;
+}
+.warning-title.level-1 { background: #fff3cd; color: #856404; border: 2px solid #ffc107; }
+.warning-title.level-2 { background: #ffe5b4; color: #b35900; border: 2px solid #fd7e14; }
+.warning-title.level-3 { background: #f8d7da; color: #721c24; border: 2px solid #dc3545; }
+
+.student-info-box {
+    background: #f8f9fa;
+    border-right: 4px solid #1e3c72;
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+}
+.student-info-box table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: auto;
+}
+.student-info-box td {
+    padding: 6px 10px;
+    border: none;
+    font-size: 1em;
+    text-align: right;
+}
+.student-info-box td.label {
+    font-weight: 700;
+    color: #1e3c72;
+    width: 130px;
+}
+
+.warning-body {
+    text-align: justify;
+    font-size: 1.05em;
+    line-height: 2.1;
+    margin: 20px 0;
+}
+.warning-body p {
+    margin-bottom: 14px;
+    text-indent: 30px;
+}
+.warning-body .number-badge {
+    display: inline-block;
+    background: #1e3c72;
+    color: white;
+    padding: 2px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    margin: 0 4px;
+}
+
+.recommendations {
+    background: #f0f4f8;
+    padding: 15px 25px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border-right: 4px solid #2a5298;
+}
+.recommendations h4 {
+    color: #1e3c72;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+.recommendations ul { padding-right: 25px; }
+.recommendations li { margin-bottom: 6px; font-size: 0.98em; }
+
+.signatures {
+    margin-top: 50px;
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    text-align: center;
+}
+.signatures .sig-box { padding: 10px; }
+.signatures .sig-title {
+    font-weight: 700;
+    color: #1e3c72;
+    margin-bottom: 40px;
+    font-size: 1.02em;
+}
+.signatures .sig-line {
+    border-top: 2px dotted #333;
+    padding-top: 6px;
+    font-weight: 600;
+    color: #222;
+    font-size: 1em;
+}
+
+.warning-date {
+    text-align: left;
+    margin-top: 25px;
+    font-size: 0.95em;
+    color: #444;
+    direction: rtl;
+}
+
+.warning-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e4e8;
+}
+
+@media print {
+    body * { visibility: hidden; }
+    .warning-paper, .warning-paper * { visibility: visible; }
+    .warning-paper {
+        position: absolute;
+        top: 0; right: 0; left: 0;
+        margin: 0;
+        padding: 20px;
+        box-shadow: none;
+        border-radius: 0;
     }
-  </style>
+    .warning-actions { display: none !important; }
+    .warning-modal { background: white; position: static; padding: 0; }
+}
+
+@media (max-width: 700px) {
+    .warning-paper { padding: 25px 20px; }
+    .warning-paper .letterhead .school-name { font-size: 1.2em; }
+    .warning-title { font-size: 1.15em; }
+    .signatures { grid-template-columns: 1fr; gap: 30px; }
+    .signatures .sig-title { margin-bottom: 25px; }
+}
+
+@media (max-width: 600px) {
+    header h1 { font-size: 1.3em; }
+    .stats-cards { grid-template-columns: repeat(2, 1fr); }
+    nav button { padding: 7px 12px; font-size: 0.85em; }
+    td, th { padding: 8px; font-size: 0.82em; }
+    .status-btn { padding: 5px 8px; font-size: 0.75em; }
+    .login-box { padding: 30px 22px; }
+}
+</style>
 </head>
 <body>
 
-  <div class="app-viewport relative overflow-hidden flex flex-col justify-between">
-    
-    <header class="bg-maroon-dark text-beige p-4 md:p-5 shadow-md border-b-4 border-gold flex justify-between items-center z-10 no-print">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-maroon-light flex items-center justify-center text-gold text-xl md:text-2xl font-bold shadow-inner">
-          <i class="fa-solid fa-shield-halved"></i>
-        </div>
-        <div>
-          <h1 class="font-cairo font-black text-lg md:text-xl text-beige leading-tight">منصة التقييم والتحليل السيبراني</h1>
-          <p class="text-xs md:text-sm text-gold-light font-medium"> : الاستجابة للحوادث وخطة التعافي من الكوارث (DRP)</p>
-        </div>
-      </div>
-      
-      <!-- Top Live Timer Bar -->
-      <div id="top-timer-display" class="hidden flex items-center gap-2 bg-maroon/80 px-4 py-2 rounded-xl border border-gold/40 text-beige">
-        <i class="fa-solid fa-stopwatch text-gold text-lg"></i>
-        <span id="timer-text" class="font-mono text-lg font-black tracking-wider text-amber-300">20:00</span>
-      </div>
-    </header>
+<!-- ===================== شاشة تسجيل الدخول ===================== -->
+<div id="loginScreen">
+    <div class="login-box">
+        <span class="logo">🔐</span>
+        <h1>مدرسة الطرة الثانوية للبنين</h1>
+        <p class="subtitle">نظام الحضور والغياب — الصف الثاني عشر / تكنولوجيا المعلومات</p>
 
-    <main id="main-container" class="flex-1 p-4 md:p-8 overflow-y-auto custom-scrollbar">
+        <label for="passwordInput">كلمة المرور</label>
+        <input type="password" id="passwordInput" placeholder="••••••••" autocomplete="off">
 
-      <!-- ================= SCREEN 1: WELCOME / INTRO ================= -->
-      <section id="screen-welcome" class="space-y-6 max-w-4xl mx-auto py-2">
-        
-        <div class="bg-gradient-to-br from-maroon-dark to-maroon text-beige p-8 rounded-2xl shadow-xl border border-gold/20 text-center relative overflow-hidden">
-          <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl text-beige pointer-events-none">
-            <i class="fa-solid fa-network-wired"></i>
-          </div>
-          <span class="inline-block px-4 py-1.5 bg-gold/20 text-gold text-xs md:text-sm font-bold rounded-full mb-3 border border-gold/30">
-            نموذج تقييمي رسمي مخصص - مؤقت 20 دقيقة
-          </span>
-          <h2 class="text-2xl md:text-4xl font-black font-cairo mb-3 leading-snug">
-            اختبار سيناريوهات الأمن السيبراني وإدارة الحوادث
-          </h2>
-          <p class="text-beige-paper text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-light">
-            نموذج امتحاني ذكي يقوم بتوليد ترتيب عشوائي فريد للأسئلة والخيارات الأربعة لكل طالب، لقياس التفكير النقدي وقدرات التحليل الميداني والتقييم لـ 25 سيناريو .
-          </p>
-        </div>
+        <button id="loginBtn">🔓 دخول</button>
 
-        <!-- Features Overview Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-beige-card p-5 rounded-xl border border-beige-dark shadow-sm flex items-start gap-4">
-            <div class="p-3 bg-maroon-subtle rounded-lg text-maroon font-bold text-xl">
-              <i class="fa-solid fa-stopwatch text-maroon"></i>
-            </div>
-            <div>
-              <h3 class="font-bold text-maroon text-base mb-1">توقيت إجباري (20 دقيقة)</h3>
-              <p class="text-xs text-charcoal-muted leading-relaxed">يتوفر لديك دقيقة واحدة تقريباً لكل سؤال. يتم تسليم النموذج تلقائياً فور انتهاء الوقت.</p>
-            </div>
-          </div>
+        <div class="login-error" id="loginError">❌ كلمة المرور غير صحيحة</div>
 
-          <div class="bg-beige-card p-5 rounded-xl border border-beige-dark shadow-sm flex items-start gap-4">
-            <div class="p-3 bg-maroon-subtle rounded-lg text-maroon font-bold text-xl">
-              <i class="fa-solid fa-shuffle text-maroon"></i>
-            </div>
-            <div>
-              <h3 class="font-bold text-maroon text-base mb-1">عشوائية فريدة (Shuffled)</h3>
-              <p class="text-xs text-charcoal-muted leading-relaxed">يضمن النظام عدم تكرار ترتيب الأسئلة أو الخيارات بين المتقدمين.</p>
-            </div>
-          </div>
+        <div class="login-hint">💡 هذا النظام محمي. الدخول للمعلم فقط.</div>
+    </div>
+</div>
 
-          <div class="bg-beige-card p-5 rounded-xl border border-beige-dark shadow-sm flex items-start gap-4">
-            <div class="p-3 bg-maroon-subtle rounded-lg text-maroon font-bold text-xl">
-              <i class="fa-solid fa-chart-line text-maroon"></i>
+<!-- ===================== المحتوى ===================== -->
+<div id="mainApp" style="display:none;">
+
+<header>
+    <div class="container">
+        <h1>🏫 مدرسة الطرة الثانوية للبنين</h1>
+        <p>نظام الحضور والغياب - الصف الثاني عشر / تكنولوجيا المعلومات</p>
+        <nav>
+            <button class="nav-btn active" data-page="home">🏠 الرئيسية</button>
+            <button class="nav-btn" data-page="daily">📝 التسجيل اليومي</button>
+            <button class="nav-btn" data-page="reports">📊 التقارير</button>
+            <button class="nav-btn" data-page="alerts">🔔 التنبيهات</button>
+            <button class="nav-btn" data-page="backup">💾 النسخ الاحتياطي</button>
+            <button class="nav-btn logout-btn" id="logoutBtn">🚪 خروج</button>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+
+    <section id="page-home" class="page active">
+        <div class="stats-cards" id="statsCards"></div>
+
+        <div class="toolbar">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="navigate('daily')">📝 الذهاب للتسجيل اليومي</button>
+                <button class="btn btn-warning" onclick="clearAllAbsences()">🗑️ حذف جميع السجلات</button>
             </div>
-            <div>
-              <h3 class="font-bold text-maroon text-base mb-1">تقييم لقياس معيار Distinction</h3>
-              <p class="text-xs text-charcoal-muted leading-relaxed">تقرير شامل وفوري بالنتيجة والدرجة المستحقة (Distinction, Merit, Pass, Referral) مع تعليل دقيق.</p>
-            </div>
-          </div>
+            <span class="today-badge" id="todayBadge"></span>
         </div>
 
-        <!-- Student Info Input Panel -->
-        <div class="bg-beige-card p-6 rounded-xl border border-beige-dark shadow-sm space-y-4">
-          <h3 class="font-bold font-cairo text-maroon text-base flex items-center gap-2">
-            <i class="fa-solid fa-user-pen text-gold"></i> معلومات المتقدم للاختبار:
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold text-charcoal mb-1">اسم الطالب الكامل:</label>
-              <input type="text" id="student-name-input" placeholder="أدخل اسمك الثلاثي..." class="w-full p-3 bg-beige-paper border border-beige-dark rounded-lg text-sm text-charcoal focus:outline-none focus:border-maroon font-medium">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px;">#</th>
+                        <th>اسم الطالب</th>
+                        <th>رقم الطالب</th>
+                        <th>غائب</th>
+                        <th>بعذر</th>
+                        <th>الحالة</th>
+                        <th>إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="studentsTable"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="page-daily" class="page">
+        <h2 style="margin-bottom:15px; color:var(--primary-light);">📝 التسجيل اليومي</h2>
+
+        <div class="daily-panel">
+            <div class="daily-controls">
+                <label>📅 التاريخ: <input type="date" id="dailyDate"></label>
+                <button class="btn btn-secondary" onclick="setDateToday()">اليوم</button>
+                <button class="btn btn-secondary" onclick="changeDay(-1)">⬅️ يوم سابق</button>
+                <button class="btn btn-secondary" onclick="changeDay(1)">يوم تالٍ ➡️</button>
+                <button class="btn btn-success" onclick="saveDailyRecord()">💾 حفظ</button>
             </div>
-            <div>
-              <label class="block text-xs font-bold text-charcoal mb-1">رقم الادكسل:</label>
-              <input type="text" id="student-id-input" placeholder="أدخل رقم الادكسل أو الرقم الوطني..." class="w-full p-3 bg-beige-paper border border-beige-dark rounded-lg text-sm text-charcoal focus:outline-none focus:border-maroon font-medium">
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+                <button class="btn btn-success btn-small" onclick="markAll('present')">✅ الكل حاضر</button>
+                <button class="btn btn-danger btn-small" onclick="markAll('absent')">❌ الكل غائب</button>
+                <button class="btn btn-info btn-small" onclick="markAll('excused')">📝 الكل بعذر</button>
+                <button class="btn btn-secondary btn-small" onclick="resetAll()">🔄 مسح التحديد</button>
             </div>
-          </div>
+
+            <div class="daily-info">
+                <span>📊 الحاضر: <strong id="cPresent">0</strong></span>
+                <span>❌ الغائب: <strong id="cAbsent">0</strong></span>
+                <span>📝 بعذر: <strong id="cExcused">0</strong></span>
+                <span>❓ لم يسجل: <strong id="cUnset">0</strong></span>
+            </div>
         </div>
 
-        <div class="text-center pt-2">
-          <button onclick="startQuiz()" class="bg-maroon hover:bg-maroon-light text-beige font-bold text-lg px-10 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 inline-flex items-center gap-3">
-            <span>توليد نموذج فريد وبدء الاختبار (20 دقيقة)</span>
-            <i class="fa-solid fa-play"></i>
-          </button>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px;">#</th>
+                        <th>اسم الطالب</th>
+                        <th>رقم الطالب</th>
+                        <th style="min-width:280px;">الحالة</th>
+                    </tr>
+                </thead>
+                <tbody id="dailyTable"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="page-reports" class="page">
+        <h2 style="margin-bottom:15px; color:var(--primary-light);">📊 التقارير الكاملة</h2>
+
+        <div class="filter-form">
+            <label>من تاريخ: <input type="date" id="repStart" value="2026-08-23"></label>
+            <label>إلى تاريخ: <input type="date" id="repEnd" value="2027-06-18"></label>
+            <label>نوع الحساب:
+                <select id="repMode">
+                    <option value="all">جميع السجلات</option>
+                    <option value="absent">الغياب فقط (بدون عذر)</option>
+                    <option value="excused">بعذر فقط</option>
+                </select>
+            </label>
+            <button class="btn btn-primary" onclick="renderReports()">🔍 عرض</button>
+            <button class="btn btn-secondary" onclick="exportCSV()">📥 تصدير CSV</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ طباعة</button>
         </div>
 
-      </section>
+        <div id="reportsSummary" class="alert alert-info"></div>
 
-      <!-- ================= SCREEN 2: QUIZ INTERFACE ================= -->
-      <section id="screen-quiz" class="hidden space-y-6 max-w-4xl mx-auto">
-        
-        <!-- Timer Progress & Question Status Tracker -->
-        <div class="bg-beige-card p-4 rounded-xl border border-beige-dark shadow-sm space-y-3">
-          <div class="flex flex-col md:flex-row justify-between md:items-center gap-2">
-            <div class="flex items-center gap-3">
-              <span class="text-xs md:text-sm font-bold text-maroon flex items-center gap-2">
-                <i class="fa-solid fa-file-signature text-gold"></i>
-                السؤال <span id="current-q-num" class="text-lg font-extrabold">1</span> من <span id="total-q-num">25</span>
-              </span>
-              <span id="answered-badge" class="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full border border-emerald-300">
-                المُجاب: 0 / 25
-              </span>
-            </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:50px;">#</th>
+                        <th>اسم الطالب</th>
+                        <th>رقم الطالب</th>
+                        <th>غائب</th>
+                        <th>بعذر</th>
+                        <th>الإجمالي</th>
+                        <th>الحالة</th>
+                        <th>تواريخ الغياب</th>
+                    </tr>
+                </thead>
+                <tbody id="reportsTable"></tbody>
+            </table>
+        </div>
+    </section>
 
-            <!-- Quiz Timer Bar -->
-            <div id="quiz-timer-container" class="flex items-center gap-3 bg-beige-paper px-4 py-1.5 rounded-lg border border-beige-dark">
-              <span class="text-xs font-bold text-charcoal-muted">الوقت المتبقي:</span>
-              <span id="quiz-timer-text" class="font-mono font-black text-lg text-maroon">20:00</span>
-            </div>
-          </div>
+    <section id="page-alerts" class="page">
+        <h2 style="margin-bottom:15px; color:var(--primary-light);">🔔 التنبيهات والإنذارات</h2>
+        <div class="alert alert-info">
+            ℹ️ يتم احتساب التنبيهات بناءً على <strong>الغياب بدون عذر فقط</strong>.
+        </div>
+        <div id="alertsList"></div>
+    </section>
 
-          <!-- Time Progress Bar -->
-          <div class="w-full bg-beige-paper h-2.5 rounded-full overflow-hidden p-0.5 border border-beige-dark">
-            <div id="time-progress-bar" class="bg-emerald-600 h-full rounded-full transition-all duration-1000" style="width: 100%;"></div>
-          </div>
+    <section id="page-backup" class="page">
+        <h2 style="margin-bottom:15px; color:var(--primary-light);">💾 النسخ الاحتياطي والاستعادة</h2>
+
+        <div class="alert alert-warning">
+            ⚠️ البيانات محفوظة داخل متصفحك فقط. قم بعمل نسخة احتياطية دورياً.
         </div>
 
-        <!-- Question Navigation Grid Navigator Modal / Toggle -->
-        <div class="bg-beige-card p-4 rounded-xl border border-beige-dark shadow-sm">
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-xs font-bold text-charcoal-muted">جدول الانتقال السريع بين الأسئلة:</span>
-            <span class="text-xs text-gold-light font-semibold">انقر على رقم السؤال للانتقال إليه مباشرة</span>
-          </div>
-          <div id="questions-grid-navigator" class="grid grid-cols-5 sm:grid-cols-10 md:grid-cols-25 gap-1.5">
-            <!-- Dynamically generated question numbers -->
-          </div>
+        <div style="background:white; padding:20px; border-radius:10px; margin-bottom:15px;">
+            <h3 style="margin-bottom:10px;">📤 تصدير نسخة احتياطية</h3>
+            <p style="color:var(--muted); margin-bottom:10px;">يحفظ جميع الطلاب والسجلات في ملف JSON.</p>
+            <button class="btn btn-primary" onclick="exportBackup()">📥 تنزيل النسخة الاحتياطية</button>
         </div>
 
-        <!-- Question Box -->
-        <div class="bg-beige-card p-6 md:p-8 rounded-2xl border border-beige-dark shadow-sm relative">
-          <div class="inline-block px-3 py-1 bg-maroon-subtle text-maroon text-xs font-extrabold rounded-md mb-3 border border-maroon/20" id="q-category">
-            الموضوع: الاستجابة الميدانية
-          </div>
-          
-          <h2 id="q-text" class="text-base md:text-lg font-bold font-cairo text-charcoal leading-relaxed mb-6">
-            جاري تحميل السيناريو...
-          </h2>
-
-          <!-- Options Container -->
-          <div id="options-container" class="space-y-3">
-            <!-- Options loaded dynamically -->
-          </div>
+        <div style="background:white; padding:20px; border-radius:10px;">
+            <h3 style="margin-bottom:10px;">📥 استعادة نسخة احتياطية</h3>
+            <p style="color:var(--muted); margin-bottom:10px;">اختر ملف JSON لاستعادة البيانات.</p>
+            <input type="file" id="importFile" accept=".json" style="margin-bottom:10px;">
+            <br>
+            <button class="btn btn-success" onclick="importBackup()">⬆️ استعادة</button>
         </div>
+    </section>
 
-        <!-- Navigation Action Buttons -->
-        <div class="flex flex-wrap justify-between items-center gap-3 pt-2">
-          <button id="btn-prev" onclick="prevQuestion()" class="bg-beige-paper hover:bg-beige-dark text-charcoal font-bold px-6 py-3 rounded-xl border border-beige-dark transition-all disabled:opacity-40 disabled:cursor-not-allowed text-sm flex items-center gap-2">
-            <i class="fa-solid fa-chevron-right"></i>
-            <span>السابق</span>
-          </button>
+    <section id="page-student" class="page"></section>
 
-          <div class="flex items-center gap-2">
-            <button onclick="confirmFinishQuiz()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-6 py-3 rounded-xl shadow transition-all text-sm flex items-center gap-2">
-              <i class="fa-solid fa-paper-plane"></i>
-              <span>تسليم الاختبار النهائى</span>
-            </button>
-          </div>
+</main>
 
-          <button id="btn-next" onclick="nextQuestion()" class="bg-maroon hover:bg-maroon-light text-beige font-bold px-8 py-3 rounded-xl shadow transition-all text-sm flex items-center gap-2">
-            <span>التالي</span>
-            <i class="fa-solid fa-chevron-left"></i>
-          </button>
-        </div>
+<footer>
+    © 2026-2027 - مدرسة الطرة الثانوية للبنين | نظام الحضور والغياب
+</footer>
 
-      </section>
+</div>
 
-      <!-- ================= SCREEN 3: RESULTS & DETAILED ANALYSIS ================= -->
-      <section id="screen-results" class="hidden space-y-6 max-w-4xl mx-auto">
-        
-        <!-- Results Summary Header -->
-        <div class="bg-beige-card p-6 md:p-8 rounded-2xl border border-beige-dark shadow-md text-center relative overflow-hidden">
-          <div class="text-gold text-5xl mb-3">
-            <i class="fa-solid fa-award" id="result-badge-icon"></i>
-          </div>
-          
-          <h2 class="text-2xl md:text-3xl font-black font-cairo text-maroon mb-1">نتيجة التقييم النهائي لمعيار D</h2>
-          <p class="text-xs text-charcoal-muted mb-4">نظام إدارة الحوادث السيبرانية والتعافي من الكوارث</p>
+<!-- ===================== Modal: الإنذار الرسمي ===================== -->
+<div class="warning-modal" id="warningModal">
+    <div class="warning-paper" id="warningPaper"></div>
+</div>
 
-          <!-- Student Meta Tag -->
-          <div id="result-student-info" class="inline-block bg-beige-paper px-4 py-1.5 rounded-full border border-beige-dark text-xs font-bold text-charcoal mb-6">
-            اسم الطالب: - | الرقم: -
-          </div>
+<script>
+/* ==========================================================================
+   🔐 0. نظام تسجيل الدخول
+   ========================================================================== */
+(function() {
+    "use strict";
+    const CORRECT_PASSWORD = "IT-12";
+    const SESSION_KEY = "attendance_auth";
+    const safeStorage = {
+        get(k) { try { return localStorage.getItem(k); } catch(e) { return null; } },
+        set(k,v) { try { localStorage.setItem(k,v); } catch(e) {} },
+        remove(k) { try { localStorage.removeItem(k); } catch(e) {} }
+    };
 
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-            <div class="p-4 bg-beige-paper rounded-xl border border-beige-dark">
-              <div class="text-xs text-charcoal-muted font-bold mb-1">الدرجة الكلية</div>
-              <div id="result-score-text" class="text-2xl md:text-3xl font-black text-maroon font-cairo">0 / 25</div>
-            </div>
-            
-            <div class="p-4 bg-beige-paper rounded-xl border border-beige-dark">
-              <div class="text-xs text-charcoal-muted font-bold mb-1">النسبة المئوية</div>
-              <div id="result-percentage-text" class="text-2xl md:text-3xl font-black text-gold font-cairo">0%</div>
-            </div>
+    let loginScreen, mainApp, passInput, loginError;
 
-            <div class="p-4 bg-beige-paper rounded-xl border border-beige-dark">
-              <div class="text-xs text-charcoal-muted font-bold mb-1">التقييم المستحق</div>
-              <div id="result-level-text" class="text-base font-bold text-maroon font-cairo mt-1">Pass</div>
-            </div>
+    function initLoginUI() {
+        loginScreen = document.getElementById("loginScreen");
+        mainApp = document.getElementById("mainApp");
+        passInput = document.getElementById("passwordInput");
+        loginError = document.getElementById("loginError");
+        if (!loginScreen || !mainApp || !passInput) return;
 
-            <div class="p-4 bg-beige-paper rounded-xl border border-beige-dark">
-              <div class="text-xs text-charcoal-muted font-bold mb-1">الوقت المستغرق</div>
-              <div id="result-time-spent" class="text-2xl md:text-3xl font-black text-charcoal font-cairo">00:00</div>
-            </div>
-          </div>
+        const loginBtn = document.getElementById("loginBtn");
+        if (loginBtn) loginBtn.addEventListener("click", checkPassword);
 
-          <p id="result-feedback-msg" class="text-sm text-charcoal leading-relaxed max-w-2xl mx-auto bg-maroon-subtle p-4 rounded-xl border border-maroon/20 font-medium">
-            جاري تحليل النتيجة...
-          </p>
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) logoutBtn.addEventListener("click", logout);
 
-          <!-- Action Control Buttons -->
-          <div class="flex flex-wrap justify-center gap-3 mt-6 no-print">
-            <button onclick="restartQuiz()" class="bg-maroon hover:bg-maroon-light text-beige font-bold text-sm px-6 py-2.5 rounded-xl shadow transition-all flex items-center gap-2">
-              <i class="fa-solid fa-rotate-right"></i>
-              <span>إعادة الاختبار (نموذج عشوائي جديد)</span>
-            </button>
-            <button onclick="window.print()" class="bg-beige-paper hover:bg-beige-dark text-charcoal font-bold text-sm px-6 py-2.5 rounded-xl border border-beige-dark transition-all flex items-center gap-2">
-              <i class="fa-solid fa-print"></i>
-              <span>طباعة تقرير الطالب</span>
-            </button>
-          </div>
-        </div>
+        passInput.addEventListener("keypress", function(e) {
+            if (e.key === "Enter" || e.keyCode === 13) { e.preventDefault(); checkPassword(); }
+        });
 
-        <!-- Filtered Answers Review Section -->
-        <div class="bg-beige-card p-6 rounded-2xl border border-beige-dark shadow-sm">
-          <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6 pb-4 border-b border-beige-dark">
-            <h3 class="font-bold font-cairo text-lg text-maroon flex items-center gap-2">
-              <i class="fa-solid fa-magnifying-glass-chart"></i>
-              تحليل إجابات الطالب والتفسير العلمي
-            </h3>
-            <div class="flex gap-2 text-xs font-bold no-print">
-              <button onclick="filterReview('all')" id="filter-btn-all" class="px-4 py-2 rounded-lg bg-maroon text-beige">الكل (<span id="count-all">25</span>)</button>
-              <button onclick="filterReview('correct')" id="filter-btn-correct" class="px-4 py-2 rounded-lg bg-beige-paper text-charcoal hover:bg-beige-dark">الصحيحة (<span id="count-correct">0</span>)</button>
-              <button onclick="filterReview('wrong')" id="filter-btn-wrong" class="px-4 py-2 rounded-lg bg-beige-paper text-charcoal hover:bg-beige-dark">الخاطئة (<span id="count-wrong">0</span>)</button>
-            </div>
-          </div>
-
-          <div id="review-questions-list" class="space-y-6">
-            <!-- Review items generated dynamically via JS -->
-          </div>
-        </div>
-
-      </section>
-
-    </main>
-
-    <footer class="bg-maroon-dark text-beige-paper p-4 text-center text-xs md:text-sm font-semibold border-t-2 border-gold/30 flex justify-between items-center px-6 z-10">
-      <div> إدارة الحوادث السيبرانية والتعافي من الكوارث</div>
-      <div class="text-gold font-bold flex items-center gap-1.5 text-sm">
-        <i class="fa-solid fa-user-check"></i>
-        <span> <h2> إعداد: أ. منذر الزعبي </h2></span>
-      </div>
-    </footer>
-
-  </div>
-
-  <script>
-    /* ================= 25 COMPLEX SCENARIO QUESTIONS DATABASE ================= */
-    const rawQuestionsData = [
-      {
-        id: 1,
-        category: "تحديد وتقييم الحوادث والإنذار الكاذب",
-        question: "أفادت وحدة المراقبة الأمنية (SIEM) بتوليد 500 تنبيه في دقيقة واحدة تشير إلى وجود برمجية خبيثة تنقل بيانات عالية الحجم. عند الفحص الفني الأولي تبين أن موظفاً صرح له رسمياً قام بتشغيل برنامج النسخ الاحتياطي الدوري المجدول. كيف يجب على فريق CSIRT تصنيف هذا البلاغ؟",
-        options: [
-          "إنذار كاذب (False Alarm)؛ لأن السلوك ناتج عن إجراء مصرح به من نظام معروف ولم يحدث اختراق أمني حقيقي.",
-          "حادث أمني من الدرجة العالية؛ لأن تنبيهات النظام الأمني لا يمكن أن تكون خاطئة ويجب إيقاف حساب الموظف فوراً.",
-          "هجوم حرمان من الخدمة (DDoS)؛ بسب الضغط العالي الناتج عن توليد 500 تنبيه في دقيقة واحدة.",
-          "حادث تسريب بيانات حرج؛ لأن نقل البيانات عالية الحجم يتطلب دائماً استجابة الشرطة والجهات القانونية."
-        ],
-        correct: 0,
-        explanation: "يحدث الإنذار الكاذب (False Alarm) عندما يقوم نظام حماية الأمن السيبراني بالتنبيه عن مشكلة أو نشاط مريب غير ضار في الواقع (مثل برنامج النسخ الاحتياطي المصرح به). التقييم الأولي السليم يحمي المنظمة من إرباك العمل وتضييع موارد فريق الاستجابة."
-      },
-      {
-        id: 2,
-        category: "أدوار فريق CSIRT والتناغم القيادي",
-        question: "وقع اختراق لشبكة شركة اتصالات وتم تسريب قاعدة بيانات مشتركيها. اندلع نزاع بين مدير IT (قائد الحادث التقني) وأحد أعضاء مجلس الإدارة حول من يتولى مخاطبة وسائل الإعلام والتواصل مع مجلس الإدارة. وفق الهيكلية التنظيمية المعتمدة لسياسة الاستجابة، من المسؤول عن هذا الدور؟",
-        options: [
-          "قائد الفريق (Team Leader)؛ لأنه من كبار الموظفين الإداريين والمسؤول عن الاتصال بمجلس الإدارة والإدارة العليا.",
-          "مدير الحادث (Incident Manager)؛ لأنه الأكثر معرفة بالتفاصيل التقنية الدقيقة للهجوم.",
-          "الأعضاء المنتسبون للسيناريو التقني؛ لأنهم يملكون الأدلة الجنائية المسحوبة من الأجهزة.",
-          "مستشار الأمن الخارجي؛ لتجنب أي مسؤولية قانونية داخلية على موظفي الشركة."
-        ],
-        correct: 0,
-        explanation: "في هيكلية فريق CSIRT، يكون قائد الفريق (Team Leader) هو المسؤول الإداري الأعلى والربط المباشر مع مجلس الإدارة لتوصيل الصورة الاستراتيجية، بينما يتفرغ قائد/مدير الحادث (Incident Manager) للاستجابة التقنية والتفصيلية الميدانية."
-      },
-      {
-        id: 3,
-        category: "الأولويات الميدانية والاستجابة للطوارئ",
-        question: "اندلع حريق مادي مفاجئ في مركز البيانات الرئيسي لمستشفى يضم خوادم إدارة العمليات الجراحية الحية. ما هي الإجراء الفوري الأول وفق تسلسل أولويات الاستجابة للحوادث الكارثية؟",
-        options: [
-          "إخلاء المكان فوراً لحماية سلامة الأشخاص والأفراد كأولوية قصوى قبل أي أصول تقنية.",
-          "أخذ صورة مطابقة للقرص الصلب (Disk Image) للحفاظ على الأدلة قبل تضرر الخوادم بالحريق.",
-          "فصل الشبكة وجعل محركات الأقراص Offline لحماية بيانات المرضى الحساسة.",
-          "تطبيق إجراءات تقليل التعطيل وإعادة تشغيل الأنظمة غير المتأثرة من الموقع البديل."
-        ],
-        correct: 0,
-        explanation: "الأولوية الأولى والمطلقة في جميع معايير الاستجابة للحوادث هي لحماية سلامة البشر والأرواح (Life Safety). الأنظمة والمعدات تأتي دائماً في المرتبة التالية بغض النظر عن قيمتها المالية أو التقنية."
-      },
-      {
-        id: 4,
-        category: "الاحتواء والعزل الميداني",
-        question: "اكتشف مهندس الأمن السيبراني أن جهاز حاسوب في قسم المالية يتصل بسيرفر خارجي مجهول ويقوم بتشفير الملفات المحلية متأثراً بهجوم الفدية (Ransomware). ما هي الخطوة الفورية الأكثر صحة التي يتعين اتخاذها لاحتواء الضرر؟",
-        options: [
-          "عزل الجهاز فوراً عن الشبكة (فصل كابل الشبكة/الوايفاي) لمنع انتشار الفدية للأجهزة الأخرى.",
-          "إعادة تشغيل الجهاز (Reboot) فوراً لإيقاف برمجية الفدية عن العمل.",
-          "بدء عملية استعادة النسخ الاحتياطية على نفس الجهاز أثناء عمله بالشبكة.",
-          "إرسال إيميل تحذيري لجميع الموظفين قبل الاتخاذ أي إجراء تقني على الجهاز المتأثر."
-        ],
-        correct: 0,
-        explanation: "الخطوة الأولى للاحتواء الميداني في هجمات البرمجيات الخبيثة القابلة للانتقال (كالفدية) هي العزل الفوري للجهاز المصاب عن الشبكة لمنع تفشي الهجوم للشبكة الداخلية وخوادم الشركة."
-      },
-      {
-        id: 5,
-        category: "التحقيق الجنائي الرقمي وجمع الأدلة",
-        question: "أثناء معالجة حادث اختراق لخادم سرّي، طُلب من خبير التحقيق الجنائي الرقمي الحفاظ على الأدلة لدعم دعوى قضائية مرتقبة. ما هي الممارسة المعيارية الصائبة لجمع الأدلة الرقمية؟",
-        options: [
-          "أخذ نسخة مطابقة للقرص بت التلو الآخر (Bit-stream / Disk Image) للعمل عليها وحفظ الأصل.",
-          "نسخ الملفات المتأثرة يدوياً ونقلها إلى قرص مدمج Flash Drive عادي.",
-          "تحديث نظام التشغيل فوراً للتحقق مما إذا كانت ثغرة النظام هي السبب.",
-          "حذف الحساب المخترق فوراً لإخفاء آثاره ومسح سجلات الأحداث لتوفير المساحة."
-        ],
-        correct: 0,
-        explanation: "حماية الأدلة الجنائية الرقمية تتطلب أخذ صورة طبق الأصل للقرص (Disk Image / Bit-stream Image) لحفظ حالة النظام والتكوينات والملفات الوصفية (Metadata) دون تعديل الأصول لدعم التحقيق القضائي."
-      },
-      {
-        id: 6,
-        category: "حساب RTO و RPO والتقييم الزمني",
-        question: "مؤسسة مالية تُجري نسخاً احتياطياً كل 4 ساعات (الساعة 12:00، 4:00، 8:00). وقعت حادثة تلف خوادم الساعة 03:00 عصراً، ونجح فريق التعافي في إعادة تشغيل الخوادم والخدمة الساعة 07:00 مساءً. احسب قيم مؤشري RPO و RTO لهذه الحادثة بالترتيب.",
-        options: [
-          "RPO = 3 ساعات (من 12:00 إلى 03:00)، و RTO = 4 ساعات (من 03:00 إلى 07:00).",
-          "RPO = 4 ساعات، و RTO = 3 ساعات.",
-          "RPO = 7 ساعات، و RTO = 12 ساعة.",
-          "RPO = ساعة واحدة، و RTO = 5 ساعات."
-        ],
-        correct: 0,
-        explanation: "مؤشر RPO يعبر عن كمية البيانات المفقودة بالزمن من آخر نسخة احتياطية (من 12:00 إلى لحظة الحادث 03:00 = 3 ساعات). أما RTO فهو الوقت المستغرق لإعادة الخدمة من لحظة انقطاعها (من 03:00 إلى 07:00 = 4 ساعات)."
-      },
-      {
-        id: 7,
-        category: "الفرق البنيوي بين سياسة الحوادث و DRP",
-        question: "ترغب إحدى المنظمات في التمييز بين 'سياسة الاستجابة للحوادث' و 'خطة التعافي من الكوارث (DRP)'. أي العبارات التالية تصف الاختلاف البنيوي الجوهري بينهما؟",
-        options: [
-          "سياسة الحوادث تتعامل مع الهجمات والبرمجيات الخبيثة، بينما DRP تركز على الكوارث المادية والجسيمة التي تدمر البنية التحتية وتقتضي استعادة الأنظمة الحرجة.",
-          "سياسة الحوادث تطبق فقط بعد انتهاء الكارثة، بينما DRP تطبق قبل وقوع الكارثة فقط.",
-          "لا يوجد أي فرق بينهما وهما مصطلحان مترادفان تماماً لنفس الوثيقة.",
-          "سياسة الحوادث تخضع لمعيار ISO 27031 فقط، بينما DRP لا تخضع لأي معايير دولية."
-        ],
-        correct: 0,
-        explanation: "تختص سياسة الحوادث بإدارة الاختراقات والأنشطة الرقمية الخبيثة، في حين تهدف خطة التعافي من الكوارث (DRP) إلى مواجهة الكوارث الشاملة (كالحرائق والفيضانات) وتدمير المراكز المادية لاستعادة الأنظمة الحرجة واستمرارية العمل."
-      },
-      {
-        id: 8,
-        category: "إخطار الجهات الخارجية والمسؤولية القانونية",
-        question: "اكتشفت منظمة تسريباً للبيانات الشخصية والبطاقات الائتمانية لعميلاتها نتيجة اختراق خارجي. متى يكون إخطار الجهات الخارجية والقانونية (مثل هيئة حماية البيانات أو الشرطة) إجراءً أمنياً متطلباً؟",
-        options: [
-          "عند تسريب بيانات شخصية لحماية المؤسسة قانونياً والالتزام بالتشريعات المعتمدة وتتبع المجرمين.",
-          "فقط في حال طلب المهاجم مبلغ فدية يزيد عن مليون دولار.",
-          "يمنع إخطار أي جهة خارجية تحت أي ظرف لحماية سمعة الشركة التجارية بشكل مطلق.",
-          "فقط عند فشل فريق CSIRT في تحديد اسم المهاجم خلال أول 10 دقائق."
-        ],
-        correct: 0,
-        explanation: "يتوجب التواصل مع الجهات القانونية والشرطة أو الهيئات التنظيمية عند حدوث تسريب للبيانات الشخصية لضمان الامتثال للتشريعات لحماية المؤسسة والمواطنين، وبدء الملاحقات الجنائية."
-      },
-      {
-        id: 9,
-        category: "تقليل التعطيل التشغيلي",
-        question: "قام فريق CSIRT بعزل الجزء المخترق من شبكة الشركة. ما هو الإجراء التالي الأنسب لتقليل التوقف التشغيلي لقطاعات الشركة الأخرى غير المتأثرة؟",
-        options: [
-          "إعادة الأنظمة غير المتأثرة للاتصال بالإنترنت بشكل مراقب كإجراء احترازي لتقليل توقف العمل.",
-          "إبقاء جميع أجهزة المنظمة مغلقة ومفصولة لعدة أسابيع لحين انتهاء المحاكمة.",
-          "مسح كافة بيانات الشركة والبدء بإنشاء بنية تحتية جديدة من الصفر.",
-          "تغيير نشاط الشركة التجاري لحين صدور التقرير النهائي."
-        ],
-        correct: 0,
-        explanation: "من مبادئ عمل CSIRT تقليل التعطيل (Minimizing Disruption) عبر السماح للأنظمة غير المتأثرة بالعودة للعمل الآمن والمراقب لضمان استمرار أنشطة المؤسسة وعدم شل عملها بالكامل."
-      },
-      {
-        id: 10,
-        category: "مرحلة ما بعد الحادث والدروس المستفادة",
-        question: "بعد التعافي الكامل من هجوم سيبراني معقد، عقد فريق الاستجابة جلسة 'Lessons Learned'. أي المخرجات التالية تعد الهدف الرئيسي لهذه المرحلة؟",
-        options: [
-          "تحديث وتعديل الإجراءات الأمنية والتدريب لتلافي تكرار الثغرة مستقبلاً.",
-          "تحديد الموظف الذي ارتكب الخطأ ومعاقبته أمام جميع الزملاء.",
-          "إلغاء سياسة الأمن السيبراني السابقة والاعتماد على الحلول اليدوية والورقية.",
-          "إغلاق ملف الحادث دون كتابة تقارير تفصيلية لتجنب التسريبات."
-        ],
-        correct: 0,
-        explanation: "جلسة نتائج المراجعة واستخلاص الدروس (Lessons Learned) تهدف إلى تحليل نقاط الضعف التي استغلها الهجوم وتوصية بالتحسينات الفنية والتعديلات التدريبية لتطوير المنظومة ومنع التكرار."
-      },
-      {
-        id: 11,
-        category: "استراتيجيات المواقع البديلة (Redundant Sites)",
-        question: "مؤسسة طيران عالمية تفرض أن يكون وقت التعافي (RTO) أقرب ما يكون إلى الصفر (Near Zero RTO) لنظام حجز التذاكر. ما هي استراتيجية التعافي الأكثر ملاءمة لهذه المتطلبات؟",
-        options: [
-          "الموقع المكرر النشط فوراً (Hot / Redundant Site) الذي يعمل بشكل متزامن كلياً مع الموقع الرئيسي.",
-          "الموقع البارد (Cold Site) الذي يحتوي فقط على مساحة ومصدر كهرباء بدون أجهزة جاهزة.",
-          "الاعتماد على النسخ الاحتياطية المطبوعة ورقياً وتوزيعها بالبريد.",
-          "الموقع الدافئ (Warm Site) الذي يحتاج لعدة أيام لتجهيز البرمجيات والبيانات."
-        ],
-        correct: 0,
-        explanation: "لتحقيق RTO يقارب الصفر للأنظمة الحيوية جداً، يتطلب الأمر موقعاً مكرراً نشطاً (Hot Site / Redundant Site) يحتوي على بيانات وأجهزة مكررة ومتزامنة فورياً لتحويل الحركة إليه لحظة الفشل."
-      },
-      {
-        id: 12,
-        category: "معيار ISO 27031 ومنهجية PDCA",
-        question: "تطبق مؤسسة معيار ISO 27031 للجاهزية السيبرانية. أثناء مرحلة 'Check' (تحقق) من نموذج PDCA، ما الذي ينبغي على فريق إدارة التعافي القيام به؟",
-        options: [
-          "اختبار تمارين خطط التعافي ومراجعة قياسات RTO و RPO وتقييم كفاءتها.",
-          "صياغة كتابة الأهداف والأدوار الوظيفية لأول مرة.",
-          "توفير الميزانية لشراء محركات الأقراص السحابية.",
-          "تحديث الخطط بناءً على ملاحظات الثغرات المستكشفة (والتي تخص مرحلة Act)."
-        ],
-        correct: 0,
-        explanation: "مرحلة Check (تحقق) في منهجية PDCA لـ ISO 27031 تركز على المراقبة والقياس والاختبار التدريبي للخطط للتأكد من مدى تحقيقها للأهداف المحددة قبل وقوع الكارثة الفعلية."
-      },
-      {
-        id: 13,
-        category: "الاحتواء وحماية البيانات الحساسة",
-        question: "أثناء تصدي فريق CSIRT لهجوم يستهدف خوادم قواعد البيانات الحساسة، كيف تتمثل أولوية 'حماية البيانات' قبل تفاقم الاختراق؟",
-        options: [
-          "جعل محركات الأقراص المخزنة للبيانات الحساسة والقيمة Offline وفصلها عن مسارات الوصول الشبكي.",
-          "حذف قواعد البيانات كلياً حتى لا يتمكن المهاجم من قراءتها.",
-          "تغيير اسم الخادم على الشبكة مع ترك صلاحيات الوصول كما هي.",
-          "تشفير الشاشات الرئيسية للمستكشفين دون فصل محركات الأقراص."
-        ],
-        correct: 0,
-        explanation: "حماية البيانات تتطلب قطع اتصال وسائط التخزين الحاوية على بيانات حساسة (Making Disks Offline) لحمايتها من التعديل أو السرقة أو التشفير بواسطة البرمجيات الخبيثة أثناء الحادث."
-      },
-      {
-        id: 14,
-        category: "التوثيق الجنائي الجاهز للمحاكمة",
-        question: "لماذا يُصر معيار التعامل مع الحوادث السيبرانية على التوثيق التفصيلي والدقيق لكافة أفعال فريق CSIRT بالدقيقة والثانية أثناء الاستجابة؟",
-        options: [
-          "لتقديم سجل حوادث دقيق ودلائل مقبولة أمام المحاكم ودعم التحقيقات الجنائية وإثبات سلامة الإجراءات.",
-          "لإشغال الموظفين عن متابعة عملهم التقني الميداني.",
-          "لتحديد كمية المكافآت المالية لأعضاء الفريق بناءً على عدد الأسطر المكتوبة.",
-          "لأن القوانين تمنع استعادة الأجهزة إلا بعد كتابة 100 صفحة تقرير."
-        ],
-        correct: 0,
-        explanation: "التوثيق التفصيلي المحكم الزمني يعتبر جزءاً لا يتجزأ من تسلسل الأدلة (Chain of Custody) لإثبات أن الأدلة لم تتعرض للتلاعب وتفصيل الأفعال المتخذة لدعم القضية القانونية ضد الجناة."
-      },
-      {
-        id: 15,
-        category: "التصنيف والتقييم الأولي للحادث",
-        question: "تلقى مركز العمليات بلاغين متزامنين: الأول يفيد بتعطل شاشة حاسوب موظف الاستقبال، والثاني يفيد بظهور محاولات دخول غير مصرح بها على سيرفر التحكم بالدخول للبنك. كيف يرتب فريق CSIRT أولويات التصنيف؟",
-        options: [
-          "التعامل مع سيرفر التحكم بالدخول للبنك أولاً لأنه يمثل خادماً حرجاً وتأثيراً عالياً على المنظمة.",
-          "التعامل مع حاسوب الاستقبال أولاً لأنه الموظف الأكثر إزعاجاً لاتصالات الدعم.",
-          "تجاهل البلاغين والانتظار لحين تلقي بلاغ ثالث حريق مادي.",
-          "إغلاق خوادم البنك وحواسيب الاستقبال معاً بشكل دائم بدون تقييم."
-        ],
-        correct: 0,
-        explanation: "التصنيف والتقييم (Categorization) يستند إلى أهمية النظام المتأثر ومستوى المخاطر الحرج (Criticality)، حيث تعطى الأولوية للأنظمة والخدمات ذات الأثر المباشر على الأمن والعمليات الرئيسية."
-      },
-      {
-        id: 16,
-        category: "آليات تنفيذ DRP والتخزين السحابي",
-        question: "تعتمد شركة على نسخ احتياطي سحابي خارجي يومي. تعرض مقاطعة الشركة لفيضان أدى لتدمير السيرفرات المادية. ما هي الركيزة الأساسية لتفعيل التعافي وفق معيار ISO 27031 في هذا السيناريو؟",
-        options: [
-          "توفير معدات وأجهزة بديلة مع خطوط اتصالات عالية السرعة للاتصال بالنسخ السحابية واستعادتها.",
-          "شراء أشرطة تخزين مغناطيسية قديمة وتوصيلها بالمعدات التالفة بفعل الفيضان.",
-          "إلغاء الخطة المكتوبة والبدء بجمع البيانات عبر الاتصال الهاتفي بالعملاء.",
-          "تأجيل التعافي لحين جفاف المبنى بالكامل بعد عدة أشهر."
-        ],
-        correct: 0,
-        explanation: "تنفيذ خطة التعافي عند تدمير المعدات يتطلب توفير أجهزة جديدة/بديلة وخطوط اتصالات سريعة ومصرحة للربط بالنسخ الاحتياطية السحابية لإعادة تشغيل البيئة التقنية."
-      },
-      {
-        id: 17,
-        category: "تأمين الحسابات وكلمات المرور أثناء الحادث",
-        question: "اكتشف فريق الاستجابة أن الهجوم تم باستخدام حساب مسؤول شبكة (Domain Admin) مخترق. ما هو الإجراء الحازم والضروري ضمن مرحلة 'احتواء الضرر'؟",
-        options: [
-          "تعطيل الحساب المخترق فوراً، وإرغام جميع الحسابات ذات الصلاحيات المرتفعة على إعادة تعيين كلمات المرور.",
-          "إرسال رسالة للحساب المخترق تطلب منه الكف عن الاختراق.",
-          "زيادة صلاحيات الحساب المخترق لمراقبته ومعرفة خطواته التالية.",
-          "انتظار نهاية انتهاء فترة الدوام الرسمي لتغيير كلمات المرور."
-        ],
-        correct: 0,
-        explanation: "في حالة استغلال الحسابات الذات الصلاحيات المرتفعة، يلزم التعطيل الفوري للحساب المصاب وتصفير وتغيير كلمات المرور لكافة الحسابات المماثلة لمنع استمرار المهاجم في الحركة الجانبية (Lateral Movement)."
-      },
-      {
-        id: 18,
-        category: "تقييم مؤشر RPO وتكرار النسخ الاحتياطي",
-        question: "متجر إلكتروني يجري 10,000 عملية شراء بالساعة. حدد مجلس الإدارة مؤشر RPO بـ 5 دقائق فقط. ماذا يعني هذا تقنياً بالنسبة للاستراتيجية المتبعة؟",
-        options: [
-          "أنه لا يمكن السماح بفقدان أكثر من 5 دقائق من المعاملات، مما يتطلب آلية نسخ احتياطي/مزامنة مستمرة تقريباً.",
-          "أن الخوادم يجب أن تعود للعمل خلال 5 دقائق من وقوع الكارثة بغض النظر عن البيانات المفقودة.",
-          "أن الموقع سينهي عمله اليومي بعد 5 دقائق من بداية أي هجوم.",
-          "أن النسخ الاحتياطي الأسبوعي كافٍ تماماً لاستيفاء هذا المعيار."
-        ],
-        correct: 0,
-        explanation: "RPO يعبر عن الفارق الزمني الأقصى المقبول لفقدان البيانات. RPO يساوي 5 دقائق يعني وجوب أخذ نسخ احتياطية متكررة جداً أو مزامنة حية لوقاية المؤسسة من ضياع معاملات مالية ضخمة."
-      },
-      {
-        id: 19,
-        category: "مكونات DRP وتعيين المسؤوليات",
-        question: "تضمنت خطة التعافي من الكوارث إستراتيجيات ممتازة، ولكن عند وقوع الكارثة شلت حركة المنظمة بسب عدم معرفة الأفراد لمن تجب إسناد المهام. أي مكونات DRP كان مفقوداً؟",
-        options: [
-          "تحديد الهيكل التنظيمي للأدوار والمسؤوليات الواضحة وتعيين المسؤول عن إدارة وتنفيذ التعافي.",
-          "عدم شراء خوادم ذات ألوان مناسبة للهوية البصرية.",
-          "غياب عقود الصيانة المطبوعة ورقياً بداخل غرفة الخوادم.",
-          "عدم تفعيل خاصية الإنذار الصوتي المرتفع في الاستقبال."
-        ],
-        correct: 0,
-        explanation: "تحديد الأدوار والمسؤوليات (Roles & Responsibilities) وتسمية قائد تنفيذ التعافي يعد الركن الأساسي في DRP لتجنب التضارب والشلل التشغيلي لحظة وقوع الكوارث."
-      },
-      {
-        id: 20,
-        category: "حماية الأدلة والجريمة المنظمة",
-        question: "أثناء معالجة اختراق، قام موظف تكنولوجيا المعلومات بمحاولة إصلاح خادم متأثر عبر تشغيل برنامج تنظيف مجاني من الإنترنت، مما أدى لمسح ملفات Log وتغيير تواريخ الملفات المخترقة. كيف يقيم هذا الفعل من منظور حماية الأدلة؟",
-        options: [
-          "تعديل خاطئ أدى لتلوث الدليل الجنائي وتدمير تسلسل الحيازة (Chain of Custody) مما يصعب المحاكمة.",
-          "تصرف تصحيحي ممتاز ويوفر وقت فريق الاستجابة.",
-          "إجراء متوافق تماماً مع متطلبات أخذ الصورة المطابقة Bit-stream.",
-          "طريقة معتمدة دولياً لتحديث السجلات واستعادة الخدمة بسرعة."
-        ],
-        correct: 0,
-        explanation: "تشغيل أدوات غير مصرحة أو تعديل البيئة المصابة يؤدي لتدمير الأدلة الرقمية (Adulteration of Evidence) وتغير التواريخ الوصفية مما يجعل الأدلة غير مقبولة فنياً وقانونياً أمام القضاء."
-      },
-      {
-        id: 21,
-        category: "استدعاء الخبراء الخارجيين",
-        question: "تعرضت منظمة لهجوم سيبراني معقد ومجهول المصدر يستخدم ثغرات الصفر (Zero-Day) لا تستطيع الكوادر الداخلية التعامل معها. ما التوصية الصحيحة لسياسة الحوادث في هذه الحالة؟",
-        options: [
-          "الاستعانة فوراً بخبراء أمان واستشاريين خارجيين متخصصين للتعامل مع الهجوم المعقد وفق السياسة.",
-          "التكتم على الأمر وإنهاء خدمات قسم تكنولوجيا المعلومات فوراً.",
-          "دفع الفدية فوراً بدون الاستعانة بأي طرف استشاري.",
-          "إغلاق المنظمة وإعلان إفلاسها لتجنب تكاليف الاستعانة بالخبراء."
-        ],
-        correct: 0,
-        explanation: "تتيح سياسة الاستجابة للحوادث التواصل والاستعانة بخبراء أمان خارجيين ومقاولين متخصصين فور مواجهة هجمات متقدمة تتجاوز القدرات التقنية الحالية لفريق CSIRT الداخلي."
-      },
-      {
-        id: 22,
-        category: "منهجية PDCA في تعزيز الجاهزية",
-        question: "أظهر اختبار محاكاة الكارثة السنوي لشركة أن وقت استعادة البيانات الحساسة يستغرق 12 ساعة بينما المحدد في الخطة RTO هو 4 ساعات. وفق منهجية PDCA، في أي مرحلة يتم اتخاذ القرار لتعديل الاستراتيجية ورفع سرعة الأجهزة؟",
-        options: [
-          "مرحلة تصرف (Act)؛ لتعديل الخطة والتحسين المستمر بناءً على الفجوات المستكشفة.",
-          "مرحلة خطط (Plan) فقط بدون الحاجة لتعديل أجهزة.",
-          "مرحلة نفذ (Do) بإعادة نطق كلمات الاختبار.",
-          "إلغاء منهجية PDCA لأنها فشلت في الاختبار."
-        ],
-        correct: 0,
-        explanation: "مرحلة Act (تصرف) تتضمن اتخاذ القرارات والتغييرات الجوهرية وتطبيق التحسينات المستمرة لمعالجة الفجوات المستكشفة أثناء مرحلة التقييم والاختبار (Check)."
-      },
-      {
-        id: 23,
-        category: "تنشيط خطة التعافي (DRP Activation)",
-        question: "متى يتم رسمياً إعلان تفعيل وتنفيذ خطة التعافي من الكوارث (DRP Activation)؟",
-        options: [
-          "عند وصول الحادث إلى مستوى كارثي يتجاوز قدرة الاستجابة العادية ويسبب توقفاً حرجاً للأنظمة الأساسية.",
-          "عند ظهور أي تنبيه أمني بسيط على حاسوب شخصي لأحد الموظفين.",
-          "بشكل أسبوعي تلقائي لتنشيط السيرفرات.",
-          "فقط عند صدور حكم قضائي نهائي ضد المهاجمين."
-        ],
-        correct: 0,
-        explanation: "يتم إعلان تنشيط خطة DRP عند وقوع حادث جسيم أو حادثة مادية تعطل الأنظمة الحيوية وتتعدى قدرات المعالجة التشغيلية المعتادة، وفق خطوات محددة ومعتمدة في بند تنشيط الخطة."
-      },
-      {
-        id: 24,
-        category: "الاحتواء وتقليل التوقف التشغيلي",
-        question: "إذا تم تأكيد حادثة تسريب بيانات حية من سيرفر تجارة إلكترونية، أي الخيارات التالية يحقق التوازن الأفضل بين احتواء الحادث وتقليل التعطيل التشغيلي؟",
-        options: [
-          "عزل السيرفر المخترق وتحويل حركة المرور إلى سيرفر بديل آمن وسليم مفصول عن الثغرة.",
-          "ترك السيرفر المخترق يعمل كما هو دون أي تدخل لتجنب خسارة الأرباح.",
-          "إغلاق متجر الشركة كلياً وتسريح الموظفين.",
-          "قطع التيار الكهربائي العام عن المبنى بالكامل."
-        ],
-        correct: 0,
-        explanation: "الموازنة الاحترافية تقتضي عزل البيئة المخترقة لمنع الضرر، بالتوازي مع تفعيل سيرفر/موقع بديل سليم (Redundant/Failover) لضمان استمرار الأعمال وتقليل الخسائر."
-      },
-      {
-        id: 25,
-        category: "المراجعة الشاملة والتطبيق الميداني",
-        question: "ما هي الخطوة الأخيرة والضرورية بعد إنجاز تعافي الأنظمة المتأثرة واستعادتها للعمل من النسخ الاحتياطية؟",
-        options: [
-          "إجراء تحقق أمني شامل للتأكد من خلو النسخ الاحتياطية المستعادة من البرمجية الخبيثة ومراقبتها قبل الإغلاق النهائي للحادث.",
-          "إغلاق جميع أنظمة المراقبة للحصول على فترة راحة.",
-          "حذف جميع النسخ الاحتياطية لتوفير المساحة للأيام القادمة.",
-          "تجاهل كتابة أي تقرير وإبلاغ الجميع بأن شيئاً لم يحدث."
-        ],
-        correct: 0,
-        explanation: "عند تعافي الأنظمة وإعادتها للعمل، يجب مراقبتها والتأكد من خلوها وخلو النسخ الاحتياطية المسحوبة من أي ثغرات أو برمجيات خبيثة كامنة (Backdoors) لمنع تجدد الاختراق فور التشغيل."
-      }
-    ];
-
-    let questions = [];
-    let currentQuestionIndex = 0;
-    let userAnswers = {}; // { qIndex: selectedOptionIndex }
-    let timerInterval = null;
-    const TOTAL_QUIZ_TIME_SECONDS = 20 * 60; // 20 Minutes (1200 Seconds)
-    let timeRemainingSeconds = TOTAL_QUIZ_TIME_SECONDS;
-    let studentMeta = { name: '', id: '' };
-
-    document.addEventListener('DOMContentLoaded', () => {
-      // Setup initial state
-    });
-
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
+        if (safeStorage.get(SESSION_KEY) === "true") showApp();
+        else setTimeout(function() { passInput.focus(); }, 200);
     }
 
-    function generateUniqueModel() {
-      // Clone original raw questions
-      const cloned = JSON.parse(JSON.stringify(rawQuestionsData));
-      
-      // 1. Shuffle the order of questions
-      const shuffledQuestions = shuffleArray(cloned);
-
-      // 2. Shuffle options for each question while keeping track of correct index
-      shuffledQuestions.forEach((q) => {
-        const originalOptions = q.options.map((opt, idx) => ({
-          text: opt,
-          isCorrect: idx === q.correct
-        }));
-
-        const shuffledOptions = shuffleArray(originalOptions);
-        
-        q.options = shuffledOptions.map(o => o.text);
-        q.correct = shuffledOptions.findIndex(o => o.isCorrect);
-      });
-
-      return shuffledQuestions;
-    }
-
-    function startQuiz() {
-      const nameInput = document.getElementById('student-name-input').value.trim();
-      const idInput = document.getElementById('student-id-input').value.trim();
-
-      if (!nameInput) {
-        alert('يرجى إدخال اسم الطالب قبل بدء الاختبار.');
-        return;
-      }
-
-      studentMeta.name = nameInput;
-      studentMeta.id = idInput || 'غير محدد';
-
-      // Reset variables and generate a new randomized model
-      questions = generateUniqueModel();
-      currentQuestionIndex = 0;
-      userAnswers = {};
-      timeRemainingSeconds = TOTAL_QUIZ_TIME_SECONDS;
-
-      // Switch screens
-      document.getElementById('screen-welcome').classList.add('hidden');
-      document.getElementById('screen-results').classList.add('hidden');
-      document.getElementById('screen-quiz').classList.remove('hidden');
-      document.getElementById('top-timer-display').classList.remove('hidden');
-
-      // Start Countdown Timer
-      startCountdownTimer();
-
-      // Render Navigator & First Question
-      renderNavigatorGrid();
-      renderQuestion(0);
-    }
-
-    function startCountdownTimer() {
-      if (timerInterval) clearInterval(timerInterval);
-
-      updateTimerUI();
-
-      timerInterval = setInterval(() => {
-        timeRemainingSeconds--;
-        updateTimerUI();
-
-        if (timeRemainingSeconds <= 0) {
-          clearInterval(timerInterval);
-          alert('انتهى الوقت المحدد للاختبار (20 دقيقة)! سيتم تسليم إجاباتك تلقائياً.');
-          finishQuiz();
-        }
-      }, 1000);
-    }
-
-    function updateTimerUI() {
-      const minutes = Math.floor(timeRemainingSeconds / 60);
-      const seconds = timeRemainingSeconds % 60;
-      const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-      // Update text displays
-      document.getElementById('timer-text').innerText = formattedTime;
-      document.getElementById('quiz-timer-text').innerText = formattedTime;
-
-      // Calculate progress percentage
-      const percentLeft = (timeRemainingSeconds / TOTAL_QUIZ_TIME_SECONDS) * 100;
-      const progressBar = document.getElementById('time-progress-bar');
-      const timerContainer = document.getElementById('quiz-timer-container');
-
-      progressBar.style.width = `${percentLeft}%`;
-
-      // Dynamic color shifts based on time remaining
-      if (timeRemainingSeconds <= 300) { // Less than 5 mins
-        progressBar.className = "bg-red-600 h-full rounded-full transition-all duration-1000";
-        timerContainer.classList.add('timer-warning');
-      } else if (timeRemainingSeconds <= 600) { // Less than 10 mins
-        progressBar.className = "bg-amber-500 h-full rounded-full transition-all duration-1000";
-        timerContainer.classList.remove('timer-warning');
-      } else {
-        progressBar.className = "bg-emerald-600 h-full rounded-full transition-all duration-1000";
-        timerContainer.classList.remove('timer-warning');
-      }
-    }
-
-    function renderQuestion(index) {
-      currentQuestionIndex = index;
-      const q = questions[index];
-
-      // Update Header Trackers
-      document.getElementById('current-q-num').innerText = index + 1;
-      document.getElementById('total-q-num').innerText = questions.length;
-
-      const answeredCount = Object.keys(userAnswers).length;
-      document.getElementById('answered-badge').innerText = `المُجاب: ${answeredCount} / ${questions.length}`;
-
-      // Set Question Content
-      document.getElementById('q-category').innerText = `الموضوع: ${q.category}`;
-      document.getElementById('q-text').innerText = q.question;
-
-      // Render Options Cards
-      const optionsContainer = document.getElementById('options-container');
-      optionsContainer.innerHTML = '';
-
-      const selectedOption = userAnswers[index];
-      const letters = ['أ', 'ب', 'ج', 'د'];
-
-      q.options.forEach((optText, optIdx) => {
-        const card = document.createElement('div');
-        card.className = `option-card p-4 rounded-xl cursor-pointer flex items-start gap-3 ${selectedOption === optIdx ? 'selected' : ''}`;
-        
-        card.onclick = () => selectOption(optIdx);
-
-        card.innerHTML = `
-          <div class="w-8 h-8 rounded-lg border border-beige-dark ${selectedOption === optIdx ? 'bg-maroon text-beige' : 'bg-beige-paper text-maroon'} flex items-center justify-center font-bold text-sm shrink-0 mt-0.5 transition-colors">
-            ${letters[optIdx]}
-          </div>
-          <div class="text-sm md:text-base text-charcoal font-medium leading-relaxed pt-0.5 flex-1 text-right">
-            ${optText}
-          </div>
-        `;
-
-        optionsContainer.appendChild(card);
-      });
-
-      // Navigation Buttons State
-      document.getElementById('btn-prev').disabled = index === 0;
-      
-      const btnNext = document.getElementById('btn-next');
-      if (index === questions.length - 1) {
-        btnNext.innerHTML = `<span>الوصول للنهاية</span> <i class="fa-solid fa-flag-checkered"></i>`;
-      } else {
-        btnNext.innerHTML = `<span>التالي</span> <i class="fa-solid fa-chevron-left"></i>`;
-      }
-
-      // Update Question Navigator Grid
-      updateNavigatorGridUI();
-
-      // Scroll smoothly to top
-      document.getElementById('main-container').scrollTop = 0;
-    }
-
-    function selectOption(optIdx) {
-      userAnswers[currentQuestionIndex] = optIdx;
-      renderQuestion(currentQuestionIndex);
-    }
-
-    function nextQuestion() {
-      if (currentQuestionIndex < questions.length - 1) {
-        renderQuestion(currentQuestionIndex + 1);
-      }
-    }
-
-    function prevQuestion() {
-      if (currentQuestionIndex > 0) {
-        renderQuestion(currentQuestionIndex - 1);
-      }
-    }
-
-    function renderNavigatorGrid() {
-      const container = document.getElementById('questions-grid-navigator');
-      container.innerHTML = '';
-
-      questions.forEach((_, idx) => {
-        const btn = document.createElement('button');
-        btn.id = `grid-q-btn-${idx}`;
-        btn.className = `q-grid-btn p-1.5 rounded-lg border text-xs font-bold text-center ${userAnswers[idx] !== undefined ? 'answered' : 'bg-beige-paper text-charcoal border-beige-dark'}`;
-        btn.innerText = idx + 1;
-        btn.onclick = () => renderQuestion(idx);
-        container.appendChild(btn);
-      });
-    }
-
-    function updateNavigatorGridUI() {
-      questions.forEach((_, idx) => {
-        const btn = document.getElementById(`grid-q-btn-${idx}`);
-        if (!btn) return;
-
-        btn.className = `q-grid-btn p-1.5 rounded-lg border text-xs font-bold text-center ${userAnswers[idx] !== undefined ? 'answered' : 'bg-beige-paper text-charcoal border-beige-dark'}`;
-
-        if (idx === currentQuestionIndex) {
-          btn.classList.add('current');
+    function checkPassword() {
+        const input = (passInput.value || "").trim();
+        if (input === CORRECT_PASSWORD) {
+            loginError.classList.remove("show");
+            safeStorage.set(SESSION_KEY, "true");
+            showApp();
         } else {
-          btn.classList.remove('current');
+            loginError.classList.add("show");
+            passInput.value = "";
+            passInput.focus();
+            loginError.style.animation = "none";
+            setTimeout(function() { loginError.style.animation = "shake 0.3s"; }, 10);
         }
-      });
     }
 
-    function confirmFinishQuiz() {
-      const answeredCount = Object.keys(userAnswers).length;
-      const unAnswered = questions.length - answeredCount;
-
-      let msg = `هل أنت تأكد من رغبتك في تسليم الاختبار الآن؟`;
-      if (unAnswered > 0) {
-        msg = `تنبيه: لديك (${unAnswered}) سؤال لم تقم بالإجابة عنها بعد!\n` + msg;
-      }
-
-      if (confirm(msg)) {
-        finishQuiz();
-      }
+    function showApp() {
+        if (loginScreen) loginScreen.classList.add("hidden");
+        if (mainApp) mainApp.style.display = "block";
+        if (typeof window.startApp === "function") window.startApp();
+        else setTimeout(function() { if (typeof window.startApp === "function") window.startApp(); }, 300);
     }
 
-    function finishQuiz() {
-      if (timerInterval) clearInterval(timerInterval);
-
-      document.getElementById('screen-quiz').classList.add('hidden');
-      document.getElementById('top-timer-display').classList.add('hidden');
-      document.getElementById('screen-results').classList.remove('hidden');
-
-      // Calculate score
-      let correctCount = 0;
-      questions.forEach((q, idx) => {
-        if (userAnswers[idx] === q.correct) {
-          correctCount++;
-        }
-      });
-
-      const total = questions.length;
-      const percentage = Math.round((correctCount / total) * 100);
-      const timeSpentSeconds = TOTAL_QUIZ_TIME_SECONDS - timeRemainingSeconds;
-
-      // Time Spent formatting
-      const spentMins = Math.floor(timeSpentSeconds / 60);
-      const spentSecs = timeSpentSeconds % 60;
-      const timeSpentFormatted = `${spentMins.toString().padStart(2, '0')}:${spentSecs.toString().padStart(2, '0')}`;
-
-      // Update Student Meta
-      document.getElementById('result-student-info').innerText = `المتقدم: ${studentMeta.name} | الرقم المرجعي: ${studentMeta.id}`;
-      document.getElementById('result-score-text').innerText = `${correctCount} / ${total}`;
-      document.getElementById('result-percentage-text').innerText = `${percentage}%`;
-      document.getElementById('result-time-spent').innerText = timeSpentFormatted;
-
-      // Standard Grade Thresholds (Distinction, Merit, Pass, Referral)
-      let levelText = '';
-      let feedbackMsg = '';
-      let badgeIcon = 'fa-solid fa-award';
-
-      if (percentage >= 85) {
-        levelText = 'امتياز (Distinction)';
-        feedbackMsg = 'أداء استثنائي مبهر! أظهرت تحليلاً عميقاً وقدرة فائقة على اتخاذ القرارات الصحيحة في سيناريوهات الاستجابة للحوادث السيبرانية وتفعيل خطط DRP.';
-        badgeIcon = 'fa-solid fa-crown text-amber-500';
-      } else if (percentage >= 70) {
-        levelText = 'جيد جداً (Merit)';
-        feedbackMsg = 'أداء ممتاز جداً! تملك فهماً قوياً لمعظم سيناريوهات المعيار D وتطبيقات ISO 27031 وحساب RTO/RPO بشكل يحقق أهداف الاستجابة.';
-        badgeIcon = 'fa-solid fa-medal text-gold';
-      } else if (percentage >= 50) {
-        levelText = 'مقبول (Pass)';
-        feedbackMsg = 'تم اجتياز التقييم بنجاح. ينصح بمراجعة النقاط المتعلقة بحفظ الأدلة الجنائية Digital Forensics وحسابات RPO الدقيقة للارتقاء لمستوى الإتقان.';
-        badgeIcon = 'fa-solid fa-shield text-maroon-light';
-      } else {
-        levelText = 'غير مجتاز (Referral)';
-        feedbackMsg = 'لم يتم تحقيق النسبة المطلوبة لاجتياز المعيار D. يرجى إعادة دراسة مفاهيم الاستجابة للحوادث وتوزيع الأدوار قبل تقديم النموذج مرة أخرى.';
-        badgeIcon = 'fa-solid fa-triangle-exclamation text-red-600';
-      }
-
-      document.getElementById('result-level-text').innerText = levelText;
-      document.getElementById('result-feedback-msg').innerText = feedbackMsg;
-      document.getElementById('result-badge-icon').className = badgeIcon;
-
-      // Review Counters
-      document.getElementById('count-all').innerText = total;
-      document.getElementById('count-correct').innerText = correctCount;
-      document.getElementById('count-wrong').innerText = total - correctCount;
-
-      renderReviewList('all');
+    function logout() {
+        if (!confirm("هل تريد تسجيل الخروج؟")) return;
+        safeStorage.remove(SESSION_KEY);
+        location.reload();
     }
 
-    function renderReviewList(filter) {
-      const container = document.getElementById('review-questions-list');
-      container.innerHTML = '';
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initLoginUI);
+    else initLoginUI();
+})();
 
-      const letters = ['أ', 'ب', 'ج', 'د'];
+/* ==========================================================================
+   1. البيانات
+   ========================================================================== */
+const STUDENTS_SEED = [
+    { id: 1,  nameAr: "احمد زياد محمود رشيدات",       nameEn: "Ahmad Zyad Rshedat",                          number: "UD90702" },
+    { id: 2,  nameAr: "ايوب رائد محمد السخاينه",      nameEn: "Ayoub Ra'ed Mohammad Skhayneh",              number: "UD90704" },
+    { id: 3,  nameAr: "براء رافي نضمي ابو جمل",        nameEn: "Bara' Radi Nazmi AbuJamal",                  number: "UD90709" },
+    { id: 4,  nameAr: "براء محمد عبدالعزيز الزريقات",  nameEn: "Bara'a Mohamed AbedAlaziez Alzriqat",        number: "UD90708" },
+    { id: 5,  nameAr: "ذاكر سامر إبراهيم ارشيدات",    nameEn: "Thaker Samer Ibrahim Irrshidat",             number: "UD90705" },
+    { id: 6,  nameAr: "غيث مفضي مرعي الردابسة",       nameEn: "Ghaith Mufadi Marei Aldarabseh",             number: "UD90703" },
+    { id: 7,  nameAr: "فادي حسن مرعي حجازي",          nameEn: "Fadi Hasan Marei Hijazi",                    number: "UD90706" },
+    { id: 8,  nameAr: "ماجد هاني حامد المصري",        nameEn: "Majed Hani Hamed Masri",                     number: "UD90707" },
+    { id: 9,  nameAr: "مجد زياد محمد الصميعات",        nameEn: "Majed Zeyad Mohammad Alsomaiat",             number: "UD90714" },
+    { id: 10, nameAr: "محمد خلدون جمعان السخني",      nameEn: "Mohammad Khlaldoon Jam'an Alsoukhani",       number: "UD90715" },
+    { id: 11, nameAr: "محمد خير جلال محمد درابسة",    nameEn: "Moh'D Khier Jala Mohammad Darabseh",         number: "UD90712" },
+    { id: 12, nameAr: "محمد فادي نادر الدرابسة",      nameEn: "Mohammad Fadi Nader Aldarrabsih",            number: "UD90710" },
+    { id: 13, nameAr: "محمد يوسف غازي الحايك",        nameEn: "Mohammad Yousef Ghazi Al-Hayek",             number: "UD90713" },
+    { id: 14, nameAr: "يامن حسين علي الخطيب",          nameEn: "Yamen Hussein Ali Alkhatib",                 number: "UD90711" },
+    { id: 15, nameAr: "عباده قاسم محمد الرشيدات",      nameEn: "OBADA QASEM MOHAMMAD ALRSHAIDAT",            number: "TF93703" },
+    { id: 16, nameAr: "راشد احمد فاضل المصري",        nameEn: "RASHED AHMAD FADEL ALMASRI",                 number: "TF93705" },
+    { id: 17, nameAr: "يزن محمد عبد المجيد ابو حمود",  nameEn: "YAZAN MOHAMMAD ABDEL MAJID ABUHAMMOUD",      number: "TF93707" }
+];
 
-      questions.forEach((q, idx) => {
-        const userAns = userAnswers[idx];
-        const isCorrect = userAns === q.correct;
+const WARNING_THRESHOLD = 5;
+const ORANGE_THRESHOLD = 25;
+const RED_THRESHOLD = 35;
 
-        if (filter === 'correct' && !isCorrect) return;
-        if (filter === 'wrong' && isCorrect) return;
-
-        const item = document.createElement('div');
-        item.className = `p-5 rounded-xl border ${isCorrect ? 'border-green-300 bg-green-50/40' : 'border-red-300 bg-red-50/40'}`;
-
-        item.innerHTML = `
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-xs font-bold px-3 py-1 rounded-full ${isCorrect ? 'bg-green-200 text-green-900' : 'bg-red-200 text-red-900'}">
-              ${isCorrect ? 'إجابة صحيحة ✓' : 'إجابة خاطئة ✗'}
-            </span>
-            <span class="text-xs font-bold text-charcoal-muted">السؤال ${idx + 1} من 25 (${q.category})</span>
-          </div>
-
-          <h4 class="font-bold text-base text-charcoal mb-3 leading-relaxed">${q.question}</h4>
-
-          <div class="space-y-1.5 text-xs md:text-sm mb-4">
-            <div class="p-2.5 rounded font-medium ${isCorrect ? 'bg-green-100 text-green-900' : 'bg-red-100 text-red-900'}">
-              <b>إجابة الطالب:</b> ${userAns !== undefined ? `${letters[userAns]}) ${q.options[userAns]}` : 'لم يتم الإجابة'}
-            </div>
-            ${!isCorrect ? `
-              <div class="p-2.5 rounded font-medium bg-green-100 text-green-900">
-                <b>الإجابة الصحيحة الأنسب:</b> ${letters[q.correct]}) ${q.options[q.correct]}
-              </div>
-            ` : ''}
-          </div>
-
-          <div class="p-3 bg-white/90 rounded-lg border border-beige-dark text-xs text-charcoal leading-relaxed">
-            <span class="font-bold text-maroon block mb-1"><i class="fa-solid fa-lightbulb text-gold"></i> التفسير والتعليل العلمي للإجابة:</span>
-            ${q.explanation}
-          </div>
-        `;
-
-        container.appendChild(item);
-      });
-    }
-
-    function filterReview(filterType) {
-      document.getElementById('filter-btn-all').className = `px-4 py-2 rounded-lg ${filterType === 'all' ? 'bg-maroon text-beige' : 'bg-beige-paper text-charcoal hover:bg-beige-dark'}`;
-      document.getElementById('filter-btn-correct').className = `px-4 py-2 rounded-lg ${filterType === 'correct' ? 'bg-maroon text-beige' : 'bg-beige-paper text-charcoal hover:bg-beige-dark'}`;
-      document.getElementById('filter-btn-wrong').className = `px-4 py-2 rounded-lg ${filterType === 'wrong' ? 'bg-maroon text-beige' : 'bg-beige-paper text-charcoal hover:bg-beige-dark'}`;
-
-      renderReviewList(filterType);
-    }
-
-    function restartQuiz() {
-      if (timerInterval) clearInterval(timerInterval);
-      
-      document.getElementById('screen-results').classList.add('hidden');
-      document.getElementById('screen-welcome').classList.remove('hidden');
-      document.getElementById('top-timer-display').classList.add('hidden');
-    }
-
-
-
-    // منع القائمة عند الضغط بالزر الأيمن
-document.addEventListener('contextmenu', event => event.preventDefault());
-
-// منع اختصارات لوحة المفاتيح
-document.onkeydown = function(e) {
-  // F12
-  if (e.keyCode == 123) return false;
-  // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+U
-  if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) return false;
-  if (e.ctrlKey && e.keyCode == 85) return false;
+const SCHOOL_INFO = {
+    name: "مدرسة الطرة الثانوية للبنين",
+    ministry: "وزارة التربية والتعليم",
+    directorate: "مديرية التربية والتعليم للواء الرمثا",
+    year: "2026 / 2027",
+    className: "الصف الثاني عشر - تكنولوجيا المعلومات",
+    teacher: "أ. منذر الزعبي",
+    quality: "أ. يزن الخطيب",
+    principal: "د. طارق جيت"
 };
 
+/* ==========================================================================
+   2. قاعدة البيانات
+   ========================================================================== */
+const DB_NAME = "attendance_db_v2";
+const DB_VERSION = 1;
+let db = null;
 
-// تشويش المحتوى عند الخروج من المتصفح أو فقدان التركيز
-window.addEventListener('blur', () => {
-  document.body.style.filter = 'blur(10px)';
-});
+function openDB() {
+    return new Promise(function(resolve, reject) {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = function(e) {
+            const d = e.target.result;
+            if (!d.objectStoreNames.contains("students"))
+                d.createObjectStore("students", { keyPath: "id" });
+            if (!d.objectStoreNames.contains("records")) {
+                const store = d.createObjectStore("records", { keyPath: "id", autoIncrement: true });
+                store.createIndex("student_id", "student_id");
+                store.createIndex("date", "date");
+            }
+        };
+        req.onsuccess = function(e) { db = e.target.result; resolve(db); };
+        req.onerror = function(e) { reject(e.target.error); };
+    });
+}
+function tx(s, m) { return db.transaction(s, m).objectStore(s); }
+function dbAdd(s, o) { return new Promise(function(res, rej) { const r = tx(s, "readwrite").add(o); r.onsuccess = function() { res(r.result); }; r.onerror = function() { rej(r.error); }; }); }
+function dbPut(s, o) { return new Promise(function(res, rej) { const r = tx(s, "readwrite").put(o); r.onsuccess = function() { res(r.result); }; r.onerror = function() { rej(r.error); }; }); }
+function dbDelete(s, k) { return new Promise(function(res, rej) { const r = tx(s, "readwrite").delete(k); r.onsuccess = function() { res(); }; r.onerror = function() { rej(r.error); }; }); }
+function dbGetAll(s) { return new Promise(function(res, rej) { const r = tx(s, "readonly").getAll(); r.onsuccess = function() { res(r.result); }; r.onerror = function() { rej(r.error); }; }); }
+function dbClear(s) { return new Promise(function(res, rej) { const r = tx(s, "readwrite").clear(); r.onsuccess = function() { res(); }; r.onerror = function() { rej(r.error); }; }); }
 
-// إعادة المحتوى عند العودة
-window.addEventListener('focus', () => {
-  document.body.style.filter = 'none';
-});
+async function initDatabase() {
+    await openDB();
+    const existing = await dbGetAll("students");
+    if (existing.length === 0) for (const s of STUDENTS_SEED) await dbPut("students", s);
+}
 
+/* ==========================================================================
+   3. الدوال المساعدة
+   ========================================================================== */
+function getStatusColor(t) {
+    if (t >= RED_THRESHOLD) return "red";
+    if (t >= ORANGE_THRESHOLD) return "orange";
+    if (t >= WARNING_THRESHOLD) return "yellow";
+    return "green";
+}
+function getStatusText(t) {
+    if (t >= RED_THRESHOLD) return "🔴 إنذار أحمر";
+    if (t >= ORANGE_THRESHOLD) return "🟠 إنذار برتقالي";
+    if (t >= WARNING_THRESHOLD) return "🟡 تنبيه";
+    return "🟢 منتظم";
+}
+function formatDateAr(iso) {
+    if (!iso) return "";
+    const days = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+    const d = new Date(iso + "T00:00:00");
+    return iso + " (" + days[d.getDay()] + ")";
+}
+function todayISO() { return new Date().toISOString().split("T")[0]; }
 
-document.addEventListener('keyup', (e) => {
-  if (e.key === 'PrintScreen') {
-    navigator.clipboard.writeText(''); // مسح الحافظة فوراً
-    alert('التقاط الشاشة غير مسموح به في هذا الموقع');
-  }
-});
-  </script>
+function numberToArabicWords(num) {
+    const ones = ["", "يوم واحد", "يومان", "ثلاثة أيام", "أربعة أيام", "خمسة أيام",
+                  "ستة أيام", "سبعة أيام", "ثمانية أيام", "تسعة أيام"];
+    const tens = ["", "عشرة أيام", "عشرون يومًا", "ثلاثون يومًا", "أربعون يومًا",
+                  "خمسون يومًا", "ستون يومًا", "سبعون يومًا", "ثمانون يومًا", "تسعون يومًا"];
+    if (num < 10) return ones[num];
+    if (num === 10) return "عشرة أيام";
+    if (num < 20) return ones[num - 10] + " عشر";
+    if (num % 10 === 0) return tens[num / 10];
+    return ones[num % 10] + " و" + tens[Math.floor(num / 10)];
+}
+
+function getWarningLevel(days) {
+    if (days >= RED_THRESHOLD) return 3;
+    if (days >= ORANGE_THRESHOLD) return 2;
+    if (days >= WARNING_THRESHOLD) return 1;
+    return 0;
+}
+
+/* ==========================================================================
+   4. البيانات العامة
+   ========================================================================== */
+let studentsCache = [];
+let recordsCache = [];
+let currentStudentId = null;
+let dailyDate = todayISO();
+let dailySelections = {};
+let appStarted = false;
+
+async function loadData() {
+    studentsCache = await dbGetAll("students");
+    recordsCache = await dbGetAll("records");
+}
+
+function countAbsent(id) { return recordsCache.filter(function(r) { return r.student_id === id && r.status === "absent"; }).length; }
+function countExcused(id) { return recordsCache.filter(function(r) { return r.student_id === id && r.status === "excused"; }).length; }
+function countTotal(id) { return countAbsent(id); }
+function getAbsentDates(id) {
+    return recordsCache.filter(function(r) { return r.student_id === id && r.status === "absent"; })
+                       .map(function(r) { return r.date; }).sort();
+}
+
+/* ==========================================================================
+   5. الرئيسية
+   ========================================================================== */
+function renderStats() {
+    const counts = { green: 0, yellow: 0, orange: 0, red: 0 };
+    let totalAbsent = 0, totalExcused = 0;
+    studentsCache.forEach(function(s) {
+        const c = countTotal(s.id);
+        counts[getStatusColor(c)]++;
+        totalAbsent += countAbsent(s.id);
+        totalExcused += countExcused(s.id);
+    });
+    document.getElementById("statsCards").innerHTML =
+        '<div class="card total"><h3>👥 إجمالي الطلاب</h3><span class="num">' + studentsCache.length + '</span></div>' +
+        '<div class="card red"><h3>❌ إجمالي الغياب</h3><span class="num">' + totalAbsent + '</span></div>' +
+        '<div class="card excused"><h3>📝 إجمالي بعذر</h3><span class="num">' + totalExcused + '</span></div>' +
+        '<div class="card green"><h3>🟢 منتظم</h3><span class="num">' + counts.green + '</span></div>' +
+        '<div class="card yellow"><h3>🟡 تنبيه</h3><span class="num">' + counts.yellow + '</span></div>' +
+        '<div class="card orange"><h3>🟠 إنذار برتقالي</h3><span class="num">' + counts.orange + '</span></div>' +
+        '<div class="card red"><h3>🔴 إنذار أحمر</h3><span class="num">' + counts.red + '</span></div>';
+}
+
+function renderStudentsTable() {
+    const tbody = document.getElementById("studentsTable");
+    tbody.innerHTML = "";
+    studentsCache.sort(function(a, b) { return a.id - b.id; }).forEach(function(s) {
+        const absent = countAbsent(s.id);
+        const excused = countExcused(s.id);
+        const color = getStatusColor(absent);
+        const status = getStatusText(absent);
+        const level = getWarningLevel(absent);
+
+        const tr = document.createElement("tr");
+        tr.className = "row-" + color;
+        tr.innerHTML =
+            '<td>' + s.id + '</td>' +
+            '<td><a class="student-link" onclick="openStudent(' + s.id + ')">' + s.nameAr + '</a></td>' +
+            '<td>' + s.number + '</td>' +
+            '<td><span class="badge badge-' + color + '">' + absent + '</span></td>' +
+            '<td><span class="badge badge-excused">' + excused + '</span></td>' +
+            '<td>' + status + '</td>' +
+            '<td>' +
+                '<button class="btn btn-small btn-info" onclick="openStudent(' + s.id + ')">📋 تفاصيل</button>' +
+                (level > 0 ? ' <button class="btn btn-small btn-warning" onclick="showWarning(' + s.id + ')">📨 إنذار</button>' : '') +
+            '</td>';
+        tbody.appendChild(tr);
+    });
+}
+
+/* ==========================================================================
+   6. التسجيل اليومي
+   ========================================================================== */
+function renderDailyTable() {
+    const tbody = document.getElementById("dailyTable");
+    tbody.innerHTML = "";
+    dailySelections = {};
+    const existing = {};
+    recordsCache.filter(function(r) { return r.date === dailyDate; }).forEach(function(r) {
+        existing[r.student_id] = r.status;
+        dailySelections[r.student_id] = r.status;
+    });
+    studentsCache.sort(function(a, b) { return a.id - b.id; }).forEach(function(s) {
+        const status = existing[s.id] || null;
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+            '<td>' + s.id + '</td>' +
+            '<td>' + s.nameAr + '</td>' +
+            '<td>' + s.number + '</td>' +
+            '<td><div class="status-group" data-sid="' + s.id + '">' +
+                '<button class="status-btn ' + (status === "present" ? "active-present" : "") + '" onclick="setStatus(' + s.id + ', \'present\')">✅ حاضر</button>' +
+                '<button class="status-btn ' + (status === "absent" ? "active-absent" : "") + '" onclick="setStatus(' + s.id + ', \'absent\')">❌ غائب</button>' +
+                '<button class="status-btn ' + (status === "excused" ? "active-excused" : "") + '" onclick="setStatus(' + s.id + ', \'excused\')">📝 بعذر</button>' +
+            '</div></td>';
+        tbody.appendChild(tr);
+    });
+    updateDailyCounters();
+}
+
+function setStatus(sid, status) {
+    if (dailySelections[sid] === status) delete dailySelections[sid];
+    else dailySelections[sid] = status;
+    refreshRowButtons(sid);
+    updateDailyCounters();
+}
+function refreshRowButtons(sid) {
+    const group = document.querySelector('.status-group[data-sid="' + sid + '"]');
+    if (!group) return;
+    const status = dailySelections[sid];
+    const buttons = group.querySelectorAll(".status-btn");
+    buttons.forEach(function(b) { b.className = "status-btn"; });
+    if (status === "present") buttons[0].classList.add("active-present");
+    if (status === "absent") buttons[1].classList.add("active-absent");
+    if (status === "excused") buttons[2].classList.add("active-excused");
+}
+function updateDailyCounters() {
+    let p = 0, a = 0, e = 0;
+    Object.values(dailySelections).forEach(function(s) {
+        if (s === "present") p++;
+        else if (s === "absent") a++;
+        else if (s === "excused") e++;
+    });
+    document.getElementById("cPresent").textContent = p;
+    document.getElementById("cAbsent").textContent = a;
+    document.getElementById("cExcused").textContent = e;
+    document.getElementById("cUnset").textContent = studentsCache.length - (p + a + e);
+}
+function markAll(status) {
+    studentsCache.forEach(function(s) { dailySelections[s.id] = status; });
+    studentsCache.forEach(function(s) { refreshRowButtons(s.id); });
+    updateDailyCounters();
+}
+function resetAll() {
+    dailySelections = {};
+    studentsCache.forEach(function(s) { refreshRowButtons(s.id); });
+    updateDailyCounters();
+}
+function setDateToday() {
+    dailyDate = todayISO();
+    document.getElementById("dailyDate").value = dailyDate;
+    renderDailyTable();
+}
+function changeDay(delta) {
+    const d = new Date(dailyDate + "T00:00:00");
+    d.setDate(d.getDate() + delta);
+    dailyDate = d.toISOString().split("T")[0];
+    document.getElementById("dailyDate").value = dailyDate;
+    renderDailyTable();
+}
+async function saveDailyRecord() {
+    if (Object.keys(dailySelections).length === 0) {
+        alert("⚠️ لم تحدد أي حالة لأي طالب"); return;
+    }
+    const old = recordsCache.filter(function(r) { return r.date === dailyDate; });
+    for (const r of old) await dbDelete("records", r.id);
+    let added = 0;
+    for (const entry of Object.entries(dailySelections)) {
+        await dbAdd("records", { student_id: parseInt(entry[0]), date: dailyDate, status: entry[1], note: "" });
+        added++;
+    }
+    await loadData();
+    renderAll();
+    alert("✅ تم حفظ " + added + " سجل بتاريخ " + dailyDate);
+}
+
+/* ==========================================================================
+   7. صفحة الطالب
+   ========================================================================== */
+function openStudent(sid) {
+    currentStudentId = sid;
+    const s = studentsCache.find(function(x) { return x.id === sid; });
+    const records = recordsCache.filter(function(r) { return r.student_id === sid; })
+                                 .sort(function(a, b) { return b.date.localeCompare(a.date); });
+    const absent = records.filter(function(r) { return r.status === "absent"; }).length;
+    const excused = records.filter(function(r) { return r.status === "excused"; }).length;
+    const color = getStatusColor(absent);
+    const status = getStatusText(absent);
+    const level = getWarningLevel(absent);
+
+    function statusBadge(st) {
+        if (st === "present") return '<span class="badge badge-green">✅ حاضر</span>';
+        if (st === "absent")  return '<span class="badge badge-red">❌ غائب</span>';
+        if (st === "excused") return '<span class="badge badge-excused">📝 بعذر</span>';
+        return "-";
+    }
+
+    let recordsHTML = "";
+    if (records.length === 0) {
+        recordsHTML = '<div class="empty-state"><span class="icon">🎉</span>لا توجد سجلات</div>';
+    } else {
+        recordsHTML = '<div class="table-wrap"><table><thead><tr>' +
+            '<th style="width:50px;">#</th><th>التاريخ</th><th>اليوم</th><th>الحالة</th><th>إجراء</th>' +
+            '</tr></thead><tbody>';
+        records.forEach(function(r, i) {
+            recordsHTML += '<tr>' +
+                '<td>' + (i + 1) + '</td>' +
+                '<td>' + r.date + '</td>' +
+                '<td>' + formatDateAr(r.date).split("(")[1].replace(")", "") + '</td>' +
+                '<td>' + statusBadge(r.status) + '</td>' +
+                '<td><button class="btn btn-small btn-danger" onclick="deleteRecord(' + r.id + ', ' + sid + ')">🗑️ حذف</button></td>' +
+                '</tr>';
+        });
+        recordsHTML += '</tbody></table></div>';
+    }
+
+    const page = document.getElementById("page-student");
+    page.innerHTML =
+        '<button class="btn btn-secondary" onclick="navigate(\'home\')" style="margin-bottom:15px;">⬅️ العودة</button>' +
+        '<div class="student-header row-' + color + '">' +
+            '<h2>' + s.nameAr + '</h2>' +
+            '<p class="en-name">' + s.nameEn + '</p>' +
+            '<p>رقم الطالب: <strong>' + s.number + '</strong></p>' +
+            '<div class="student-stats">' +
+                '<div class="stat-box"><span class="stat-num" style="color:var(--red);">' + absent + '</span><span class="stat-lbl">❌ غائب</span></div>' +
+                '<div class="stat-box"><span class="stat-num" style="color:var(--excused);">' + excused + '</span><span class="stat-lbl">📝 بعذر</span></div>' +
+                '<div class="stat-box"><span class="stat-lbl">' + status + '</span></div>' +
+            '</div>' +
+            (level > 0 ?
+                '<div style="margin-top:15px;">' +
+                    '<button class="btn btn-warning" onclick="showWarning(' + sid + ')">📨 طباعة إنذار رسمي لولي الأمر</button>' +
+                '</div>' : '') +
+        '</div>' +
+        '<h3 style="color:var(--primary-light); margin:20px 0 10px;">📋 السجل الكامل</h3>' +
+        recordsHTML;
+    navigate("student");
+}
+
+async function deleteRecord(rid, sid) {
+    if (!confirm("هل أنت متأكد من حذف هذا السجل؟")) return;
+    await dbDelete("records", rid);
+    await loadData();
+    openStudent(sid);
+}
+
+/* ==========================================================================
+   8. 📨 نموذج الإنذار الرسمي
+   ========================================================================== */
+function showWarning(sid) {
+    const s = studentsCache.find(function(x) { return x.id === sid; });
+    const absent = countAbsent(sid);
+    const level = getWarningLevel(absent);
+    if (level === 0) { alert("هذا الطالب منتظم ولا يحتاج إنذاراً"); return; }
+
+    const absentDates = getAbsentDates(sid);
+    const warningDate = todayISO();
+    const warningNumber = "غ/م/" + warningDate.replace(/-/g, "") + "/" + sid;
+
+    let titleText = "";
+    let titleClass = "";
+    let bodyParagraphs = "";
+    let recommendations = "";
+
+    if (level === 1) {
+        titleText = "📌 إنذار أول بغياب الطالب";
+        titleClass = "level-1";
+        bodyParagraphs =
+            "<p>تحية طيبة وبعد،</p>" +
+            "<p>يُهدي مدير " + SCHOOL_INFO.name + " إليكم أطيب التحيات، ويتمنى لكم دوام التوفيق والسداد في تربية أبنائكم.</p>" +
+            "<p>نظرًا لأهمية المتابعة المستمرة لشؤون الطلبة التعليمية والسلوكية، وبما تقتضيه المصلحة التربوية العليا، نلفت عنايتكم إلى أن الطالب/ <strong>" + s.nameAr + "</strong>، صاحب الرقم <strong>" + s.number + "</strong>، قد تجاوز عدد أيام غيابه الحد المسموح به، حيث بلغ عدد أيام غيابه <span class=\"number-badge\">" + absent + " أيام</span>، وهي " + numberToArabicWords(absent) + "، وقد جاءت هذه الغيابات على النحو الآتي:</p>" +
+            "<p style=\"text-indent:0; background:#f8f9fa; padding:10px 15px; border-right:3px solid #ffc107; border-radius:5px; font-family:'Courier New', monospace; direction:ltr; text-align:left; font-size:0.92em;\">" + absentDates.join(" - ") + "</p>" +
+            "<p>وحرصًا منا على مصلحة الطالب التعليمية والتربوية، وضمان استمراريته في التحصيل الدراسي بوتيرة منتظمة، نرجو من سيادتكم التكرم بمتابعة ابنكم الكريم وحثّه على الالتزام بالدوام المدرسي في المواعيد المقررة، لما لذلك من أثر بالغ في تحصيله العلمي وتربيته السلوكية.</p>";
+        recommendations =
+            "<h4>📋 التوصيات المطلوبة من ولي الأمر:</h4>" +
+            "<ul>" +
+                "<li>متابعة دوام ابنكم اليومي والتحقق من حضوره.</li>" +
+                "<li>التواصل مع مربي الصف لمتابعة مستواه الأكاديمي والسلوكي.</li>" +
+                "<li>حثّ الطالب على الالتزام بالدوام المدرسي وعدم التغيّب دون عذر مشروع.</li>" +
+                "<li>إبلاغ المدرسة مسبقًا في حال وجود أي ظرف طارئ يمنع الطالب من الحضور.</li>" +
+            "</ul>";
+    } else if (level === 2) {
+        titleText = "⚠️ إنذار ثانٍ بغياب الطالب";
+        titleClass = "level-2";
+        bodyParagraphs =
+            "<p>تحية طيبة وبعد،</p>" +
+            "<p>بالإشارة إلى الموضوع أعلاه، واستكمالاً للإنذار الأول الذي تم إرساله إليكم سابقًا، وبناءً على ما رصدته إدارة " + SCHOOL_INFO.name + " من استمرار الطالب/ <strong>" + s.nameAr + "</strong>، صاحب الرقم <strong>" + s.number + "</strong>، في الغياب عن الدوام المدرسي دون عذر مشروع، فإننا نلفت عنايتكم إلى أن عدد أيام غيابه قد بلغ <span class=\"number-badge\">" + absent + " يومًا</span> حتى تاريخه، وهو ما يُشكّل تجاوزًا خطيرًا للحد المسموح به نظاميًا.</p>" +
+            "<p>وتجدر الإشارة إلى أن هذه الغيابات المتكررة تؤثر سلبًا على التحصيل الأكاديمي للطالب، وتضعف من فرصه في متابعة المنهاج الدراسي بشكل سليم، كما أنها تُعدّ مخالفة صريحة لتعليمات وزارة التربية والتعليم المتعلقة بالدوام المدرسي.</p>" +
+            "<p style=\"text-indent:0; background:#f8f9fa; padding:10px 15px; border-right:3px solid #fd7e14; border-radius:5px; font-family:'Courier New', monospace; direction:ltr; text-align:left; font-size:0.92em;\">" + absentDates.join(" - ") + "</p>" +
+            "<p>وعليه، فإننا نرجو من سيادتكم سرعة التكرم بالتواصل مع إدارة المدرسة أو مربي الصف خلال <strong>ثلاثة أيام</strong> من تاريخ هذا الإنذار، لمناقشة الأسباب ووضع الحلول المناسبة حفاظًا على مصلحة الطالب التعليمية.</p>";
+        recommendations =
+            "<h4>⚠️ التوصيات العاجلة:</h4>" +
+            "<ul>" +
+                "<li>الحضور إلى المدرسة في أقرب وقت للاجتماع مع مربي الصف والإدارة.</li>" +
+                "<li>تقديم الأعذار الرسمية عن أيام الغياب السابقة إن وُجدت.</li>" +
+                "<li>المتابعة اليومية لدوام الطالب والتأكد من انتظامه.</li>" +
+                "<li>التزام الطالب بالدوام المدرسي بشكل كامل، إذ ستُطبَّق بحقه الإجراءات النظامية في حال تكرار الغياب.</li>" +
+            "</ul>";
+    } else {
+        titleText = "🚨 إنذار نهائي بغياب الطالب";
+        titleClass = "level-3";
+        bodyParagraphs =
+            "<p>تحية طيبة وبعد،</p>" +
+            "<p>بالإشارة إلى الموضوع أعلاه، وبعد استنفاد كافة الإنذارات السابقة (الإنذار الأول والثاني)، واستمرار الطالب/ <strong>" + s.nameAr + "</strong>، صاحب الرقم <strong>" + s.number + "</strong>، في التغيب عن الدوام المدرسي بشكل متكرر ودون عذر مشروع، نلفت عنايتكم إلى أن عدد أيام غيابه قد بلغ <span class=\"number-badge\">" + absent + " يومًا</span> حتى تاريخه، وهو ما يُعدّ تجاوزًا جسيمًا للتعليمات النظامية الصادرة عن وزارة التربية والتعليم.</p>" +
+            "<p>ونظرًا لخطورة هذه الغيابات وتأثيرها السلبي على المسيرة التعليمية للطالب، وعلى تحصيله الأكاديمي، وعلى استقراره التربوي والنفسي، فإن إدارة " + SCHOOL_INFO.name + " تُرسل إليكم هذا <strong style=\"color:#dc3545;\">الإنذار النهائي</strong>، مُشدّدةً على ضرورة التزام الطالب بالدوام المدرسي التزامًا كاملًا وفوريًا.</p>" +
+            "<p style=\"text-indent:0; background:#f8f9fa; padding:10px 15px; border-right:3px solid #dc3545; border-radius:5px; font-family:'Courier New', monospace; direction:ltr; text-align:left; font-size:0.92em;\">" + absentDates.join(" - ") + "</p>" +
+            "<p>وفي حال استمرار الطالب في الغياب دون عذر مشروع بعد تاريخ هذا الإنذار، فإن إدارة المدرسة ستضطر آسفة إلى رفع الأمر إلى مديرية التربية والتعليم لاتخاذ الإجراءات القانونية اللازمة بحق الطالب، وفقًا للتعليمات والأنظمة المعمول بها في وزارة التربية والتعليم.</p>" +
+            "<p>ونحن إذ نأمل أن تجدوا في هذا الإنذار فرصة أخيرة لمعالجة الوضع قبل تصعيده، فإننا نضع أنفسنا في خدمتكم للتعاون على ما فيه مصلحة الطالب.</p>";
+        recommendations =
+            "<h4>🚨 إجراءات مطلوبة بشكل عاجل:</h4>" +
+            "<ul>" +
+                "<li><strong>الحضور الفوري إلى المدرسة</strong> خلال يومين من تاريخ هذا الإنذار.</li>" +
+                "<li>تقديم كافة الأعذار الرسمية عن أيام الغياب السابقة مصدّقة حسب الأصول.</li>" +
+                "<li>التوقيع على تعهد خطي أمام إدارة المدرسة بالالتزام التام بالدوام.</li>" +
+                "<li>المتابعة اليومية مع مربي الصف لضمان انتظام الطالب في الدوام.</li>" +
+                "<li>في حال عدم الاستجابة: سيتم رفع الأمر إلى مديرية التربية والتعليم لاتخاذ الإجراءات القانونية.</li>" +
+            "</ul>";
+    }
+
+    const html =
+        '<div class="letterhead">' +
+            '<div class="school-name">' + SCHOOL_INFO.name + '</div>' +
+            '<div class="school-info">' + SCHOOL_INFO.ministry + ' — ' + SCHOOL_INFO.directorate + '</div>' +
+            '<div class="school-info">العام الدراسي: ' + SCHOOL_INFO.year + ' — ' + SCHOOL_INFO.className + '</div>' +
+            '<div class="ref">' +
+                '<span>الرقم: ' + warningNumber + '</span>' +
+                '<span>التاريخ: ' + warningDate + '</span>' +
+            '</div>' +
+        '</div>' +
+
+        '<div class="warning-title ' + titleClass + '">' + titleText + '</div>' +
+
+        '<div style="text-align:center; margin-bottom:20px;">' +
+            '<strong style="font-size:1.1em;">المكرم ولي أمر الطالب / ' + s.nameAr + '</strong>' +
+            '<br><span style="color:#666; font-size:0.92em;">حفظه الله ورعاه</span>' +
+        '</div>' +
+
+        '<div class="student-info-box">' +
+            '<table>' +
+                '<tr>' +
+                    '<td class="label">اسم الطالب:</td><td>' + s.nameAr + '</td>' +
+                    '<td class="label">رقم الطالب:</td><td>' + s.number + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td class="label">الصف:</td><td>' + SCHOOL_INFO.className + '</td>' +
+                    '<td class="label">عدد أيام الغياب:</td><td><strong style="color:#dc3545;">' + absent + ' يومًا</strong></td>' +
+                '</tr>' +
+            '</table>' +
+        '</div>' +
+
+        '<div class="warning-body">' + bodyParagraphs + '</div>' +
+
+        '<div class="recommendations">' + recommendations + '</div>' +
+
+        '<p style="text-align:center; margin-top:25px; font-weight:600; color:#1e3c72;">' +
+            'وتفضلوا بقبول فائق الاحترام والتقدير' +
+        '</p>' +
+
+        '<div class="signatures">' +
+            '<div class="sig-box">' +
+                '<div class="sig-title">مربي الصف</div>' +
+                '<div class="sig-line">' + SCHOOL_INFO.teacher + '</div>' +
+            '</div>' +
+            '<div class="sig-box">' +
+                '<div class="sig-title">ضابط الجودة</div>' +
+                '<div class="sig-line">' + SCHOOL_INFO.quality + '</div>' +
+            '</div>' +
+            '<div class="sig-box">' +
+                '<div class="sig-title">مدير المدرسة</div>' +
+                '<div class="sig-line">' + SCHOOL_INFO.principal + '</div>' +
+            '</div>' +
+        '</div>' +
+
+        '<div class="warning-date">' +
+            'حُرِّر في: ' + warningDate +
+        '</div>' +
+
+        '<div class="warning-actions">' +
+            '<button class="btn btn-primary" onclick="window.print()">🖨️ طباعة الإنذار</button>' +
+            '<button class="btn btn-secondary" onclick="closeWarning()">✖️ إغلاق</button>' +
+        '</div>';
+
+    document.getElementById("warningPaper").innerHTML = html;
+    document.getElementById("warningModal").classList.add("show");
+}
+
+function closeWarning() {
+    document.getElementById("warningModal").classList.remove("show");
+}
+
+/* ==========================================================================
+   9. التقارير
+   ========================================================================== */
+function renderReports() {
+    const start = document.getElementById("repStart").value;
+    const end = document.getElementById("repEnd").value;
+    const mode = document.getElementById("repMode").value;
+
+    const rows = studentsCache.map(function(s) {
+        const recs = recordsCache.filter(function(r) {
+            return r.student_id === s.id && r.date >= start && r.date <= end;
+        });
+        const absentDates = recs.filter(function(r) { return r.status === "absent"; }).map(function(r) { return r.date; }).sort();
+        const excusedDates = recs.filter(function(r) { return r.status === "excused"; }).map(function(r) { return r.date; }).sort();
+
+        let displayDates = [];
+        let sortKey = 0;
+        if (mode === "all") {
+            displayDates = recs.map(function(r) { return r.date + (r.status === "excused" ? " (عذر)" : ""); }).sort();
+            sortKey = recs.length;
+        } else if (mode === "absent") {
+            displayDates = absentDates;
+            sortKey = absentDates.length;
+        } else if (mode === "excused") {
+            displayDates = excusedDates;
+            sortKey = excusedDates.length;
+        }
+
+        return {
+            id: s.id, nameAr: s.nameAr, number: s.number,
+            absent: absentDates.length, excused: excusedDates.length,
+            total: recs.length, displayDates: displayDates, sortKey: sortKey,
+            color: getStatusColor(absentDates.length),
+            status: getStatusText(absentDates.length)
+        };
+    }).sort(function(a, b) { return b.sortKey - a.sortKey; });
+
+    const tbody = document.getElementById("reportsTable");
+    tbody.innerHTML = rows.map(function(r, i) {
+        return '<tr class="row-' + r.color + '">' +
+            '<td>' + (i + 1) + '</td>' +
+            '<td><a class="student-link" onclick="openStudent(' + r.id + ')">' + r.nameAr + '</a></td>' +
+            '<td>' + r.number + '</td>' +
+            '<td><span class="badge badge-red">' + r.absent + '</span></td>' +
+            '<td><span class="badge badge-excused">' + r.excused + '</span></td>' +
+            '<td><strong>' + r.total + '</strong></td>' +
+            '<td>' + r.status + '</td>' +
+            '<td style="font-size:0.8em; color:#555; direction:ltr; text-align:left;">' +
+                (r.displayDates.length ? r.displayDates.join(" - ") : '<span style="color:#999;">—</span>') +
+            '</td></tr>';
+    }).join("");
+
+    document.getElementById("reportsSummary").innerHTML =
+        '📅 الفترة: من <strong>' + start + '</strong> إلى <strong>' + end + '</strong> — عدد الطلاب: <strong>' + rows.length + '</strong>';
+}
+
+function exportCSV() {
+    const start = document.getElementById("repStart").value;
+    const end = document.getElementById("repEnd").value;
+
+    let csv = "\uFEFF";
+    csv += "الرقم,الاسم,رقم الطالب,غائب,بعذر,الإجمالي,الحالة,تواريخ الغياب\n";
+
+    studentsCache.forEach(function(s) {
+        const recs = recordsCache.filter(function(r) {
+            return r.student_id === s.id && r.date >= start && r.date <= end;
+        });
+        const absentDates = recs.filter(function(r) { return r.status === "absent"; }).map(function(r) { return r.date; });
+        const excusedDates = recs.filter(function(r) { return r.status === "excused"; }).map(function(r) { return r.date; });
+        const datesStr = recs.map(function(r) { return r.date + (r.status === "excused" ? " (عذر)" : ""); }).sort().join(" | ");
+
+        csv += '"' + s.id + '","' + s.nameAr + '","' + s.number + '",' +
+               absentDates.length + ',' + excusedDates.length + ',' + recs.length +
+               ',"' + getStatusText(absentDates.length) + '","' + datesStr + '"\n';
+    });
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "تقرير_" + start + "_" + end + ".csv";
+    a.click();
+}
+
+/* ==========================================================================
+   10. التنبيهات
+   ========================================================================== */
+function renderAlerts() {
+    const alerts = studentsCache
+        .map(function(s) { return { s: s, total: countTotal(s.id) }; })
+        .filter(function(x) { return x.total >= WARNING_THRESHOLD; })
+        .sort(function(a, b) { return b.total - a.total; });
+
+    if (alerts.length === 0) {
+        document.getElementById("alertsList").innerHTML =
+            '<div class="empty-state"><span class="icon">🎉</span>لا توجد تنبيهات حالياً</div>';
+        return;
+    }
+
+    document.getElementById("alertsList").innerHTML = alerts.map(function(x) {
+        const s = x.s, total = x.total;
+        const color = getStatusColor(total);
+        let msg = "";
+        if (color === "red")         msg = "🚨 تجاوز الحد الأقصى (" + RED_THRESHOLD + " أيام)";
+        else if (color === "orange") msg = "⚠️ تجاوز " + ORANGE_THRESHOLD + " يوم - إنذار برتقالي";
+        else                          msg = "🔔 تجاوز " + WARNING_THRESHOLD + " أيام - تنبيه أولي";
+
+        return '<div class="alert alert-' + (color === "red" ? "error" : color === "orange" ? "warning" : "info") + '" style="margin-bottom:12px;">' +
+            '<div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; align-items:center;">' +
+                '<div><strong style="font-size:1.05em;">' + s.nameAr + '</strong>' +
+                '<div style="font-size:0.85em; color:#666;">' + s.number + '</div>' +
+                '<div style="margin-top:6px;">' + msg + '</div></div>' +
+                '<div style="text-align:center;">' +
+                    '<div style="font-size:2em; font-weight:700;">' + total + '</div>' +
+                    '<div style="font-size:0.85em;">غياب بدون عذر</div>' +
+                    '<div style="display:flex; gap:6px; margin-top:8px;">' +
+                        '<button class="btn btn-small btn-info" onclick="openStudent(' + s.id + ')">📋 التفاصيل</button>' +
+                        '<button class="btn btn-small btn-warning" onclick="showWarning(' + s.id + ')">📨 إنذار</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div></div>';
+    }).join("");
+}
+
+/* ==========================================================================
+   11. النسخ الاحتياطي
+   ========================================================================== */
+function exportBackup() {
+    const data = {
+        version: 2,
+        exportDate: new Date().toISOString(),
+        students: studentsCache,
+        records: recordsCache
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "attendance_backup_" + todayISO() + ".json";
+    a.click();
+}
+
+async function importBackup() {
+    const file = document.getElementById("importFile").files[0];
+    if (!file) { alert("⚠️ اختر ملفاً أولاً"); return; }
+    if (!confirm("⚠️ سيتم استبدال جميع البيانات الحالية. متابعة؟")) return;
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (!data.students || !data.records) throw new Error("ملف غير صالح");
+
+            await dbClear("students");
+            await dbClear("records");
+
+            for (const s of data.students) await dbPut("students", s);
+            for (const r of data.records) {
+                const obj = { student_id: r.student_id, date: r.date, status: r.status, note: r.note || "" };
+                await dbAdd("records", obj);
+            }
+            await loadData();
+            renderAll();
+            alert("✅ تم استعادة البيانات بنجاح");
+        } catch (err) {
+            alert("❌ خطأ: " + err.message);
+        }
+    };
+    reader.readAsText(file);
+}
+
+/* ==========================================================================
+   12. حذف جميع السجلات
+   ========================================================================== */
+async function clearAllAbsences() {
+    if (!confirm("⚠️ سيتم حذف جميع السجلات. متابعة؟")) return;
+    if (!confirm("⚠️ تأكيد نهائي!")) return;
+    await dbClear("records");
+    await loadData();
+    renderAll();
+    alert("✅ تم حذف جميع السجلات");
+}
+
+/* ==========================================================================
+   13. التنقل
+   ========================================================================== */
+function navigate(page) {
+    document.querySelectorAll(".page").forEach(function(p) { p.classList.remove("active"); });
+    document.getElementById("page-" + page).classList.add("active");
+    document.querySelectorAll(".nav-btn").forEach(function(b) {
+        if (b.dataset.page) b.classList.toggle("active", b.dataset.page === page);
+    });
+
+    if (page === "home")    { renderStats(); renderStudentsTable(); }
+    if (page === "daily")   { renderDailyTable(); }
+    if (page === "reports") { renderReports(); }
+    if (page === "alerts")  { renderAlerts(); }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* ==========================================================================
+   14. التشغيل
+   ========================================================================== */
+async function renderAll() {
+    renderStats();
+    renderStudentsTable();
+    renderReports();
+    renderAlerts();
+    const badge = document.getElementById("todayBadge");
+    if (badge) badge.textContent = "📅 اليوم: " + todayISO();
+}
+
+async function startApp() {
+    if (appStarted) return;
+    appStarted = true;
+
+    try {
+        await initDatabase();
+        await loadData();
+
+        const dailyDateInput = document.getElementById("dailyDate");
+        if (dailyDateInput) {
+            dailyDateInput.value = dailyDate;
+            dailyDateInput.addEventListener("change", function(e) {
+                dailyDate = e.target.value;
+                renderDailyTable();
+            });
+        }
+
+        document.querySelectorAll(".nav-btn").forEach(function(btn) {
+            if (btn.dataset.page) {
+                btn.addEventListener("click", function() { navigate(btn.dataset.page); });
+            }
+        });
+
+        // إغلاق نافذة الإنذار عند الضغط خارج النموذج
+        const warningModal = document.getElementById("warningModal");
+        if (warningModal) {
+            warningModal.addEventListener("click", function(e) {
+                if (e.target === warningModal) closeWarning();
+            });
+        }
+
+        await renderAll();
+        navigate("home");
+    } catch (err) {
+        console.error("خطأ في تشغيل التطبيق:", err);
+        alert("حدث خطأ أثناء التشغيل: " + err.message);
+    }
+}
+
+window.startApp = startApp;
+</script>
 </body>
 </html>
