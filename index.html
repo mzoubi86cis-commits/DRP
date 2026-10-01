@@ -777,13 +777,15 @@ function renderDailyTable() {
     });
     updateDailyCounters();
 }
+let pendingChanges = {};
+
 function setStatus(sid, status) {
     if (dailySelections[sid] === status) delete dailySelections[sid];
     else dailySelections[sid] = status;
     refreshRowButtons(sid);
     updateDailyCounters();
-    // ✅ حفظ تلقائي خفيف للتحضير (اختياري)
-    // لا نحفظ هنا لأن المستخدم لم يضغط "حفظ" بعد
+    // جدولة حفظ تلقائي بعد 1.5 ثانية من آخر تغيير
+    autoSave(1500);
 }
 function refreshRowButtons(sid) {
     const group = document.querySelector('.status-group[data-sid="' + sid + '"]');
@@ -891,7 +893,7 @@ function openStudent(sid) {
                 '<td>' + r.date + '</td>' +
                 '<td>' + formatDateAr(r.date).split("(")[1].replace(")", "") + '</td>' +
                 '<td>' + statusBadge(r.status) + '</td>' +
-                '<td><button class="btn btn-small btn-danger" onclick="deleteRecord(' + r.id + ', ' + sid + ')">🗑️ حذف</button></td>' +
+                '<td><button class="btn btn-small btn-danger" onclick="(' + r.id + ', ' + sid + ')">🗑️ حذف</button></td>' +
                 '</tr>';
         });
         recordsHTML += '</tbody></table></div>';
@@ -919,8 +921,10 @@ function openStudent(sid) {
 async function deleteRecord(rid, sid) {
     if (!confirm("هل أنت متأكد من حذف هذا السجل؟")) return;
     recordsCache = recordsCache.filter(function(r) { return r.id !== rid; });
+    updateSyncStatus("syncing", "⏳ جارٍ الحفظ...");
     const ok = await syncToCloud();
     if (ok) openStudent(sid);
+    else alert("⚠️ فشل الحذف، حاول مرة أخرى");
 }
 
 /* ==========================================================================
@@ -1098,6 +1102,7 @@ async function importBackup() {
             if (!data.students || !data.records) throw new Error("ملف غير صالح");
             studentsCache = data.students;
             recordsCache = data.records;
+            updateSyncStatus("syncing", "⏳ جارٍ الرفع...");
             await syncToCloud();
             renderAll();
             alert("✅ تم استعادة البيانات ورفعها للسحابة");
