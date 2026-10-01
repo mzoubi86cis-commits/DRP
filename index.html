@@ -832,9 +832,11 @@ async function saveDailyRecord() {
     if (Object.keys(dailySelections).length === 0) {
         alert("⚠️ لم تحدد أي حالة لأي طالب"); return;
     }
+    
     // حذف السجلات القديمة لهذا اليوم
     recordsCache = recordsCache.filter(function(r) { return r.date !== dailyDate; });
-    // إضافة الجديدة (بدون id - سيُولَّد تلقائياً)
+    
+    // إضافة الجديدة
     let maxId = recordsCache.reduce(function(m, r) { return Math.max(m, r.id || 0); }, 0);
     for (const entry of Object.entries(dailySelections)) {
         maxId++;
@@ -846,10 +848,13 @@ async function saveDailyRecord() {
             note: ""
         });
     }
+    
+    // حفظ فوري بدون انتظار
+    updateSyncStatus("syncing", "⏳ جارٍ الحفظ...");
     const ok = await syncToCloud();
     if (ok) {
         renderAll();
-        alert("✅ تم حفظ " + Object.keys(dailySelections).length + " سجل بتاريخ " + dailyDate + " في السحابة");
+        alert("✅ تم حفظ " + Object.keys(dailySelections).length + " سجل بتاريخ " + dailyDate);
     }
 }
 
