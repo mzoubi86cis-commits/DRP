@@ -769,7 +769,7 @@ function renderDailyTable() {
             '<td>' + s.nameAr + '</td>' +
             '<td>' + s.number + '</td>' +
             '<td><div class="status-group" data-sid="' + s.id + '">' +
-                '<button class="status-btn ' + (status === "present" ? "active-present" : "") + '" onclick="setStatus(' + s.id + ', \'present\')">✅ حاضر</button>' +
+                '<button class="status-btn ' + (status === "present" ? "active-present" : "") + '" onclick="(' + s.id + ', \'present\')">✅ حاضر</button>' +
                 '<button class="status-btn ' + (status === "absent" ? "active-absent" : "") + '" onclick="setStatus(' + s.id + ', \'absent\')">❌ غائب</button>' +
                 '<button class="status-btn ' + (status === "excused" ? "active-excused" : "") + '" onclick="setStatus(' + s.id + ', \'excused\')">📝 بعذر</button>' +
             '</div></td>';
@@ -782,6 +782,8 @@ function setStatus(sid, status) {
     else dailySelections[sid] = status;
     refreshRowButtons(sid);
     updateDailyCounters();
+    // ✅ حفظ تلقائي خفيف للتحضير (اختياري)
+    // لا نحفظ هنا لأن المستخدم لم يضغط "حفظ" بعد
 }
 function refreshRowButtons(sid) {
     const group = document.querySelector('.status-group[data-sid="' + sid + '"]');
