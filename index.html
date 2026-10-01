@@ -423,6 +423,27 @@ async function syncToCloud() {
         return false;
     }
 }
+    // ===== حفظ تلقائي مع Debounce (يُرسل بعد توقف التعديل بمدة) =====
+let autoSaveTimer = null;
+
+function autoSave(delay) {
+    delay = delay || 800; // 0.8 ثانية افتراضياً
+    if (autoSaveTimer) clearTimeout(autoSaveTimer);
+    updateSyncStatus("syncing", "⏳ جارٍ الحفظ التلقائي...");
+    autoSaveTimer = setTimeout(async function() {
+        try {
+            await cloudSave({
+                students: studentsCache,
+                records: recordsCache,
+                lastUpdate: new Date().toISOString()
+            });
+            updateSyncStatus("synced", "✅ تم الحفظ تلقائياً");
+        } catch (err) {
+            console.error("AutoSave error:", err);
+            updateSyncStatus("error", "❌ فشل الحفظ التلقائي");
+        }
+    }, delay);
+}
 
 async function syncFromCloud() {
     if (!confirm("سيتم استبدال البيانات المحلية بالبيانات السحابية. متابعة؟")) return;
