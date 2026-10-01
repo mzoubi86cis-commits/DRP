@@ -7,178 +7,42 @@
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-    --primary: #1e3c72;
-    --primary-light: #2a5298;
-    --green: #28a745;
-    --yellow: #ffc107;
-    --orange: #fd7e14;
-    --red: #dc3545;
-    --excused: #17a2b8;
-    --bg: #f0f2f5;
-    --card: #ffffff;
-    --border: #e0e4e8;
-    --text: #222;
-    --muted: #666;
+    --primary: #1e3c72; --primary-light: #2a5298;
+    --green: #28a745; --yellow: #ffc107; --orange: #fd7e14;
+    --red: #dc3545; --excused: #17a2b8;
+    --bg: #f0f2f5; --border: #e0e4e8; --text: #222; --muted: #666;
 }
-
-body {
-    font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    min-height: 100vh;
-}
-
+body { font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
 .container { max-width: 1250px; margin: 0 auto; padding: 20px; }
-
-/* ===================== شاشة تسجيل الدخول ===================== */
-#loginScreen {
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    padding: 20px;
-}
+#loginScreen { position: fixed; inset: 0; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
 #loginScreen.hidden { display: none; }
-
-.login-box {
-    background: white;
-    padding: 40px 35px;
-    border-radius: 16px;
-    max-width: 420px;
-    width: 100%;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    text-align: center;
-    animation: slideUp 0.4s ease;
-}
-@keyframes slideUp {
-    from { transform: translateY(30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
+.login-box { background: white; padding: 40px 35px; border-radius: 16px; max-width: 420px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); text-align: center; }
 .login-box .logo { font-size: 4em; margin-bottom: 15px; display: block; }
-.login-box h1 { color: var(--primary); font-size: 1.5em; margin-bottom: 6px; }
-.login-box p.subtitle { color: var(--muted); font-size: 0.95em; margin-bottom: 25px; }
-.login-box label {
-    display: block;
-    text-align: right;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: #444;
-    font-size: 0.95em;
-}
-.login-box input[type="password"] {
-    width: 100%;
-    padding: 14px 16px;
-    border: 2px solid #e0e4e8;
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 1.1em;
-    text-align: center;
-    letter-spacing: 3px;
-    transition: border 0.2s;
-    direction: ltr;
-}
-.login-box input[type="password"]:focus {
-    outline: none;
-    border-color: var(--primary-light);
-    box-shadow: 0 0 0 3px rgba(42,82,152,0.15);
-}
-.login-box button {
-    width: 100%;
-    margin-top: 18px;
-    padding: 14px;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 1.05em;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.2s;
-}
-.login-box button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(30,60,114,0.35);
-}
-.login-box button:active { transform: translateY(0); }
-
-.login-error {
-    background: #f8d7da;
-    color: #721c24;
-    padding: 10px 14px;
-    border-radius: 8px;
-    margin-top: 15px;
-    font-size: 0.9em;
-    border-right: 4px solid var(--red);
-    display: none;
-}
-.login-error.show { display: block; animation: shake 0.3s; }
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    75% { transform: translateX(8px); }
-}
-
-.login-hint {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    font-size: 0.85em;
-    color: var(--muted);
-}
-
-/* ===================== الهيدر ===================== */
-header {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    color: white;
-    padding: 22px 0;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-}
+.login-box h1 { color: var(--primary); font-size: 1.4em; margin-bottom: 6px; }
+.login-box p.subtitle { color: var(--muted); font-size: 0.9em; margin-bottom: 20px; }
+.login-box label { display: block; text-align: right; font-weight: 500; margin-bottom: 6px; margin-top: 12px; color: #444; font-size: 0.9em; }
+.login-box input { width: 100%; padding: 12px 14px; border: 2px solid #e0e4e8; border-radius: 10px; font-family: inherit; font-size: 1em; direction: ltr; transition: border 0.2s; }
+.login-box input[type="password"] { text-align: center; letter-spacing: 3px; }
+.login-box input:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(42,82,152,0.15); }
+.login-box button { width: 100%; margin-top: 15px; padding: 13px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; border: none; border-radius: 10px; font-family: inherit; font-size: 1.05em; font-weight: 700; cursor: pointer; transition: transform 0.15s, box-shadow 0.2s; }
+.login-box button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(30,60,114,0.35); }
+.login-error { background: #f8d7da; color: #721c24; padding: 10px 14px; border-radius: 8px; margin-top: 12px; font-size: 0.85em; border-right: 4px solid var(--red); display: none; }
+.login-error.show { display: block; }
+.login-hint { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); font-size: 0.8em; color: var(--muted); text-align: right; line-height: 1.7; }
+.login-hint a { color: var(--primary-light); text-decoration: none; font-weight: 600; }
+header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; padding: 22px 0; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
 header h1 { font-size: 1.7em; margin-bottom: 4px; }
 header p { opacity: 0.9; font-size: 0.95em; }
 nav { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
-nav button {
-    background: rgba(255,255,255,0.15);
-    color: white;
-    border: none;
-    padding: 9px 18px;
-    border-radius: 7px;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.95em;
-    transition: all 0.2s;
-}
+nav button { background: rgba(255,255,255,0.15); color: white; border: none; padding: 9px 18px; border-radius: 7px; cursor: pointer; font-family: inherit; font-size: 0.95em; transition: all 0.2s; }
 nav button:hover { background: rgba(255,255,255,0.3); }
 nav button.active { background: white; color: var(--primary); font-weight: 700; }
-
 .logout-btn { background: rgba(220,53,69,0.85) !important; margin-right: auto; }
-.logout-btn:hover { background: var(--red) !important; }
-
-/* ===================== البطاقات ===================== */
-.stats-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 15px;
-    margin-bottom: 25px;
-}
-.card {
-    padding: 18px;
-    border-radius: 10px;
-    text-align: center;
-    color: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-}
+.stats-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-bottom: 25px; }
+.card { padding: 18px; border-radius: 10px; text-align: center; color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: transform 0.2s; }
 .card:hover { transform: translateY(-3px); }
 .card h3 { font-size: 1em; margin-bottom: 4px; }
-.card p { font-size: 0.82em; opacity: 0.95; }
 .card .num { display: block; font-size: 1.8em; font-weight: 700; margin-top: 6px; }
 .card.green { background: linear-gradient(135deg, #28a745, #1e7e34); }
 .card.yellow { background: linear-gradient(135deg, #ffc107, #d39e00); color: #333; }
@@ -186,36 +50,13 @@ nav button.active { background: white; color: var(--primary); font-weight: 700; 
 .card.red { background: linear-gradient(135deg, #dc3545, #a71d2a); }
 .card.total { background: linear-gradient(135deg, #1e3c72, #2a5298); }
 .card.excused { background: linear-gradient(135deg, #17a2b8, #117a8b); }
-
-/* ===================== الأدوات ===================== */
-.toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.today-badge {
-    background: #e9ecef;
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-weight: 500;
-    font-size: 0.9em;
-}
-
-/* ===================== الأزرار ===================== */
-.btn {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.9em;
-    transition: all 0.2s;
-    text-decoration: none;
-    display: inline-block;
-}
+.toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+.today-badge { background: #e9ecef; padding: 8px 14px; border-radius: 6px; font-weight: 500; font-size: 0.9em; }
+.sync-badge { padding: 6px 12px; border-radius: 6px; font-size: 0.85em; font-weight: 500; }
+.sync-badge.synced { background: #d4edda; color: #155724; }
+.sync-badge.syncing { background: #fff3cd; color: #856404; }
+.sync-badge.error { background: #f8d7da; color: #721c24; }
+.btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.9em; transition: all 0.2s; text-decoration: none; display: inline-block; }
 .btn-primary { background: var(--primary-light); color: white; }
 .btn-primary:hover { background: var(--primary); }
 .btn-success { background: var(--green); color: white; }
@@ -229,467 +70,125 @@ nav button.active { background: white; color: var(--primary); font-weight: 700; 
 .btn-warning { background: var(--orange); color: white; }
 .btn-warning:hover { background: #dc6502; }
 .btn-small { padding: 5px 10px; font-size: 0.82em; }
-
-/* ===================== الجدول ===================== */
-.table-wrap {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    overflow-x: auto;
-}
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
-}
-th {
-    background: var(--primary-light);
-    color: white;
-    padding: 12px;
-    text-align: right;
-    font-weight: 500;
-    font-size: 0.9em;
-    white-space: nowrap;
-}
-td {
-    padding: 12px;
-    border-bottom: 1px solid var(--border);
-    text-align: right;
-    font-size: 0.92em;
-}
+.table-wrap { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+th { background: var(--primary-light); color: white; padding: 12px; text-align: right; font-weight: 500; font-size: 0.9em; white-space: nowrap; }
+td { padding: 12px; border-bottom: 1px solid var(--border); text-align: right; font-size: 0.92em; }
 tbody tr:hover { background: #f8f9fa; }
-.student-link {
-    color: var(--primary-light);
-    text-decoration: none;
-    font-weight: 500;
-    cursor: pointer;
-}
+.student-link { color: var(--primary-light); text-decoration: none; font-weight: 500; cursor: pointer; }
 .student-link:hover { text-decoration: underline; }
 .en-name { color: var(--muted); font-size: 0.85em; direction: ltr; text-align: left; }
-
 tr.row-green { border-right: 5px solid var(--green); }
 tr.row-yellow { border-right: 5px solid var(--yellow); background: #fff9e6; }
 tr.row-orange { border-right: 5px solid var(--orange); background: #fff3e6; }
 tr.row-red { border-right: 5px solid var(--red); background: #ffe6e6; }
-
-.badge {
-    display: inline-block;
-    padding: 3px 12px;
-    border-radius: 20px;
-    font-weight: 700;
-    min-width: 40px;
-    text-align: center;
-    font-size: 0.9em;
-}
+.badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-weight: 700; min-width: 40px; text-align: center; font-size: 0.9em; }
 .badge-green { background: #d4edda; color: #155724; }
 .badge-yellow { background: #fff3cd; color: #856404; }
 .badge-orange { background: #ffe5b4; color: #b35900; }
 .badge-red { background: #f8d7da; color: #721c24; }
 .badge-excused { background: #d1ecf1; color: #0c5460; }
-
-/* ===================== أزرار الحالة اليومية ===================== */
-.status-group {
-    display: inline-flex;
-    gap: 4px;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    background: #f8f9fa;
-}
-.status-btn {
-    padding: 6px 12px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 0.82em;
-    font-weight: 500;
-    transition: all 0.15s;
-    color: #555;
-    white-space: nowrap;
-}
+.status-group { display: inline-flex; gap: 4px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); background: #f8f9fa; }
+.status-btn { padding: 6px 12px; border: none; background: transparent; cursor: pointer; font-family: inherit; font-size: 0.82em; font-weight: 500; transition: all 0.15s; color: #555; white-space: nowrap; }
 .status-btn:hover { background: #e9ecef; }
 .status-btn.active-present { background: var(--green); color: white; font-weight: 700; }
 .status-btn.active-absent { background: var(--red); color: white; font-weight: 700; }
 .status-btn.active-excused { background: var(--excused); color: white; font-weight: 700; }
-
-/* ===================== النوافذ المنبثقة ===================== */
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.55);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: 15px;
-}
-.modal.show { display: flex; }
-.modal-content {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    max-width: 480px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    animation: pop 0.2s ease;
-}
-@keyframes pop {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-.modal-content h3 { margin-bottom: 15px; color: var(--primary-light); }
-.modal-content label { display: block; margin: 12px 0; font-weight: 500; }
-.modal-content input, .modal-content select, .modal-content textarea {
-    width: 100%;
-    padding: 9px;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-family: inherit;
-    margin-top: 5px;
-    font-size: 1em;
-}
-.modal-actions { display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; }
-
-/* ===================== لوحة التسجيل اليومي ===================== */
-.daily-panel {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    border-right: 5px solid var(--primary-light);
-}
-.daily-controls {
-    display: flex;
-    gap: 15px;
-    align-items: end;
-    flex-wrap: wrap;
-    margin: 15px 0;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border);
-}
-.daily-controls input {
-    padding: 8px;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-family: inherit;
-}
-.daily-info {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    background: #f8f9fa;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-top: 10px;
-    font-size: 0.9em;
-}
+.daily-panel { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border-right: 5px solid var(--primary-light); }
+.daily-controls { display: flex; gap: 15px; align-items: end; flex-wrap: wrap; margin: 15px 0; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+.daily-controls input { padding: 8px; border: 1px solid #ced4da; border-radius: 6px; font-family: inherit; }
+.daily-info { display: flex; gap: 20px; flex-wrap: wrap; background: #f8f9fa; padding: 12px 16px; border-radius: 8px; margin-top: 10px; font-size: 0.9em; }
 .daily-info span strong { color: var(--primary-light); }
-
-/* ===================== صفحة الطالب ===================== */
-.student-header {
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-}
+.student-header { background: white; padding: 25px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
 .student-header.row-green { border-right: 6px solid var(--green); }
 .student-header.row-yellow { border-right: 6px solid var(--yellow); }
 .student-header.row-orange { border-right: 6px solid var(--orange); }
 .student-header.row-red { border-right: 6px solid var(--red); }
 .student-header h2 { color: var(--primary-light); margin-bottom: 5px; }
 .student-stats { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
-.stat-box {
-    background: #f8f9fa;
-    padding: 12px 20px;
-    border-radius: 8px;
-    text-align: center;
-    min-width: 130px;
-}
+.stat-box { background: #f8f9fa; padding: 12px 20px; border-radius: 8px; text-align: center; min-width: 130px; }
 .stat-num { display: block; font-size: 2em; font-weight: 700; color: var(--primary-light); }
 .stat-lbl { font-size: 0.88em; color: var(--muted); }
-
-/* ===================== رسائل ===================== */
-.alert {
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-weight: 500;
-}
+.alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 15px; font-weight: 500; }
 .alert-success { background: #d4edda; color: #155724; border-right: 4px solid var(--green); }
 .alert-error { background: #f8d7da; color: #721c24; border-right: 4px solid var(--red); }
 .alert-info { background: #d1ecf1; color: #0c5460; border-right: 4px solid #17a2b8; }
 .alert-warning { background: #fff3cd; color: #856404; border-right: 4px solid var(--yellow); }
-
-/* ===================== تبويبات الصفحات ===================== */
 .page { display: none; }
 .page.active { display: block; }
-
-/* ===================== النماذج ===================== */
-.filter-form {
-    display: flex;
-    gap: 15px;
-    align-items: end;
-    flex-wrap: wrap;
-    background: white;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-.filter-form input, .filter-form select {
-    padding: 8px;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-family: inherit;
-}
-
-footer {
-    text-align: center;
-    padding: 25px;
-    color: var(--muted);
-    margin-top: 40px;
-    font-size: 0.9em;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 50px 20px;
-    background: white;
-    border-radius: 10px;
-    color: var(--muted);
-    font-size: 1.05em;
-}
+.filter-form { display: flex; gap: 15px; align-items: end; flex-wrap: wrap; background: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.filter-form input, .filter-form select { padding: 8px; border: 1px solid #ced4da; border-radius: 6px; font-family: inherit; }
+footer { text-align: center; padding: 25px; color: var(--muted); margin-top: 40px; font-size: 0.9em; }
+.empty-state { text-align: center; padding: 50px 20px; background: white; border-radius: 10px; color: var(--muted); font-size: 1.05em; }
 .empty-state .icon { font-size: 3em; display: block; margin-bottom: 10px; }
-
-/* ===================== نموذج الإنذار ===================== */
-.warning-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    align-items: flex-start;
-    justify-content: center;
-    z-index: 2000;
-    padding: 20px;
-    overflow-y: auto;
-}
+.warning-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: flex-start; justify-content: center; z-index: 2000; padding: 20px; overflow-y: auto; }
 .warning-modal.show { display: flex; }
-
-.warning-paper {
-    background: white;
-    width: 100%;
-    max-width: 850px;
-    padding: 40px 50px;
-    border-radius: 8px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    margin: 30px auto;
-    font-family: 'Tajawal', 'Traditional Arabic', serif;
-    line-height: 1.9;
-    color: #111;
-    animation: slideDown 0.3s ease;
-}
-@keyframes slideDown {
-    from { transform: translateY(-20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-.warning-paper .letterhead {
-    text-align: center;
-    padding-bottom: 15px;
-    border-bottom: 3px double #1e3c72;
-    margin-bottom: 25px;
-}
-.warning-paper .letterhead .school-name {
-    font-size: 1.6em;
-    font-weight: 700;
-    color: #1e3c72;
-    margin-bottom: 5px;
-}
-.warning-paper .letterhead .school-info {
-    font-size: 0.92em;
-    color: #555;
-}
-.warning-paper .letterhead .ref {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-    font-size: 0.9em;
-    color: #333;
-}
-
-.warning-title {
-    text-align: center;
-    font-size: 1.5em;
-    font-weight: 700;
-    padding: 12px;
-    margin: 20px 0;
-    border-radius: 6px;
-    letter-spacing: 1px;
-}
+.warning-paper { background: white; width: 100%; max-width: 850px; padding: 40px 50px; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); margin: 30px auto; line-height: 1.9; color: #111; }
+.warning-paper .letterhead { text-align: center; padding-bottom: 15px; border-bottom: 3px double #1e3c72; margin-bottom: 25px; }
+.warning-paper .letterhead .school-name { font-size: 1.6em; font-weight: 700; color: #1e3c72; margin-bottom: 5px; }
+.warning-paper .letterhead .school-info { font-size: 0.92em; color: #555; }
+.warning-paper .letterhead .ref { display: flex; justify-content: space-between; margin-top: 15px; font-size: 0.9em; color: #333; }
+.warning-title { text-align: center; font-size: 1.5em; font-weight: 700; padding: 12px; margin: 20px 0; border-radius: 6px; letter-spacing: 1px; }
 .warning-title.level-1 { background: #fff3cd; color: #856404; border: 2px solid #ffc107; }
 .warning-title.level-2 { background: #ffe5b4; color: #b35900; border: 2px solid #fd7e14; }
 .warning-title.level-3 { background: #f8d7da; color: #721c24; border: 2px solid #dc3545; }
-
-.student-info-box {
-    background: #f8f9fa;
-    border-right: 4px solid #1e3c72;
-    padding: 15px 20px;
-    border-radius: 6px;
-    margin-bottom: 25px;
-}
-.student-info-box table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: auto;
-}
-.student-info-box td {
-    padding: 6px 10px;
-    border: none;
-    font-size: 1em;
-    text-align: right;
-}
-.student-info-box td.label {
-    font-weight: 700;
-    color: #1e3c72;
-    width: 130px;
-}
-
-.warning-body {
-    text-align: justify;
-    font-size: 1.05em;
-    line-height: 2.1;
-    margin: 20px 0;
-}
-.warning-body p {
-    margin-bottom: 14px;
-    text-indent: 30px;
-}
-.warning-body .number-badge {
-    display: inline-block;
-    background: #1e3c72;
-    color: white;
-    padding: 2px 12px;
-    border-radius: 20px;
-    font-weight: 700;
-    margin: 0 4px;
-}
-
-.recommendations {
-    background: #f0f4f8;
-    padding: 15px 25px;
-    border-radius: 8px;
-    margin: 20px 0;
-    border-right: 4px solid #2a5298;
-}
-.recommendations h4 {
-    color: #1e3c72;
-    margin-bottom: 10px;
-    font-size: 1.1em;
-}
+.student-info-box { background: #f8f9fa; border-right: 4px solid #1e3c72; padding: 15px 20px; border-radius: 6px; margin-bottom: 25px; }
+.student-info-box table { width: 100%; border-collapse: collapse; min-width: auto; }
+.student-info-box td { padding: 6px 10px; border: none; font-size: 1em; text-align: right; }
+.student-info-box td.label { font-weight: 700; color: #1e3c72; width: 130px; }
+.warning-body { text-align: justify; font-size: 1.05em; line-height: 2.1; margin: 20px 0; }
+.warning-body p { margin-bottom: 14px; text-indent: 30px; }
+.warning-body .number-badge { display: inline-block; background: #1e3c72; color: white; padding: 2px 12px; border-radius: 20px; font-weight: 700; margin: 0 4px; }
+.recommendations { background: #f0f4f8; padding: 15px 25px; border-radius: 8px; margin: 20px 0; border-right: 4px solid #2a5298; }
+.recommendations h4 { color: #1e3c72; margin-bottom: 10px; font-size: 1.1em; }
 .recommendations ul { padding-right: 25px; }
 .recommendations li { margin-bottom: 6px; font-size: 0.98em; }
-
-.signatures {
-    margin-top: 50px;
-    padding-top: 20px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    text-align: center;
-}
+.signatures { margin-top: 50px; padding-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; }
 .signatures .sig-box { padding: 10px; }
-.signatures .sig-title {
-    font-weight: 700;
-    color: #1e3c72;
-    margin-bottom: 40px;
-    font-size: 1.02em;
-}
-.signatures .sig-line {
-    border-top: 2px dotted #333;
-    padding-top: 6px;
-    font-weight: 600;
-    color: #222;
-    font-size: 1em;
-}
-
-.warning-date {
-    text-align: left;
-    margin-top: 25px;
-    font-size: 0.95em;
-    color: #444;
-    direction: rtl;
-}
-
-.warning-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #e0e4e8;
-}
-
-@media print {
-    body * { visibility: hidden; }
-    .warning-paper, .warning-paper * { visibility: visible; }
-    .warning-paper {
-        position: absolute;
-        top: 0; right: 0; left: 0;
-        margin: 0;
-        padding: 20px;
-        box-shadow: none;
-        border-radius: 0;
-    }
-    .warning-actions { display: none !important; }
-    .warning-modal { background: white; position: static; padding: 0; }
-}
-
-@media (max-width: 700px) {
-    .warning-paper { padding: 25px 20px; }
-    .warning-paper .letterhead .school-name { font-size: 1.2em; }
-    .warning-title { font-size: 1.15em; }
-    .signatures { grid-template-columns: 1fr; gap: 30px; }
-    .signatures .sig-title { margin-bottom: 25px; }
-}
-
-@media (max-width: 600px) {
-    header h1 { font-size: 1.3em; }
-    .stats-cards { grid-template-columns: repeat(2, 1fr); }
-    nav button { padding: 7px 12px; font-size: 0.85em; }
-    td, th { padding: 8px; font-size: 0.82em; }
-    .status-btn { padding: 5px 8px; font-size: 0.75em; }
-    .login-box { padding: 30px 22px; }
-}
+.signatures .sig-title { font-weight: 700; color: #1e3c72; margin-bottom: 40px; font-size: 1.02em; }
+.signatures .sig-line { border-top: 2px dotted #333; padding-top: 6px; font-weight: 600; color: #222; font-size: 1em; }
+.warning-date { text-align: left; margin-top: 25px; font-size: 0.95em; color: #444; }
+.warning-actions { display: flex; gap: 10px; justify-content: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #e0e4e8; }
+@media print { body * { visibility: hidden; } .warning-paper, .warning-paper * { visibility: visible; } .warning-paper { position: absolute; top: 0; right: 0; left: 0; margin: 0; padding: 20px; box-shadow: none; border-radius: 0; } .warning-actions { display: none !important; } .warning-modal { background: white; position: static; padding: 0; } }
+@media (max-width: 700px) { .warning-paper { padding: 25px 20px; } .warning-paper .letterhead .school-name { font-size: 1.2em; } .warning-title { font-size: 1.15em; } .signatures { grid-template-columns: 1fr; gap: 30px; } }
+@media (max-width: 600px) { header h1 { font-size: 1.3em; } .stats-cards { grid-template-columns: repeat(2, 1fr); } nav button { padding: 7px 12px; font-size: 0.85em; } td, th { padding: 8px; font-size: 0.82em; } .status-btn { padding: 5px 8px; font-size: 0.75em; } .login-box { padding: 30px 22px; } }
 </style>
 </head>
 <body>
 
-<!-- ===================== شاشة تسجيل الدخول ===================== -->
 <div id="loginScreen">
     <div class="login-box">
         <span class="logo">🔐</span>
         <h1>مدرسة الطرة الثانوية للبنين</h1>
-        <p class="subtitle">نظام الحضور والغياب — الصف الثاني عشر / تكنولوجيا المعلومات</p>
+        <p class="subtitle">نظام الحضور والغياب</p>
+        
+        <div id="setupStep" style="display: none;">
+            <p style="margin-bottom: 15px; color: var(--primary); font-weight: 600; font-size: 0.95em;">⚙️ إعداد الاتصال السحابي (لأول مرة فقط)</p>
+            <label for="masterKeyInput">X-Master-Key</label>
+            <input type="text" id="masterKeyInput" placeholder="$2a$10$..." autocomplete="off">
+            <label for="binIdInput">Bin ID</label>
+            <input type="text" id="binIdInput" placeholder="65f1a2b3..." autocomplete="off">
+            <button id="setupBtn">💾 حفظ الإعدادات</button>
+            <div class="login-error" id="setupError"></div>
+            <div class="login-hint">
+                💡 افتح <a href="https://jsonbin.io" target="_blank">JSONBin.io</a> للحصول على المفاتيح إن لم تكن لديك.
+            </div>
+        </div>
 
-        <label for="passwordInput">كلمة المرور</label>
-        <input type="password" id="passwordInput" placeholder="••••••••" autocomplete="off">
-
-        <button id="loginBtn">🔓 دخول</button>
-
-        <div class="login-error" id="loginError">❌ كلمة المرور غير صحيحة</div>
-
-        <div class="login-hint">💡 هذا النظام محمي. الدخول للمعلم فقط.</div>
+        <div id="passwordStep" style="display: none;">
+            <label for="passwordInput">كلمة المرور</label>
+            <input type="password" id="passwordInput" placeholder="••••••••" autocomplete="off">
+            <button id="loginBtn">🔓 دخول</button>
+            <div class="login-error" id="loginError">❌ كلمة المرور غير صحيحة</div>
+            <div class="login-hint">
+                💡 هذا النظام محمي. الدخول للمعلم فقط.
+                <br><a href="#" id="resetSettingsLink" style="font-size: 0.9em;">⚙️ إعادة إعداد الاتصال السحابي</a>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- ===================== المحتوى ===================== -->
 <div id="mainApp" style="display:none;">
-
 <header>
     <div class="container">
         <h1>🏫 مدرسة الطرة الثانوية للبنين</h1>
@@ -709,15 +208,16 @@ footer {
 
     <section id="page-home" class="page active">
         <div class="stats-cards" id="statsCards"></div>
-
         <div class="toolbar">
             <div style="display:flex; gap:10px; flex-wrap:wrap;">
                 <button class="btn btn-primary" onclick="navigate('daily')">📝 الذهاب للتسجيل اليومي</button>
-                <button class="btn btn-warning" onclick="clearAllAbsences()">🗑️ حذف جميع السجلات</button>
+                <button class="btn btn-info" onclick="syncFromCloud()">🔄 مزامنة من السحابة</button>
             </div>
-            <span class="today-badge" id="todayBadge"></span>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <span class="sync-badge synced" id="syncStatus">✅ متزامن</span>
+                <span class="today-badge" id="todayBadge"></span>
+            </div>
         </div>
-
         <div class="table-wrap">
             <table>
                 <thead>
@@ -738,23 +238,20 @@ footer {
 
     <section id="page-daily" class="page">
         <h2 style="margin-bottom:15px; color:var(--primary-light);">📝 التسجيل اليومي</h2>
-
         <div class="daily-panel">
             <div class="daily-controls">
                 <label>📅 التاريخ: <input type="date" id="dailyDate"></label>
                 <button class="btn btn-secondary" onclick="setDateToday()">اليوم</button>
                 <button class="btn btn-secondary" onclick="changeDay(-1)">⬅️ يوم سابق</button>
                 <button class="btn btn-secondary" onclick="changeDay(1)">يوم تالٍ ➡️</button>
-                <button class="btn btn-success" onclick="saveDailyRecord()">💾 حفظ</button>
+                <button class="btn btn-success" onclick="saveDailyRecord()">💾 حفظ في السحابة</button>
             </div>
-
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
                 <button class="btn btn-success btn-small" onclick="markAll('present')">✅ الكل حاضر</button>
                 <button class="btn btn-danger btn-small" onclick="markAll('absent')">❌ الكل غائب</button>
                 <button class="btn btn-info btn-small" onclick="markAll('excused')">📝 الكل بعذر</button>
                 <button class="btn btn-secondary btn-small" onclick="resetAll()">🔄 مسح التحديد</button>
             </div>
-
             <div class="daily-info">
                 <span>📊 الحاضر: <strong id="cPresent">0</strong></span>
                 <span>❌ الغائب: <strong id="cAbsent">0</strong></span>
@@ -762,7 +259,6 @@ footer {
                 <span>❓ لم يسجل: <strong id="cUnset">0</strong></span>
             </div>
         </div>
-
         <div class="table-wrap">
             <table>
                 <thead>
@@ -780,7 +276,6 @@ footer {
 
     <section id="page-reports" class="page">
         <h2 style="margin-bottom:15px; color:var(--primary-light);">📊 التقارير الكاملة</h2>
-
         <div class="filter-form">
             <label>من تاريخ: <input type="date" id="repStart" value="2026-08-23"></label>
             <label>إلى تاريخ: <input type="date" id="repEnd" value="2027-06-18"></label>
@@ -795,9 +290,7 @@ footer {
             <button class="btn btn-secondary" onclick="exportCSV()">📥 تصدير CSV</button>
             <button class="btn btn-secondary" onclick="window.print()">🖨️ طباعة</button>
         </div>
-
         <div id="reportsSummary" class="alert alert-info"></div>
-
         <div class="table-wrap">
             <table>
                 <thead>
@@ -819,31 +312,26 @@ footer {
 
     <section id="page-alerts" class="page">
         <h2 style="margin-bottom:15px; color:var(--primary-light);">🔔 التنبيهات والإنذارات</h2>
-        <div class="alert alert-info">
-            ℹ️ يتم احتساب التنبيهات بناءً على <strong>الغياب بدون عذر فقط</strong>.
-        </div>
+        <div class="alert alert-info">ℹ️ يتم احتساب التنبيهات بناءً على <strong>الغياب بدون عذر فقط</strong>.</div>
         <div id="alertsList"></div>
     </section>
 
     <section id="page-backup" class="page">
-        <h2 style="margin-bottom:15px; color:var(--primary-light);">💾 النسخ الاحتياطي والاستعادة</h2>
-
-        <div class="alert alert-warning">
-            ⚠️ البيانات محفوظة داخل متصفحك فقط. قم بعمل نسخة احتياطية دورياً.
+        <h2 style="margin-bottom:15px; color:var(--primary-light);">💾 النسخ الاحتياطي</h2>
+        <div class="alert alert-info">
+            ℹ️ البيانات محفوظة في السحابة (JSONBin.io) وفي المتصفح. استخدم هذه الصفحة لعمل نسخة احتياطية إضافية.
         </div>
-
         <div style="background:white; padding:20px; border-radius:10px; margin-bottom:15px;">
             <h3 style="margin-bottom:10px;">📤 تصدير نسخة احتياطية</h3>
-            <p style="color:var(--muted); margin-bottom:10px;">يحفظ جميع الطلاب والسجلات في ملف JSON.</p>
+            <p style="color:var(--muted); margin-bottom:10px;">حفظ جميع البيانات في ملف JSON.</p>
             <button class="btn btn-primary" onclick="exportBackup()">📥 تنزيل النسخة الاحتياطية</button>
         </div>
-
         <div style="background:white; padding:20px; border-radius:10px;">
             <h3 style="margin-bottom:10px;">📥 استعادة نسخة احتياطية</h3>
-            <p style="color:var(--muted); margin-bottom:10px;">اختر ملف JSON لاستعادة البيانات.</p>
+            <p style="color:var(--muted); margin-bottom:10px;">اختر ملف JSON لاستعادة البيانات (سيتم رفعها للسحابة أيضاً).</p>
             <input type="file" id="importFile" accept=".json" style="margin-bottom:10px;">
             <br>
-            <button class="btn btn-success" onclick="importBackup()">⬆️ استعادة</button>
+            <button class="btn btn-success" onclick="importBackup()">⬆️ استعادة ورفع للسحابة</button>
         </div>
     </section>
 
@@ -851,25 +339,116 @@ footer {
 
 </main>
 
-<footer>
-    © 2026-2027 - مدرسة الطرة الثانوية للبنين | نظام الحضور والغياب
-</footer>
-
+<footer>© 2026-2027 - مدرسة الطرة الثانوية للبنين | نظام الحضور والغياب</footer>
 </div>
 
-<!-- ===================== Modal: الإنذار الرسمي ===================== -->
 <div class="warning-modal" id="warningModal">
     <div class="warning-paper" id="warningPaper"></div>
 </div>
 
 <script>
 /* ==========================================================================
-   🔐 0. نظام تسجيل الدخول
+   🔐 0. الإعدادات السحابية
+   ========================================================================== */
+const CONFIG = {
+    JSONBIN_API: "https://api.jsonbin.io/v3/b",
+    PASSWORD: "IT-12",
+    SESSION_KEY: "attendance_auth",
+    SETTINGS_KEY: "attendance_settings"
+};
+
+function getSettings() {
+    try { return JSON.parse(localStorage.getItem(CONFIG.SETTINGS_KEY) || "null"); }
+    catch(e) { return null; }
+}
+function saveSettings(settings) {
+    try { localStorage.setItem(CONFIG.SETTINGS_KEY, JSON.stringify(settings)); return true; }
+    catch(e) { return false; }
+}
+function clearSettings() {
+    try { localStorage.removeItem(CONFIG.SETTINGS_KEY); } catch(e) {}
+}
+
+/* ==========================================================================
+   🌐 1. الاتصال السحابي بـ JSONBin.io
+   ========================================================================== */
+async function cloudLoad() {
+    const s = getSettings();
+    if (!s || !s.binId || !s.masterKey) throw new Error("الإعدادات غير مكتملة");
+    const res = await fetch(CONFIG.JSONBIN_API + "/" + s.binId + "/latest", {
+        method: "GET",
+        headers: { "X-Master-Key": s.masterKey }
+    });
+    if (!res.ok) throw new Error("فشل التحميل من السحابة (" + res.status + ")");
+    const data = await res.json();
+    return data.record || { students: [], records: [] };
+}
+
+async function cloudSave(payload) {
+    const s = getSettings();
+    if (!s || !s.binId || !s.masterKey) throw new Error("الإعدادات غير مكتملة");
+    const res = await fetch(CONFIG.JSONBIN_API + "/" + s.binId, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": s.masterKey
+        },
+        body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error("فشل الحفظ في السحابة (" + res.status + ")");
+    return await res.json();
+}
+
+function updateSyncStatus(status, text) {
+    const el = document.getElementById("syncStatus");
+    if (!el) return;
+    el.className = "sync-badge " + status;
+    el.textContent = text;
+}
+
+async function syncToCloud() {
+    updateSyncStatus("syncing", "⏳ جارٍ الحفظ...");
+    try {
+        await cloudSave({
+            students: studentsCache,
+            records: recordsCache,
+            lastUpdate: new Date().toISOString()
+        });
+        updateSyncStatus("synced", "✅ متزامن");
+        return true;
+    } catch (err) {
+        console.error("Sync error:", err);
+        updateSyncStatus("error", "❌ فشل الحفظ");
+        alert("⚠️ فشل الحفظ في السحابة: " + err.message);
+        return false;
+    }
+}
+
+async function syncFromCloud() {
+    if (!confirm("سيتم استبدال البيانات المحلية بالبيانات السحابية. متابعة؟")) return;
+    updateSyncStatus("syncing", "⏳ جارٍ التحميل...");
+    try {
+        const data = await cloudLoad();
+        studentsCache = data.students || [];
+        recordsCache = data.records || [];
+        if (studentsCache.length === 0) {
+            studentsCache = STUDENTS_SEED.slice();
+            await syncToCloud();
+        }
+        renderAll();
+        updateSyncStatus("synced", "✅ متزامن");
+        alert("✅ تمت المزامنة بنجاح");
+    } catch (err) {
+        updateSyncStatus("error", "❌ فشل التحميل");
+        alert("⚠️ فشل التحميل من السحابة: " + err.message);
+    }
+}
+
+/* ==========================================================================
+   🔐 2. شاشة الدخول والإعدادات
    ========================================================================== */
 (function() {
     "use strict";
-    const CORRECT_PASSWORD = "IT-12";
-    const SESSION_KEY = "attendance_auth";
     const safeStorage = {
         get(k) { try { return localStorage.getItem(k); } catch(e) { return null; } },
         set(k,v) { try { localStorage.setItem(k,v); } catch(e) {} },
@@ -877,6 +456,22 @@ footer {
     };
 
     let loginScreen, mainApp, passInput, loginError;
+
+    function showSetup() {
+        document.getElementById("setupStep").style.display = "block";
+        document.getElementById("passwordStep").style.display = "none";
+        const s = getSettings();
+        if (s) {
+            if (s.masterKey) document.getElementById("masterKeyInput").value = s.masterKey;
+            if (s.binId) document.getElementById("binIdInput").value = s.binId;
+        }
+    }
+
+    function showPassword() {
+        document.getElementById("setupStep").style.display = "none";
+        document.getElementById("passwordStep").style.display = "block";
+        setTimeout(function() { document.getElementById("passwordInput").focus(); }, 200);
+    }
 
     function initLoginUI() {
         loginScreen = document.getElementById("loginScreen");
@@ -886,31 +481,78 @@ footer {
         if (!loginScreen || !mainApp || !passInput) return;
 
         const loginBtn = document.getElementById("loginBtn");
-        if (loginBtn) loginBtn.addEventListener("click", checkPassword);
-
+        const setupBtn = document.getElementById("setupBtn");
         const logoutBtn = document.getElementById("logoutBtn");
+        const resetLink = document.getElementById("resetSettingsLink");
+
+        if (loginBtn) loginBtn.addEventListener("click", checkPassword);
+        if (setupBtn) setupBtn.addEventListener("click", saveSetup);
         if (logoutBtn) logoutBtn.addEventListener("click", logout);
+        if (resetLink) resetLink.addEventListener("click", function(e) {
+            e.preventDefault();
+            if (confirm("سيتم مسح إعدادات JSONBin. هل أنت متأكد؟")) {
+                clearSettings();
+                location.reload();
+            }
+        });
 
         passInput.addEventListener("keypress", function(e) {
             if (e.key === "Enter" || e.keyCode === 13) { e.preventDefault(); checkPassword(); }
         });
+        document.getElementById("masterKeyInput").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") { e.preventDefault(); saveSetup(); }
+        });
+        document.getElementById("binIdInput").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") { e.preventDefault(); saveSetup(); }
+        });
 
-        if (safeStorage.get(SESSION_KEY) === "true") showApp();
-        else setTimeout(function() { passInput.focus(); }, 200);
+        const settings = getSettings();
+        if (!settings || !settings.masterKey || !settings.binId) {
+            showSetup();
+        } else if (safeStorage.get(CONFIG.SESSION_KEY) === "true") {
+            showApp();
+        } else {
+            showPassword();
+        }
+    }
+
+    async function saveSetup() {
+        const mk = document.getElementById("masterKeyInput").value.trim();
+        const bi = document.getElementById("binIdInput").value.trim();
+        const err = document.getElementById("setupError");
+        err.classList.remove("show");
+
+        if (!mk || !bi) {
+            err.textContent = "❌ يرجى إدخال جميع الحقول";
+            err.classList.add("show");
+            return;
+        }
+
+        saveSettings({ masterKey: mk, binId: bi });
+
+        // اختبار الاتصال
+        try {
+            updateSyncStatus("syncing", "⏳ جارٍ الاختبار...");
+            await cloudLoad();
+            updateSyncStatus("synced", "✅ متصل");
+            showPassword();
+        } catch (e) {
+            err.textContent = "❌ فشل الاتصال: " + e.message + " — تحقق من المفاتيح أو من أن الـ Bin عام (Public)";
+            err.classList.add("show");
+            clearSettings();
+        }
     }
 
     function checkPassword() {
         const input = (passInput.value || "").trim();
-        if (input === CORRECT_PASSWORD) {
+        if (input === CONFIG.PASSWORD) {
             loginError.classList.remove("show");
-            safeStorage.set(SESSION_KEY, "true");
+            safeStorage.set(CONFIG.SESSION_KEY, "true");
             showApp();
         } else {
             loginError.classList.add("show");
             passInput.value = "";
             passInput.focus();
-            loginError.style.animation = "none";
-            setTimeout(function() { loginError.style.animation = "shake 0.3s"; }, 10);
         }
     }
 
@@ -923,7 +565,7 @@ footer {
 
     function logout() {
         if (!confirm("هل تريد تسجيل الخروج؟")) return;
-        safeStorage.remove(SESSION_KEY);
+        safeStorage.remove(CONFIG.SESSION_KEY);
         location.reload();
     }
 
@@ -932,7 +574,7 @@ footer {
 })();
 
 /* ==========================================================================
-   1. البيانات
+   3. البيانات الأساسية
    ========================================================================== */
 const STUDENTS_SEED = [
     { id: 1,  nameAr: "احمد زياد محمود رشيدات",       nameEn: "Ahmad Zyad Rshedat",                          number: "UD90702" },
@@ -970,45 +612,40 @@ const SCHOOL_INFO = {
 };
 
 /* ==========================================================================
-   2. قاعدة البيانات
+   4. البيانات العامة
    ========================================================================== */
-const DB_NAME = "attendance_db_v2";
-const DB_VERSION = 1;
-let db = null;
+let studentsCache = [];
+let recordsCache = [];
+let dailyDate = new Date().toISOString().split("T")[0];
+let dailySelections = {};
+let appStarted = false;
 
-function openDB() {
-    return new Promise(function(resolve, reject) {
-        const req = indexedDB.open(DB_NAME, DB_VERSION);
-        req.onupgradeneeded = function(e) {
-            const d = e.target.result;
-            if (!d.objectStoreNames.contains("students"))
-                d.createObjectStore("students", { keyPath: "id" });
-            if (!d.objectStoreNames.contains("records")) {
-                const store = d.createObjectStore("records", { keyPath: "id", autoIncrement: true });
-                store.createIndex("student_id", "student_id");
-                store.createIndex("date", "date");
-            }
-        };
-        req.onsuccess = function(e) { db = e.target.result; resolve(db); };
-        req.onerror = function(e) { reject(e.target.error); };
-    });
-}
-function tx(s, m) { return db.transaction(s, m).objectStore(s); }
-function dbAdd(s, o) { return new Promise(function(res, rej) { const r = tx(s, "readwrite").add(o); r.onsuccess = function() { res(r.result); }; r.onerror = function() { rej(r.error); }; }); }
-function dbPut(s, o) { return new Promise(function(res, rej) { const r = tx(s, "readwrite").put(o); r.onsuccess = function() { res(r.result); }; r.onerror = function() { rej(r.error); }; }); }
-function dbDelete(s, k) { return new Promise(function(res, rej) { const r = tx(s, "readwrite").delete(k); r.onsuccess = function() { res(); }; r.onerror = function() { rej(r.error); }; }); }
-function dbGetAll(s) { return new Promise(function(res, rej) { const r = tx(s, "readonly").getAll(); r.onsuccess = function() { res(r.result); }; r.onerror = function() { rej(r.error); }; }); }
-function dbClear(s) { return new Promise(function(res, rej) { const r = tx(s, "readwrite").clear(); r.onsuccess = function() { res(); }; r.onerror = function() { rej(r.error); }; }); }
-
-async function initDatabase() {
-    await openDB();
-    const existing = await dbGetAll("students");
-    if (existing.length === 0) for (const s of STUDENTS_SEED) await dbPut("students", s);
+async function loadData() {
+    try {
+        updateSyncStatus("syncing", "⏳ جارٍ التحميل...");
+        const data = await cloudLoad();
+        studentsCache = data.students || [];
+        recordsCache = data.records || [];
+        if (studentsCache.length === 0) {
+            studentsCache = STUDENTS_SEED.slice();
+            await syncToCloud();
+        }
+        updateSyncStatus("synced", "✅ متزامن");
+    } catch (e) {
+        console.error(e);
+        studentsCache = STUDENTS_SEED.slice();
+        recordsCache = [];
+        updateSyncStatus("error", "⚠️ وضع محلي");
+    }
 }
 
-/* ==========================================================================
-   3. الدوال المساعدة
-   ========================================================================== */
+function countAbsent(id) { return recordsCache.filter(function(r) { return r.student_id === id && r.status === "absent"; }).length; }
+function countExcused(id) { return recordsCache.filter(function(r) { return r.student_id === id && r.status === "excused"; }).length; }
+function countTotal(id) { return countAbsent(id); }
+function getAbsentDates(id) {
+    return recordsCache.filter(function(r) { return r.student_id === id && r.status === "absent"; })
+                       .map(function(r) { return r.date; }).sort();
+}
 function getStatusColor(t) {
     if (t >= RED_THRESHOLD) return "red";
     if (t >= ORANGE_THRESHOLD) return "orange";
@@ -1028,47 +665,20 @@ function formatDateAr(iso) {
     return iso + " (" + days[d.getDay()] + ")";
 }
 function todayISO() { return new Date().toISOString().split("T")[0]; }
-
 function numberToArabicWords(num) {
-    const ones = ["", "يوم واحد", "يومان", "ثلاثة أيام", "أربعة أيام", "خمسة أيام",
-                  "ستة أيام", "سبعة أيام", "ثمانية أيام", "تسعة أيام"];
-    const tens = ["", "عشرة أيام", "عشرون يومًا", "ثلاثون يومًا", "أربعون يومًا",
-                  "خمسون يومًا", "ستون يومًا", "سبعون يومًا", "ثمانون يومًا", "تسعون يومًا"];
+    const ones = ["", "يوم واحد", "يومان", "ثلاثة أيام", "أربعة أيام", "خمسة أيام", "ستة أيام", "سبعة أيام", "ثمانية أيام", "تسعة أيام"];
+    const tens = ["", "عشرة أيام", "عشرون يومًا", "ثلاثون يومًا", "أربعون يومًا", "خمسون يومًا", "ستون يومًا", "سبعون يومًا", "ثمانون يومًا", "تسعون يومًا"];
     if (num < 10) return ones[num];
     if (num === 10) return "عشرة أيام";
     if (num < 20) return ones[num - 10] + " عشر";
     if (num % 10 === 0) return tens[num / 10];
     return ones[num % 10] + " و" + tens[Math.floor(num / 10)];
 }
-
-function getWarningLevel(days) {
-    if (days >= RED_THRESHOLD) return 3;
-    if (days >= ORANGE_THRESHOLD) return 2;
-    if (days >= WARNING_THRESHOLD) return 1;
+function getWarningLevel(d) {
+    if (d >= RED_THRESHOLD) return 3;
+    if (d >= ORANGE_THRESHOLD) return 2;
+    if (d >= WARNING_THRESHOLD) return 1;
     return 0;
-}
-
-/* ==========================================================================
-   4. البيانات العامة
-   ========================================================================== */
-let studentsCache = [];
-let recordsCache = [];
-let currentStudentId = null;
-let dailyDate = todayISO();
-let dailySelections = {};
-let appStarted = false;
-
-async function loadData() {
-    studentsCache = await dbGetAll("students");
-    recordsCache = await dbGetAll("records");
-}
-
-function countAbsent(id) { return recordsCache.filter(function(r) { return r.student_id === id && r.status === "absent"; }).length; }
-function countExcused(id) { return recordsCache.filter(function(r) { return r.student_id === id && r.status === "excused"; }).length; }
-function countTotal(id) { return countAbsent(id); }
-function getAbsentDates(id) {
-    return recordsCache.filter(function(r) { return r.student_id === id && r.status === "absent"; })
-                       .map(function(r) { return r.date; }).sort();
 }
 
 /* ==========================================================================
@@ -1076,17 +686,17 @@ function getAbsentDates(id) {
    ========================================================================== */
 function renderStats() {
     const counts = { green: 0, yellow: 0, orange: 0, red: 0 };
-    let totalAbsent = 0, totalExcused = 0;
+    let tA = 0, tE = 0;
     studentsCache.forEach(function(s) {
         const c = countTotal(s.id);
         counts[getStatusColor(c)]++;
-        totalAbsent += countAbsent(s.id);
-        totalExcused += countExcused(s.id);
+        tA += countAbsent(s.id);
+        tE += countExcused(s.id);
     });
     document.getElementById("statsCards").innerHTML =
         '<div class="card total"><h3>👥 إجمالي الطلاب</h3><span class="num">' + studentsCache.length + '</span></div>' +
-        '<div class="card red"><h3>❌ إجمالي الغياب</h3><span class="num">' + totalAbsent + '</span></div>' +
-        '<div class="card excused"><h3>📝 إجمالي بعذر</h3><span class="num">' + totalExcused + '</span></div>' +
+        '<div class="card red"><h3>❌ إجمالي الغياب</h3><span class="num">' + tA + '</span></div>' +
+        '<div class="card excused"><h3>📝 إجمالي بعذر</h3><span class="num">' + tE + '</span></div>' +
         '<div class="card green"><h3>🟢 منتظم</h3><span class="num">' + counts.green + '</span></div>' +
         '<div class="card yellow"><h3>🟡 تنبيه</h3><span class="num">' + counts.yellow + '</span></div>' +
         '<div class="card orange"><h3>🟠 إنذار برتقالي</h3><span class="num">' + counts.orange + '</span></div>' +
@@ -1096,13 +706,12 @@ function renderStats() {
 function renderStudentsTable() {
     const tbody = document.getElementById("studentsTable");
     tbody.innerHTML = "";
-    studentsCache.sort(function(a, b) { return a.id - b.id; }).forEach(function(s) {
+    studentsCache.slice().sort(function(a, b) { return a.id - b.id; }).forEach(function(s) {
         const absent = countAbsent(s.id);
         const excused = countExcused(s.id);
         const color = getStatusColor(absent);
         const status = getStatusText(absent);
         const level = getWarningLevel(absent);
-
         const tr = document.createElement("tr");
         tr.className = "row-" + color;
         tr.innerHTML =
@@ -1112,8 +721,7 @@ function renderStudentsTable() {
             '<td><span class="badge badge-' + color + '">' + absent + '</span></td>' +
             '<td><span class="badge badge-excused">' + excused + '</span></td>' +
             '<td>' + status + '</td>' +
-            '<td>' +
-                '<button class="btn btn-small btn-info" onclick="openStudent(' + s.id + ')">📋 تفاصيل</button>' +
+            '<td><button class="btn btn-small btn-info" onclick="openStudent(' + s.id + ')">📋 تفاصيل</button>' +
                 (level > 0 ? ' <button class="btn btn-small btn-warning" onclick="showWarning(' + s.id + ')">📨 إنذار</button>' : '') +
             '</td>';
         tbody.appendChild(tr);
@@ -1132,7 +740,7 @@ function renderDailyTable() {
         existing[r.student_id] = r.status;
         dailySelections[r.student_id] = r.status;
     });
-    studentsCache.sort(function(a, b) { return a.id - b.id; }).forEach(function(s) {
+    studentsCache.slice().sort(function(a, b) { return a.id - b.id; }).forEach(function(s) {
         const status = existing[s.id] || null;
         const tr = document.createElement("tr");
         tr.innerHTML =
@@ -1148,7 +756,6 @@ function renderDailyTable() {
     });
     updateDailyCounters();
 }
-
 function setStatus(sid, status) {
     if (dailySelections[sid] === status) delete dailySelections[sid];
     else dailySelections[sid] = status;
@@ -1199,30 +806,39 @@ function changeDay(delta) {
     document.getElementById("dailyDate").value = dailyDate;
     renderDailyTable();
 }
+
 async function saveDailyRecord() {
     if (Object.keys(dailySelections).length === 0) {
         alert("⚠️ لم تحدد أي حالة لأي طالب"); return;
     }
-    const old = recordsCache.filter(function(r) { return r.date === dailyDate; });
-    for (const r of old) await dbDelete("records", r.id);
-    let added = 0;
+    // حذف السجلات القديمة لهذا اليوم
+    recordsCache = recordsCache.filter(function(r) { return r.date !== dailyDate; });
+    // إضافة الجديدة (بدون id - سيُولَّد تلقائياً)
+    let maxId = recordsCache.reduce(function(m, r) { return Math.max(m, r.id || 0); }, 0);
     for (const entry of Object.entries(dailySelections)) {
-        await dbAdd("records", { student_id: parseInt(entry[0]), date: dailyDate, status: entry[1], note: "" });
-        added++;
+        maxId++;
+        recordsCache.push({
+            id: maxId,
+            student_id: parseInt(entry[0]),
+            date: dailyDate,
+            status: entry[1],
+            note: ""
+        });
     }
-    await loadData();
-    renderAll();
-    alert("✅ تم حفظ " + added + " سجل بتاريخ " + dailyDate);
+    const ok = await syncToCloud();
+    if (ok) {
+        renderAll();
+        alert("✅ تم حفظ " + Object.keys(dailySelections).length + " سجل بتاريخ " + dailyDate + " في السحابة");
+    }
 }
 
 /* ==========================================================================
    7. صفحة الطالب
    ========================================================================== */
 function openStudent(sid) {
-    currentStudentId = sid;
     const s = studentsCache.find(function(x) { return x.id === sid; });
     const records = recordsCache.filter(function(r) { return r.student_id === sid; })
-                                 .sort(function(a, b) { return b.date.localeCompare(a.date); });
+                                 .sort(function(a, b) { return (b.date || "").localeCompare(a.date || ""); });
     const absent = records.filter(function(r) { return r.status === "absent"; }).length;
     const excused = records.filter(function(r) { return r.status === "excused"; }).length;
     const color = getStatusColor(absent);
@@ -1240,9 +856,7 @@ function openStudent(sid) {
     if (records.length === 0) {
         recordsHTML = '<div class="empty-state"><span class="icon">🎉</span>لا توجد سجلات</div>';
     } else {
-        recordsHTML = '<div class="table-wrap"><table><thead><tr>' +
-            '<th style="width:50px;">#</th><th>التاريخ</th><th>اليوم</th><th>الحالة</th><th>إجراء</th>' +
-            '</tr></thead><tbody>';
+        recordsHTML = '<div class="table-wrap"><table><thead><tr><th style="width:50px;">#</th><th>التاريخ</th><th>اليوم</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody>';
         records.forEach(function(r, i) {
             recordsHTML += '<tr>' +
                 '<td>' + (i + 1) + '</td>' +
@@ -1267,10 +881,7 @@ function openStudent(sid) {
                 '<div class="stat-box"><span class="stat-num" style="color:var(--excused);">' + excused + '</span><span class="stat-lbl">📝 بعذر</span></div>' +
                 '<div class="stat-box"><span class="stat-lbl">' + status + '</span></div>' +
             '</div>' +
-            (level > 0 ?
-                '<div style="margin-top:15px;">' +
-                    '<button class="btn btn-warning" onclick="showWarning(' + sid + ')">📨 طباعة إنذار رسمي لولي الأمر</button>' +
-                '</div>' : '') +
+            (level > 0 ? '<div style="margin-top:15px;"><button class="btn btn-warning" onclick="showWarning(' + sid + ')">📨 طباعة إنذار رسمي لولي الأمر</button></div>' : '') +
         '</div>' +
         '<h3 style="color:var(--primary-light); margin:20px 0 10px;">📋 السجل الكامل</h3>' +
         recordsHTML;
@@ -1279,154 +890,87 @@ function openStudent(sid) {
 
 async function deleteRecord(rid, sid) {
     if (!confirm("هل أنت متأكد من حذف هذا السجل؟")) return;
-    await dbDelete("records", rid);
-    await loadData();
-    openStudent(sid);
+    recordsCache = recordsCache.filter(function(r) { return r.id !== rid; });
+    const ok = await syncToCloud();
+    if (ok) openStudent(sid);
 }
 
 /* ==========================================================================
-   8. 📨 نموذج الإنذار الرسمي
+   8. الإنذار الرسمي
    ========================================================================== */
 function showWarning(sid) {
     const s = studentsCache.find(function(x) { return x.id === sid; });
     const absent = countAbsent(sid);
     const level = getWarningLevel(absent);
     if (level === 0) { alert("هذا الطالب منتظم ولا يحتاج إنذاراً"); return; }
-
     const absentDates = getAbsentDates(sid);
     const warningDate = todayISO();
     const warningNumber = "غ/م/" + warningDate.replace(/-/g, "") + "/" + sid;
 
-    let titleText = "";
-    let titleClass = "";
-    let bodyParagraphs = "";
-    let recommendations = "";
-
+    let titleText = "", titleClass = "", body = "", rec = "";
     if (level === 1) {
-        titleText = "📌 إنذار أول بغياب الطالب";
-        titleClass = "level-1";
-        bodyParagraphs =
-            "<p>تحية طيبة وبعد،</p>" +
-            "<p>يُهدي مدير " + SCHOOL_INFO.name + " إليكم أطيب التحيات، ويتمنى لكم دوام التوفيق والسداد في تربية أبنائكم.</p>" +
-            "<p>نظرًا لأهمية المتابعة المستمرة لشؤون الطلبة التعليمية والسلوكية، وبما تقتضيه المصلحة التربوية العليا، نلفت عنايتكم إلى أن الطالب/ <strong>" + s.nameAr + "</strong>، صاحب الرقم <strong>" + s.number + "</strong>، قد تجاوز عدد أيام غيابه الحد المسموح به، حيث بلغ عدد أيام غيابه <span class=\"number-badge\">" + absent + " أيام</span>، وهي " + numberToArabicWords(absent) + "، وقد جاءت هذه الغيابات على النحو الآتي:</p>" +
+        titleText = "📌 إنذار أول بغياب الطالب"; titleClass = "level-1";
+        body = "<p>تحية طيبة وبعد،</p>" +
+            "<p>يُهدي مدير " + SCHOOL_INFO.name + " إليكم أطيب التحيات، ويتمنى لكم دوام التوفيق والسداد.</p>" +
+            "<p>نظرًا لأهمية المتابعة المستمرة لشؤون الطلبة، نلفت عنايتكم إلى أن الطالب/ <strong>" + s.nameAr + "</strong>، صاحب الرقم <strong>" + s.number + "</strong>، قد تجاوز عدد أيام غيابه الحد المسموح به، حيث بلغ <span class=\"number-badge\">" + absent + " أيام</span>، وهي " + numberToArabicWords(absent) + "، وجاءت على النحو الآتي:</p>" +
             "<p style=\"text-indent:0; background:#f8f9fa; padding:10px 15px; border-right:3px solid #ffc107; border-radius:5px; font-family:'Courier New', monospace; direction:ltr; text-align:left; font-size:0.92em;\">" + absentDates.join(" - ") + "</p>" +
-            "<p>وحرصًا منا على مصلحة الطالب التعليمية والتربوية، وضمان استمراريته في التحصيل الدراسي بوتيرة منتظمة، نرجو من سيادتكم التكرم بمتابعة ابنكم الكريم وحثّه على الالتزام بالدوام المدرسي في المواعيد المقررة، لما لذلك من أثر بالغ في تحصيله العلمي وتربيته السلوكية.</p>";
-        recommendations =
-            "<h4>📋 التوصيات المطلوبة من ولي الأمر:</h4>" +
-            "<ul>" +
-                "<li>متابعة دوام ابنكم اليومي والتحقق من حضوره.</li>" +
-                "<li>التواصل مع مربي الصف لمتابعة مستواه الأكاديمي والسلوكي.</li>" +
-                "<li>حثّ الطالب على الالتزام بالدوام المدرسي وعدم التغيّب دون عذر مشروع.</li>" +
-                "<li>إبلاغ المدرسة مسبقًا في حال وجود أي ظرف طارئ يمنع الطالب من الحضور.</li>" +
-            "</ul>";
+            "<p>وحرصًا منا على مصلحة الطالب التعليمية، نرجو من سيادتكم التكرم بمتابعة ابنكم الكريم وحثّه على الالتزام بالدوام المدرسي.</p>";
+        rec = "<h4>📋 التوصيات المطلوبة من ولي الأمر:</h4><ul>" +
+            "<li>متابعة دوام ابنكم اليومي والتحقق من حضوره.</li>" +
+            "<li>التواصل مع مربي الصف لمتابعة مستواه الأكاديمي والسلوكي.</li>" +
+            "<li>حثّ الطالب على الالتزام بالدوام المدرسي.</li>" +
+            "<li>إبلاغ المدرسة مسبقًا في حال وجود أي ظرف طارئ.</li></ul>";
     } else if (level === 2) {
-        titleText = "⚠️ إنذار ثانٍ بغياب الطالب";
-        titleClass = "level-2";
-        bodyParagraphs =
-            "<p>تحية طيبة وبعد،</p>" +
-            "<p>بالإشارة إلى الموضوع أعلاه، واستكمالاً للإنذار الأول الذي تم إرساله إليكم سابقًا، وبناءً على ما رصدته إدارة " + SCHOOL_INFO.name + " من استمرار الطالب/ <strong>" + s.nameAr + "</strong>، صاحب الرقم <strong>" + s.number + "</strong>، في الغياب عن الدوام المدرسي دون عذر مشروع، فإننا نلفت عنايتكم إلى أن عدد أيام غيابه قد بلغ <span class=\"number-badge\">" + absent + " يومًا</span> حتى تاريخه، وهو ما يُشكّل تجاوزًا خطيرًا للحد المسموح به نظاميًا.</p>" +
-            "<p>وتجدر الإشارة إلى أن هذه الغيابات المتكررة تؤثر سلبًا على التحصيل الأكاديمي للطالب، وتضعف من فرصه في متابعة المنهاج الدراسي بشكل سليم، كما أنها تُعدّ مخالفة صريحة لتعليمات وزارة التربية والتعليم المتعلقة بالدوام المدرسي.</p>" +
+        titleText = "⚠️ إنذار ثانٍ بغياب الطالب"; titleClass = "level-2";
+        body = "<p>تحية طيبة وبعد،</p>" +
+            "<p>بالإشارة إلى الموضوع أعلاه، واستكمالاً للإنذار الأول، وبناءً على ما رصدته إدارة " + SCHOOL_INFO.name + " من استمرار الطالب/ <strong>" + s.nameAr + "</strong>، صاحب الرقم <strong>" + s.number + "</strong>، في الغياب دون عذر مشروع، نلفت عنايتكم إلى أن عدد أيام غيابه قد بلغ <span class=\"number-badge\">" + absent + " يومًا</span>.</p>" +
+            "<p>وتجدر الإشارة إلى أن هذه الغيابات المتكررة تؤثر سلبًا على التحصيل الأكاديمي للطالب، وتُعدّ مخالفة صريحة لتعليمات وزارة التربية والتعليم.</p>" +
             "<p style=\"text-indent:0; background:#f8f9fa; padding:10px 15px; border-right:3px solid #fd7e14; border-radius:5px; font-family:'Courier New', monospace; direction:ltr; text-align:left; font-size:0.92em;\">" + absentDates.join(" - ") + "</p>" +
-            "<p>وعليه، فإننا نرجو من سيادتكم سرعة التكرم بالتواصل مع إدارة المدرسة أو مربي الصف خلال <strong>ثلاثة أيام</strong> من تاريخ هذا الإنذار، لمناقشة الأسباب ووضع الحلول المناسبة حفاظًا على مصلحة الطالب التعليمية.</p>";
-        recommendations =
-            "<h4>⚠️ التوصيات العاجلة:</h4>" +
-            "<ul>" +
-                "<li>الحضور إلى المدرسة في أقرب وقت للاجتماع مع مربي الصف والإدارة.</li>" +
-                "<li>تقديم الأعذار الرسمية عن أيام الغياب السابقة إن وُجدت.</li>" +
-                "<li>المتابعة اليومية لدوام الطالب والتأكد من انتظامه.</li>" +
-                "<li>التزام الطالب بالدوام المدرسي بشكل كامل، إذ ستُطبَّق بحقه الإجراءات النظامية في حال تكرار الغياب.</li>" +
-            "</ul>";
+            "<p>نرجو من سيادتكم سرعة التواصل مع إدارة المدرسة خلال <strong>ثلاثة أيام</strong> من تاريخ هذا الإنذار.</p>";
+        rec = "<h4>⚠️ التوصيات العاجلة:</h4><ul>" +
+            "<li>الحضور إلى المدرسة للاجتماع مع مربي الصف والإدارة.</li>" +
+            "<li>تقديم الأعذار الرسمية عن أيام الغياب السابقة إن وُجدت.</li>" +
+            "<li>المتابعة اليومية لدوام الطالب.</li>" +
+            "<li>التزام الطالب بالدوام بشكل كامل.</li></ul>";
     } else {
-        titleText = "🚨 إنذار نهائي بغياب الطالب";
-        titleClass = "level-3";
-        bodyParagraphs =
-            "<p>تحية طيبة وبعد،</p>" +
-            "<p>بالإشارة إلى الموضوع أعلاه، وبعد استنفاد كافة الإنذارات السابقة (الإنذار الأول والثاني)، واستمرار الطالب/ <strong>" + s.nameAr + "</strong>، صاحب الرقم <strong>" + s.number + "</strong>، في التغيب عن الدوام المدرسي بشكل متكرر ودون عذر مشروع، نلفت عنايتكم إلى أن عدد أيام غيابه قد بلغ <span class=\"number-badge\">" + absent + " يومًا</span> حتى تاريخه، وهو ما يُعدّ تجاوزًا جسيمًا للتعليمات النظامية الصادرة عن وزارة التربية والتعليم.</p>" +
-            "<p>ونظرًا لخطورة هذه الغيابات وتأثيرها السلبي على المسيرة التعليمية للطالب، وعلى تحصيله الأكاديمي، وعلى استقراره التربوي والنفسي، فإن إدارة " + SCHOOL_INFO.name + " تُرسل إليكم هذا <strong style=\"color:#dc3545;\">الإنذار النهائي</strong>، مُشدّدةً على ضرورة التزام الطالب بالدوام المدرسي التزامًا كاملًا وفوريًا.</p>" +
+        titleText = "🚨 إنذار نهائي بغياب الطالب"; titleClass = "level-3";
+        body = "<p>تحية طيبة وبعد،</p>" +
+            "<p>بعد استنفاد كافة الإنذارات السابقة، واستمرار الطالب/ <strong>" + s.nameAr + "</strong>، صاحب الرقم <strong>" + s.number + "</strong>، في التغيب دون عذر مشروع، نلفت عنايتكم إلى أن عدد أيام غيابه قد بلغ <span class=\"number-badge\">" + absent + " يومًا</span>، وهو تجاوز جسيم للتعليمات النظامية.</p>" +
+            "<p>لذا تُرسل إليكم إدارة " + SCHOOL_INFO.name + " هذا <strong style=\"color:#dc3545;\">الإنذار النهائي</strong>، مُشدّدةً على ضرورة التزام الطالب بالدوام فورًا.</p>" +
             "<p style=\"text-indent:0; background:#f8f9fa; padding:10px 15px; border-right:3px solid #dc3545; border-radius:5px; font-family:'Courier New', monospace; direction:ltr; text-align:left; font-size:0.92em;\">" + absentDates.join(" - ") + "</p>" +
-            "<p>وفي حال استمرار الطالب في الغياب دون عذر مشروع بعد تاريخ هذا الإنذار، فإن إدارة المدرسة ستضطر آسفة إلى رفع الأمر إلى مديرية التربية والتعليم لاتخاذ الإجراءات القانونية اللازمة بحق الطالب، وفقًا للتعليمات والأنظمة المعمول بها في وزارة التربية والتعليم.</p>" +
-            "<p>ونحن إذ نأمل أن تجدوا في هذا الإنذار فرصة أخيرة لمعالجة الوضع قبل تصعيده، فإننا نضع أنفسنا في خدمتكم للتعاون على ما فيه مصلحة الطالب.</p>";
-        recommendations =
-            "<h4>🚨 إجراءات مطلوبة بشكل عاجل:</h4>" +
-            "<ul>" +
-                "<li><strong>الحضور الفوري إلى المدرسة</strong> خلال يومين من تاريخ هذا الإنذار.</li>" +
-                "<li>تقديم كافة الأعذار الرسمية عن أيام الغياب السابقة مصدّقة حسب الأصول.</li>" +
-                "<li>التوقيع على تعهد خطي أمام إدارة المدرسة بالالتزام التام بالدوام.</li>" +
-                "<li>المتابعة اليومية مع مربي الصف لضمان انتظام الطالب في الدوام.</li>" +
-                "<li>في حال عدم الاستجابة: سيتم رفع الأمر إلى مديرية التربية والتعليم لاتخاذ الإجراءات القانونية.</li>" +
-            "</ul>";
+            "<p>وفي حال استمرار الغياب، ستضطر المدرسة لرفع الأمر إلى مديرية التربية والتعليم لاتخاذ الإجراءات القانونية.</p>";
+        rec = "<h4>🚨 إجراءات مطلوبة بشكل عاجل:</h4><ul>" +
+            "<li><strong>الحضور الفوري إلى المدرسة</strong> خلال يومين.</li>" +
+            "<li>تقديم كافة الأعذار الرسمية مصدّقة.</li>" +
+            "<li>التوقيع على تعهد خطي بالالتزام بالدوام.</li>" +
+            "<li>المتابعة اليومية مع مربي الصف.</li>" +
+            "<li>في حال عدم الاستجابة: رفع الأمر لمديرية التربية.</li></ul>";
     }
 
     const html =
-        '<div class="letterhead">' +
-            '<div class="school-name">' + SCHOOL_INFO.name + '</div>' +
-            '<div class="school-info">' + SCHOOL_INFO.ministry + ' — ' + SCHOOL_INFO.directorate + '</div>' +
-            '<div class="school-info">العام الدراسي: ' + SCHOOL_INFO.year + ' — ' + SCHOOL_INFO.className + '</div>' +
-            '<div class="ref">' +
-                '<span>الرقم: ' + warningNumber + '</span>' +
-                '<span>التاريخ: ' + warningDate + '</span>' +
-            '</div>' +
-        '</div>' +
-
+        '<div class="letterhead"><div class="school-name">' + SCHOOL_INFO.name + '</div>' +
+        '<div class="school-info">' + SCHOOL_INFO.ministry + ' — ' + SCHOOL_INFO.directorate + '</div>' +
+        '<div class="school-info">العام الدراسي: ' + SCHOOL_INFO.year + ' — ' + SCHOOL_INFO.className + '</div>' +
+        '<div class="ref"><span>الرقم: ' + warningNumber + '</span><span>التاريخ: ' + warningDate + '</span></div></div>' +
         '<div class="warning-title ' + titleClass + '">' + titleText + '</div>' +
-
-        '<div style="text-align:center; margin-bottom:20px;">' +
-            '<strong style="font-size:1.1em;">المكرم ولي أمر الطالب / ' + s.nameAr + '</strong>' +
-            '<br><span style="color:#666; font-size:0.92em;">حفظه الله ورعاه</span>' +
-        '</div>' +
-
-        '<div class="student-info-box">' +
-            '<table>' +
-                '<tr>' +
-                    '<td class="label">اسم الطالب:</td><td>' + s.nameAr + '</td>' +
-                    '<td class="label">رقم الطالب:</td><td>' + s.number + '</td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td class="label">الصف:</td><td>' + SCHOOL_INFO.className + '</td>' +
-                    '<td class="label">عدد أيام الغياب:</td><td><strong style="color:#dc3545;">' + absent + ' يومًا</strong></td>' +
-                '</tr>' +
-            '</table>' +
-        '</div>' +
-
-        '<div class="warning-body">' + bodyParagraphs + '</div>' +
-
-        '<div class="recommendations">' + recommendations + '</div>' +
-
-        '<p style="text-align:center; margin-top:25px; font-weight:600; color:#1e3c72;">' +
-            'وتفضلوا بقبول فائق الاحترام والتقدير' +
-        '</p>' +
-
+        '<div style="text-align:center; margin-bottom:20px;"><strong style="font-size:1.1em;">المكرم ولي أمر الطالب / ' + s.nameAr + '</strong><br><span style="color:#666; font-size:0.92em;">حفظه الله ورعاه</span></div>' +
+        '<div class="student-info-box"><table><tr><td class="label">اسم الطالب:</td><td>' + s.nameAr + '</td><td class="label">رقم الطالب:</td><td>' + s.number + '</td></tr>' +
+        '<tr><td class="label">الصف:</td><td>' + SCHOOL_INFO.className + '</td><td class="label">عدد أيام الغياب:</td><td><strong style="color:#dc3545;">' + absent + ' يومًا</strong></td></tr></table></div>' +
+        '<div class="warning-body">' + body + '</div>' +
+        '<div class="recommendations">' + rec + '</div>' +
+        '<p style="text-align:center; margin-top:25px; font-weight:600; color:#1e3c72;">وتفضلوا بقبول فائق الاحترام والتقدير</p>' +
         '<div class="signatures">' +
-            '<div class="sig-box">' +
-                '<div class="sig-title">مربي الصف</div>' +
-                '<div class="sig-line">' + SCHOOL_INFO.teacher + '</div>' +
-            '</div>' +
-            '<div class="sig-box">' +
-                '<div class="sig-title">ضابط الجودة</div>' +
-                '<div class="sig-line">' + SCHOOL_INFO.quality + '</div>' +
-            '</div>' +
-            '<div class="sig-box">' +
-                '<div class="sig-title">مدير المدرسة</div>' +
-                '<div class="sig-line">' + SCHOOL_INFO.principal + '</div>' +
-            '</div>' +
+            '<div class="sig-box"><div class="sig-title">مربي الصف</div><div class="sig-line">' + SCHOOL_INFO.teacher + '</div></div>' +
+            '<div class="sig-box"><div class="sig-title">ضابط الجودة</div><div class="sig-line">' + SCHOOL_INFO.quality + '</div></div>' +
+            '<div class="sig-box"><div class="sig-title">مدير المدرسة</div><div class="sig-line">' + SCHOOL_INFO.principal + '</div></div>' +
         '</div>' +
-
-        '<div class="warning-date">' +
-            'حُرِّر في: ' + warningDate +
-        '</div>' +
-
-        '<div class="warning-actions">' +
-            '<button class="btn btn-primary" onclick="window.print()">🖨️ طباعة الإنذار</button>' +
-            '<button class="btn btn-secondary" onclick="closeWarning()">✖️ إغلاق</button>' +
-        '</div>';
+        '<div class="warning-date">حُرِّر في: ' + warningDate + '</div>' +
+        '<div class="warning-actions"><button class="btn btn-primary" onclick="window.print()">🖨️ طباعة الإنذار</button><button class="btn btn-secondary" onclick="closeWarning()">✖️ إغلاق</button></div>';
 
     document.getElementById("warningPaper").innerHTML = html;
     document.getElementById("warningModal").classList.add("show");
 }
-
-function closeWarning() {
-    document.getElementById("warningModal").classList.remove("show");
-}
+function closeWarning() { document.getElementById("warningModal").classList.remove("show"); }
 
 /* ==========================================================================
    9. التقارير
@@ -1435,75 +979,41 @@ function renderReports() {
     const start = document.getElementById("repStart").value;
     const end = document.getElementById("repEnd").value;
     const mode = document.getElementById("repMode").value;
-
     const rows = studentsCache.map(function(s) {
-        const recs = recordsCache.filter(function(r) {
-            return r.student_id === s.id && r.date >= start && r.date <= end;
-        });
-        const absentDates = recs.filter(function(r) { return r.status === "absent"; }).map(function(r) { return r.date; }).sort();
-        const excusedDates = recs.filter(function(r) { return r.status === "excused"; }).map(function(r) { return r.date; }).sort();
-
-        let displayDates = [];
-        let sortKey = 0;
-        if (mode === "all") {
-            displayDates = recs.map(function(r) { return r.date + (r.status === "excused" ? " (عذر)" : ""); }).sort();
-            sortKey = recs.length;
-        } else if (mode === "absent") {
-            displayDates = absentDates;
-            sortKey = absentDates.length;
-        } else if (mode === "excused") {
-            displayDates = excusedDates;
-            sortKey = excusedDates.length;
-        }
-
-        return {
-            id: s.id, nameAr: s.nameAr, number: s.number,
-            absent: absentDates.length, excused: excusedDates.length,
-            total: recs.length, displayDates: displayDates, sortKey: sortKey,
-            color: getStatusColor(absentDates.length),
-            status: getStatusText(absentDates.length)
-        };
+        const recs = recordsCache.filter(function(r) { return r.student_id === s.id && r.date >= start && r.date <= end; });
+        const aD = recs.filter(function(r) { return r.status === "absent"; }).map(function(r) { return r.date; }).sort();
+        const eD = recs.filter(function(r) { return r.status === "excused"; }).map(function(r) { return r.date; }).sort();
+        let displayDates = [], sortKey = 0;
+        if (mode === "all") { displayDates = recs.map(function(r) { return r.date + (r.status === "excused" ? " (عذر)" : ""); }).sort(); sortKey = recs.length; }
+        else if (mode === "absent") { displayDates = aD; sortKey = aD.length; }
+        else if (mode === "excused") { displayDates = eD; sortKey = eD.length; }
+        return { id: s.id, nameAr: s.nameAr, number: s.number, absent: aD.length, excused: eD.length, total: recs.length, displayDates: displayDates, sortKey: sortKey, color: getStatusColor(aD.length), status: getStatusText(aD.length) };
     }).sort(function(a, b) { return b.sortKey - a.sortKey; });
-
     const tbody = document.getElementById("reportsTable");
     tbody.innerHTML = rows.map(function(r, i) {
-        return '<tr class="row-' + r.color + '">' +
-            '<td>' + (i + 1) + '</td>' +
+        return '<tr class="row-' + r.color + '"><td>' + (i + 1) + '</td>' +
             '<td><a class="student-link" onclick="openStudent(' + r.id + ')">' + r.nameAr + '</a></td>' +
             '<td>' + r.number + '</td>' +
             '<td><span class="badge badge-red">' + r.absent + '</span></td>' +
             '<td><span class="badge badge-excused">' + r.excused + '</span></td>' +
             '<td><strong>' + r.total + '</strong></td>' +
             '<td>' + r.status + '</td>' +
-            '<td style="font-size:0.8em; color:#555; direction:ltr; text-align:left;">' +
-                (r.displayDates.length ? r.displayDates.join(" - ") : '<span style="color:#999;">—</span>') +
-            '</td></tr>';
+            '<td style="font-size:0.8em; color:#555; direction:ltr; text-align:left;">' + (r.displayDates.length ? r.displayDates.join(" - ") : '<span style="color:#999;">—</span>') + '</td></tr>';
     }).join("");
-
-    document.getElementById("reportsSummary").innerHTML =
-        '📅 الفترة: من <strong>' + start + '</strong> إلى <strong>' + end + '</strong> — عدد الطلاب: <strong>' + rows.length + '</strong>';
+    document.getElementById("reportsSummary").innerHTML = '📅 الفترة: من <strong>' + start + '</strong> إلى <strong>' + end + '</strong> — عدد الطلاب: <strong>' + rows.length + '</strong>';
 }
 
 function exportCSV() {
     const start = document.getElementById("repStart").value;
     const end = document.getElementById("repEnd").value;
-
-    let csv = "\uFEFF";
-    csv += "الرقم,الاسم,رقم الطالب,غائب,بعذر,الإجمالي,الحالة,تواريخ الغياب\n";
-
+    let csv = "\uFEFF" + "الرقم,الاسم,رقم الطالب,غائب,بعذر,الإجمالي,الحالة,تواريخ الغياب\n";
     studentsCache.forEach(function(s) {
-        const recs = recordsCache.filter(function(r) {
-            return r.student_id === s.id && r.date >= start && r.date <= end;
-        });
-        const absentDates = recs.filter(function(r) { return r.status === "absent"; }).map(function(r) { return r.date; });
-        const excusedDates = recs.filter(function(r) { return r.status === "excused"; }).map(function(r) { return r.date; });
-        const datesStr = recs.map(function(r) { return r.date + (r.status === "excused" ? " (عذر)" : ""); }).sort().join(" | ");
-
-        csv += '"' + s.id + '","' + s.nameAr + '","' + s.number + '",' +
-               absentDates.length + ',' + excusedDates.length + ',' + recs.length +
-               ',"' + getStatusText(absentDates.length) + '","' + datesStr + '"\n';
+        const recs = recordsCache.filter(function(r) { return r.student_id === s.id && r.date >= start && r.date <= end; });
+        const aD = recs.filter(function(r) { return r.status === "absent"; }).map(function(r) { return r.date; });
+        const eD = recs.filter(function(r) { return r.status === "excused"; }).map(function(r) { return r.date; });
+        const dStr = recs.map(function(r) { return r.date + (r.status === "excused" ? " (عذر)" : ""); }).sort().join(" | ");
+        csv += '"' + s.id + '","' + s.nameAr + '","' + s.number + '",' + aD.length + ',' + eD.length + ',' + recs.length + ',"' + getStatusText(aD.length) + '","' + dStr + '"\n';
     });
-
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -1515,39 +1025,25 @@ function exportCSV() {
    10. التنبيهات
    ========================================================================== */
 function renderAlerts() {
-    const alerts = studentsCache
-        .map(function(s) { return { s: s, total: countTotal(s.id) }; })
+    const alerts = studentsCache.map(function(s) { return { s: s, total: countTotal(s.id) }; })
         .filter(function(x) { return x.total >= WARNING_THRESHOLD; })
         .sort(function(a, b) { return b.total - a.total; });
-
     if (alerts.length === 0) {
-        document.getElementById("alertsList").innerHTML =
-            '<div class="empty-state"><span class="icon">🎉</span>لا توجد تنبيهات حالياً</div>';
+        document.getElementById("alertsList").innerHTML = '<div class="empty-state"><span class="icon">🎉</span>لا توجد تنبيهات حالياً</div>';
         return;
     }
-
     document.getElementById("alertsList").innerHTML = alerts.map(function(x) {
         const s = x.s, total = x.total;
         const color = getStatusColor(total);
         let msg = "";
-        if (color === "red")         msg = "🚨 تجاوز الحد الأقصى (" + RED_THRESHOLD + " أيام)";
+        if (color === "red") msg = "🚨 تجاوز الحد الأقصى (" + RED_THRESHOLD + " أيام)";
         else if (color === "orange") msg = "⚠️ تجاوز " + ORANGE_THRESHOLD + " يوم - إنذار برتقالي";
-        else                          msg = "🔔 تجاوز " + WARNING_THRESHOLD + " أيام - تنبيه أولي";
-
+        else msg = "🔔 تجاوز " + WARNING_THRESHOLD + " أيام - تنبيه أولي";
         return '<div class="alert alert-' + (color === "red" ? "error" : color === "orange" ? "warning" : "info") + '" style="margin-bottom:12px;">' +
             '<div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; align-items:center;">' +
-                '<div><strong style="font-size:1.05em;">' + s.nameAr + '</strong>' +
-                '<div style="font-size:0.85em; color:#666;">' + s.number + '</div>' +
-                '<div style="margin-top:6px;">' + msg + '</div></div>' +
-                '<div style="text-align:center;">' +
-                    '<div style="font-size:2em; font-weight:700;">' + total + '</div>' +
-                    '<div style="font-size:0.85em;">غياب بدون عذر</div>' +
-                    '<div style="display:flex; gap:6px; margin-top:8px;">' +
-                        '<button class="btn btn-small btn-info" onclick="openStudent(' + s.id + ')">📋 التفاصيل</button>' +
-                        '<button class="btn btn-small btn-warning" onclick="showWarning(' + s.id + ')">📨 إنذار</button>' +
-                    '</div>' +
-                '</div>' +
-            '</div></div>';
+            '<div><strong style="font-size:1.05em;">' + s.nameAr + '</strong><div style="font-size:0.85em; color:#666;">' + s.number + '</div><div style="margin-top:6px;">' + msg + '</div></div>' +
+            '<div style="text-align:center;"><div style="font-size:2em; font-weight:700;">' + total + '</div><div style="font-size:0.85em;">غياب بدون عذر</div>' +
+            '<div style="display:flex; gap:6px; margin-top:8px;"><button class="btn btn-small btn-info" onclick="openStudent(' + s.id + ')">📋 التفاصيل</button><button class="btn btn-small btn-warning" onclick="showWarning(' + s.id + ')">📨 إنذار</button></div></div></div></div>';
     }).join("");
 }
 
@@ -1555,12 +1051,7 @@ function renderAlerts() {
    11. النسخ الاحتياطي
    ========================================================================== */
 function exportBackup() {
-    const data = {
-        version: 2,
-        exportDate: new Date().toISOString(),
-        students: studentsCache,
-        records: recordsCache
-    };
+    const data = { version: 2, exportDate: new Date().toISOString(), students: studentsCache, records: recordsCache };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -1572,24 +1063,16 @@ async function importBackup() {
     const file = document.getElementById("importFile").files[0];
     if (!file) { alert("⚠️ اختر ملفاً أولاً"); return; }
     if (!confirm("⚠️ سيتم استبدال جميع البيانات الحالية. متابعة؟")) return;
-
     const reader = new FileReader();
     reader.onload = async function(e) {
         try {
             const data = JSON.parse(e.target.result);
             if (!data.students || !data.records) throw new Error("ملف غير صالح");
-
-            await dbClear("students");
-            await dbClear("records");
-
-            for (const s of data.students) await dbPut("students", s);
-            for (const r of data.records) {
-                const obj = { student_id: r.student_id, date: r.date, status: r.status, note: r.note || "" };
-                await dbAdd("records", obj);
-            }
-            await loadData();
+            studentsCache = data.students;
+            recordsCache = data.records;
+            await syncToCloud();
             renderAll();
-            alert("✅ تم استعادة البيانات بنجاح");
+            alert("✅ تم استعادة البيانات ورفعها للسحابة");
         } catch (err) {
             alert("❌ خطأ: " + err.message);
         }
@@ -1598,19 +1081,7 @@ async function importBackup() {
 }
 
 /* ==========================================================================
-   12. حذف جميع السجلات
-   ========================================================================== */
-async function clearAllAbsences() {
-    if (!confirm("⚠️ سيتم حذف جميع السجلات. متابعة؟")) return;
-    if (!confirm("⚠️ تأكيد نهائي!")) return;
-    await dbClear("records");
-    await loadData();
-    renderAll();
-    alert("✅ تم حذف جميع السجلات");
-}
-
-/* ==========================================================================
-   13. التنقل
+   12. التنقل والتشغيل
    ========================================================================== */
 function navigate(page) {
     document.querySelectorAll(".page").forEach(function(p) { p.classList.remove("active"); });
@@ -1618,17 +1089,13 @@ function navigate(page) {
     document.querySelectorAll(".nav-btn").forEach(function(b) {
         if (b.dataset.page) b.classList.toggle("active", b.dataset.page === page);
     });
-
-    if (page === "home")    { renderStats(); renderStudentsTable(); }
-    if (page === "daily")   { renderDailyTable(); }
+    if (page === "home") { renderStats(); renderStudentsTable(); }
+    if (page === "daily") { renderDailyTable(); }
     if (page === "reports") { renderReports(); }
-    if (page === "alerts")  { renderAlerts(); }
+    if (page === "alerts") { renderAlerts(); }
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-/* ==========================================================================
-   14. التشغيل
-   ========================================================================== */
 async function renderAll() {
     renderStats();
     renderStudentsTable();
@@ -1641,42 +1108,28 @@ async function renderAll() {
 async function startApp() {
     if (appStarted) return;
     appStarted = true;
-
     try {
-        await initDatabase();
         await loadData();
-
-        const dailyDateInput = document.getElementById("dailyDate");
-        if (dailyDateInput) {
-            dailyDateInput.value = dailyDate;
-            dailyDateInput.addEventListener("change", function(e) {
+        const ddi = document.getElementById("dailyDate");
+        if (ddi) {
+            ddi.value = dailyDate;
+            ddi.addEventListener("change", function(e) {
                 dailyDate = e.target.value;
                 renderDailyTable();
             });
         }
-
         document.querySelectorAll(".nav-btn").forEach(function(btn) {
-            if (btn.dataset.page) {
-                btn.addEventListener("click", function() { navigate(btn.dataset.page); });
-            }
+            if (btn.dataset.page) btn.addEventListener("click", function() { navigate(btn.dataset.page); });
         });
-
-        // إغلاق نافذة الإنذار عند الضغط خارج النموذج
-        const warningModal = document.getElementById("warningModal");
-        if (warningModal) {
-            warningModal.addEventListener("click", function(e) {
-                if (e.target === warningModal) closeWarning();
-            });
-        }
-
+        const wm = document.getElementById("warningModal");
+        if (wm) wm.addEventListener("click", function(e) { if (e.target === wm) closeWarning(); });
         await renderAll();
         navigate("home");
     } catch (err) {
-        console.error("خطأ في تشغيل التطبيق:", err);
-        alert("حدث خطأ أثناء التشغيل: " + err.message);
+        console.error(err);
+        alert("حدث خطأ: " + err.message);
     }
 }
-
 window.startApp = startApp;
 </script>
 </body>
