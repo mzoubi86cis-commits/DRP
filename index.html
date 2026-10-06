@@ -1166,46 +1166,6 @@ async function startApp() {
 window.startApp = startApp;
 
 
-document.addEventListener('keydown', (e) => {
-  // كشف زر Windows أو Shift+Win+S
-  if (e.key === 'Meta' || e.key === 'PrintScreen') {
-    document.body.style.opacity = '0'; // إخفاء المحتوى فوراً
-    setTimeout(() => {
-      document.body.style.opacity = '1'; // إعادته بعد ثانية
-    }, 2000);
-  }
-});
-
-
-    body {
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
-}
-
-    // تشويش المحتوى عند الخروج من المتصفح أو فقدان التركيز
-window.addEventListener('blur', () => {
-  document.body.style.filter = 'blur(10px)';
-});
-
-// إعادة المحتوى عند العودة
-window.addEventListener('focus', () => {
-  document.body.style.filter = 'none';
-});
-
-    // منع القائمة عند الضغط بالزر الأيمن
-document.addEventListener('contextmenu', event => event.preventDefault());
-
-// منع اختصارات لوحة المفاتيح
-document.onkeydown = function(e) {
-  // F12
-  if (e.keyCode == 123) return false;
-  // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+U
-  if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) return false;
-  if (e.ctrlKey && e.keyCode == 85) return false;
-};
-
-
 
 
     
