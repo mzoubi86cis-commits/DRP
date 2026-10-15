@@ -339,7 +339,7 @@ footer { text-align: center; padding: 25px; color: var(--muted); margin-top: 40p
 
 </main>
 
-<footer>© 2026-2027 - مدرسة الطرة الثانوية للبنين | نظام الحضور والغياب- أ.منذر عبدالوهاب الزعبي</footer>
+<footer>© 2026-2027 - مدرسة الطرة الثانوية للبنين | نظام الحضور والغياب - أ.منذر عبدالوهاب الزعبي</footer>
 </div>
 
 <div class="warning-modal" id="warningModal">
@@ -423,11 +423,10 @@ async function syncToCloud() {
         return false;
     }
 }
-    // ===== حفظ تلقائي مع Debounce (يُرسل بعد توقف التعديل بمدة) =====
-let autoSaveTimer = null;
 
+let autoSaveTimer = null;
 function autoSave(delay) {
-    delay = delay || 800; // 0.8 ثانية افتراضياً
+    delay = delay || 800;
     if (autoSaveTimer) clearTimeout(autoSaveTimer);
     updateSyncStatus("syncing", "⏳ جارٍ الحفظ التلقائي...");
     autoSaveTimer = setTimeout(async function() {
@@ -551,7 +550,6 @@ async function syncFromCloud() {
 
         saveSettings({ masterKey: mk, binId: bi });
 
-        // اختبار الاتصال
         try {
             updateSyncStatus("syncing", "⏳ جارٍ الاختبار...");
             await cloudLoad();
@@ -632,9 +630,6 @@ const SCHOOL_INFO = {
     principal: "د. طارق جيت"
 };
 
-/* ==========================================================================
-   4. البيانات العامة
-   ========================================================================== */
 let studentsCache = [];
 let recordsCache = [];
 let dailyDate = new Date().toISOString().split("T")[0];
@@ -702,9 +697,6 @@ function getWarningLevel(d) {
     return 0;
 }
 
-/* ==========================================================================
-   5. الرئيسية
-   ========================================================================== */
 function renderStats() {
     const counts = { green: 0, yellow: 0, orange: 0, red: 0 };
     let tA = 0, tE = 0;
@@ -749,9 +741,6 @@ function renderStudentsTable() {
     });
 }
 
-/* ==========================================================================
-   6. التسجيل اليومي
-   ========================================================================== */
 function renderDailyTable() {
     const tbody = document.getElementById("dailyTable");
     tbody.innerHTML = "";
@@ -769,7 +758,7 @@ function renderDailyTable() {
             '<td>' + s.nameAr + '</td>' +
             '<td>' + s.number + '</td>' +
             '<td><div class="status-group" data-sid="' + s.id + '">' +
-                '<button class="status-btn ' + (status === "present" ? "active-present" : "") + '" onclick="(' + s.id + ', \'present\')">✅ حاضر</button>' +
+                '<button class="status-btn ' + (status === "present" ? "active-present" : "") + '" onclick="setStatus(' + s.id + ', \'present\')">✅ حاضر</button>' +
                 '<button class="status-btn ' + (status === "absent" ? "active-absent" : "") + '" onclick="setStatus(' + s.id + ', \'absent\')">❌ غائب</button>' +
                 '<button class="status-btn ' + (status === "excused" ? "active-excused" : "") + '" onclick="setStatus(' + s.id + ', \'excused\')">📝 بعذر</button>' +
             '</div></td>';
@@ -777,14 +766,12 @@ function renderDailyTable() {
     });
     updateDailyCounters();
 }
-let pendingChanges = {};
 
 function setStatus(sid, status) {
     if (dailySelections[sid] === status) delete dailySelections[sid];
     else dailySelections[sid] = status;
     refreshRowButtons(sid);
     updateDailyCounters();
-    // جدولة حفظ تلقائي بعد 1.5 ثانية من آخر تغيير
     autoSave(1500);
 }
 function refreshRowButtons(sid) {
@@ -836,11 +823,7 @@ async function saveDailyRecord() {
     if (Object.keys(dailySelections).length === 0) {
         alert("⚠️ لم تحدد أي حالة لأي طالب"); return;
     }
-    
-    // حذف السجلات القديمة لهذا اليوم
     recordsCache = recordsCache.filter(function(r) { return r.date !== dailyDate; });
-    
-    // إضافة الجديدة
     let maxId = recordsCache.reduce(function(m, r) { return Math.max(m, r.id || 0); }, 0);
     for (const entry of Object.entries(dailySelections)) {
         maxId++;
@@ -852,8 +835,6 @@ async function saveDailyRecord() {
             note: ""
         });
     }
-    
-    // حفظ فوري بدون انتظار
     updateSyncStatus("syncing", "⏳ جارٍ الحفظ...");
     const ok = await syncToCloud();
     if (ok) {
@@ -862,9 +843,6 @@ async function saveDailyRecord() {
     }
 }
 
-/* ==========================================================================
-   7. صفحة الطالب
-   ========================================================================== */
 function openStudent(sid) {
     const s = studentsCache.find(function(x) { return x.id === sid; });
     const records = recordsCache.filter(function(r) { return r.student_id === sid; })
@@ -893,7 +871,7 @@ function openStudent(sid) {
                 '<td>' + r.date + '</td>' +
                 '<td>' + formatDateAr(r.date).split("(")[1].replace(")", "") + '</td>' +
                 '<td>' + statusBadge(r.status) + '</td>' +
-                '<td><button class="btn btn-small btn-danger" onclick="(' + r.id + ', ' + sid + ')">🗑️ حذف</button></td>' +
+                '<td><button class="btn btn-small btn-danger" onclick="deleteRecord(' + r.id + ', ' + sid + ')">🗑️ حذف</button></td>' +
                 '</tr>';
         });
         recordsHTML += '</tbody></table></div>';
@@ -927,9 +905,6 @@ async function deleteRecord(rid, sid) {
     else alert("⚠️ فشل الحذف، حاول مرة أخرى");
 }
 
-/* ==========================================================================
-   8. الإنذار الرسمي
-   ========================================================================== */
 function showWarning(sid) {
     const s = studentsCache.find(function(x) { return x.id === sid; });
     const absent = countAbsent(sid);
@@ -1004,9 +979,6 @@ function showWarning(sid) {
 }
 function closeWarning() { document.getElementById("warningModal").classList.remove("show"); }
 
-/* ==========================================================================
-   9. التقارير
-   ========================================================================== */
 function renderReports() {
     const start = document.getElementById("repStart").value;
     const end = document.getElementById("repEnd").value;
@@ -1053,9 +1025,6 @@ function exportCSV() {
     a.click();
 }
 
-/* ==========================================================================
-   10. التنبيهات
-   ========================================================================== */
 function renderAlerts() {
     const alerts = studentsCache.map(function(s) { return { s: s, total: countTotal(s.id) }; })
         .filter(function(x) { return x.total >= WARNING_THRESHOLD; })
@@ -1079,9 +1048,6 @@ function renderAlerts() {
     }).join("");
 }
 
-/* ==========================================================================
-   11. النسخ الاحتياطي
-   ========================================================================== */
 function exportBackup() {
     const data = { version: 2, exportDate: new Date().toISOString(), students: studentsCache, records: recordsCache };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
@@ -1113,9 +1079,6 @@ async function importBackup() {
     reader.readAsText(file);
 }
 
-/* ==========================================================================
-   12. التنقل والتشغيل
-   ========================================================================== */
 function navigate(page) {
     document.querySelectorAll(".page").forEach(function(p) { p.classList.remove("active"); });
     document.getElementById("page-" + page).classList.add("active");
@@ -1165,10 +1128,23 @@ async function startApp() {
 }
 window.startApp = startApp;
 
-
-
-
-    
+// تصدير الدوال عالمياً
+window.setStatus = setStatus;
+window.navigate = navigate;
+window.openStudent = openStudent;
+window.deleteRecord = deleteRecord;
+window.showWarning = showWarning;
+window.closeWarning = closeWarning;
+window.syncFromCloud = syncFromCloud;
+window.setDateToday = setDateToday;
+window.changeDay = changeDay;
+window.saveDailyRecord = saveDailyRecord;
+window.markAll = markAll;
+window.resetAll = resetAll;
+window.renderReports = renderReports;
+window.exportCSV = exportCSV;
+window.exportBackup = exportBackup;
+window.importBackup = importBackup;
 </script>
 </body>
 </html>
