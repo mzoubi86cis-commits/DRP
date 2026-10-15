@@ -149,8 +149,154 @@ footer { text-align: center; padding: 25px; color: var(--muted); margin-top: 40p
 .signatures .sig-line { border-top: 2px dotted #333; padding-top: 6px; font-weight: 600; color: #222; font-size: 1em; }
 .warning-date { text-align: left; margin-top: 25px; font-size: 0.95em; color: #444; }
 .warning-actions { display: flex; gap: 10px; justify-content: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #e0e4e8; }
-@media print { body * { visibility: hidden; } .warning-paper, .warning-paper * { visibility: visible; } .warning-paper { position: absolute; top: 0; right: 0; left: 0; margin: 0; padding: 20px; box-shadow: none; border-radius: 0; } .warning-actions { display: none !important; } .warning-modal { background: white; position: static; padding: 0; } }
-@media (max-width: 700px) { .warning-paper { padding: 25px 20px; } .warning-paper .letterhead .school-name { font-size: 1.2em; } .warning-title { font-size: 1.15em; } .signatures { grid-template-columns: 1fr; gap: 30px; } }
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 8mm 10mm;
+    }
+    
+    html, body {
+        width: 100%;
+        height: auto !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+    }
+    
+    body * { visibility: hidden; }
+    .warning-paper, .warning-paper * { visibility: visible; }
+    
+    .warning-modal {
+        position: static !important;
+        inset: auto !important;
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+        overflow: visible !important;
+        min-height: 0 !important;
+        height: auto !important;
+    }
+    
+    header, nav, footer, main, .page, #loginScreen, #mainApp {
+        display: none !important;
+    }
+    
+    .warning-paper {
+        position: static !important;
+        margin: 0 auto !important;
+        padding: 5mm 8mm !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        font-size: 10pt;
+        line-height: 1.5;
+        max-width: 100% !important;
+        width: 100% !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+    }
+    
+    /* ترويسة المدرسة */
+    .warning-paper .letterhead {
+        padding-bottom: 6px !important;
+        margin-bottom: 10px !important;
+    }
+    .warning-paper .letterhead .school-name {
+        font-size: 15pt;
+        margin-bottom: 2px;
+    }
+    .warning-paper .letterhead .school-info {
+        font-size: 8.5pt;
+    }
+    .warning-paper .letterhead .ref {
+        margin-top: 5px;
+        font-size: 8.5pt;
+    }
+    
+    /* عنوان الإنذار */
+    .warning-title {
+        font-size: 13pt;
+        padding: 5px;
+        margin: 8px 0;
+    }
+    
+    /* بيانات الطالب */
+    .student-info-box {
+        padding: 6px 10px;
+        margin-bottom: 8px;
+    }
+    .student-info-box td {
+        padding: 2px 5px;
+        font-size: 9pt;
+    }
+    .student-info-box td.label {
+        width: 90px;
+        font-size: 9pt;
+    }
+    
+    /* نص الإنذار */
+    .warning-body {
+        font-size: 10pt;
+        line-height: 1.6;
+        margin: 8px 0;
+    }
+    .warning-body p {
+        margin-bottom: 5px;
+        text-indent: 15px;
+    }
+    .warning-body .number-badge {
+        padding: 1px 6px;
+        font-size: 9pt;
+    }
+    
+    /* التوصيات */
+    .recommendations {
+        padding: 6px 12px;
+        margin: 8px 0;
+    }
+    .recommendations h4 {
+        font-size: 10pt;
+        margin-bottom: 4px;
+    }
+    .recommendations ul {
+        padding-right: 18px;
+    }
+    .recommendations li {
+        font-size: 9pt;
+        margin-bottom: 1px;
+    }
+    
+    /* التوقيعات */
+    .signatures {
+        margin-top: 12px;
+        padding-top: 6px;
+        gap: 8px;
+        page-break-inside: avoid;
+    }
+    .signatures .sig-box {
+        padding: 3px;
+    }
+    .signatures .sig-title {
+        font-size: 9.5pt;
+        margin-bottom: 15px;
+    }
+    .signatures .sig-line {
+        font-size: 9.5pt;
+        padding-top: 3px;
+    }
+    
+    /* التاريخ أسفل */
+    .warning-date {
+        margin-top: 8px;
+        font-size: 8.5pt;
+    }
+    
+    /* إخفاء الأزرار */
+    .warning-actions {
+        display: none !important;
+    }
+}@media (max-width: 700px) { .warning-paper { padding: 25px 20px; } .warning-paper .letterhead .school-name { font-size: 1.2em; } .warning-title { font-size: 1.15em; } .signatures { grid-template-columns: 1fr; gap: 30px; } }
 @media (max-width: 600px) { header h1 { font-size: 1.3em; } .stats-cards { grid-template-columns: repeat(2, 1fr); } nav button { padding: 7px 12px; font-size: 0.85em; } td, th { padding: 8px; font-size: 0.82em; } .status-btn { padding: 5px 8px; font-size: 0.75em; } .login-box { padding: 30px 22px; } }
 </style>
 </head>
